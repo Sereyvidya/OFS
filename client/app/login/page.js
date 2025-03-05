@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { FaLock } from "react-icons/fa";
+import Link from "next/link";
 
 const login = () => {
     const [formData, setFormData] = useState({
@@ -11,21 +12,39 @@ const login = () => {
     })
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
+    
+        // Check if passwords match
+        if (formData.password !== formData.confirmPassword) {
+            alert("Passwords do not match. Please re-enter.");
+            return; // Stop form submission
+        }
+    
+        console.log("Sending data:", formData); // Debugging
+    
         try {
-            const res = await fetch("http://127.0.0.1:5000/login", {
+            const res = await fetch("http://127.0.0.1:5000/register", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
             });
+    
             const data = await res.json();
-            console.log(data)
+            console.log("Response received:", data); // Debugging
+    
+            if (res.ok) {
+                alert("Registration successful!");
+            } else {
+                alert(`Registration failed: ${data.error || "Unknown error"}`);
+            }
         } catch (error) {
-            console.error("Login error:", error);
+            console.error("Registration error:", error);
+            alert("An error occurred. Please try again.");
         }
-    }
+    };
+    
 
     return (
         <div className="min-h-screen bg-cover bg-center flex flex-col justify-center" style={{backgroundImage: 'url(/bg.jpg)'}}>
@@ -60,7 +79,7 @@ const login = () => {
                     <button type="submit" className="text-center text-black mt-2 border border-white bg-white rounded-l-full rounded-r-full p-2">Log in</button>
                     <div className="flex justify-center mt-2">
                         <p>Don't have an account? 
-                            <a href="#" className="font-semibold"> Register</a>
+                        <Link href="/register" className="font-semibold text-blue-400 hover:underline"> Register </Link>
                         </p>
                     </div>
                 </form>
