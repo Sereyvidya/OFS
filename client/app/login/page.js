@@ -4,8 +4,10 @@ import React, { useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { FaLock } from "react-icons/fa";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 
 const login = () => {
+    const router = useRouter();
     const [formData, setFormData] = useState({
         username: "",
         password: ""
@@ -13,6 +15,7 @@ const login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        router.push("/homepage");
     
         // Check if passwords match
         if (formData.password !== formData.confirmPassword) {
@@ -43,6 +46,26 @@ const login = () => {
             console.error("Registration error:", error);
             alert("An error occurred. Please try again.");
         }
+
+        try {
+            const res = await fetch("http://127.0.0.1:5000/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(formData),
+            });
+      
+            if (res.ok) {
+              const data = await res.json();
+              console.log("Login successful:", data);
+              // Redirect to the homepage after a successful login
+              router.push("/homepage");
+            } else {
+              alert("Login failed. Please check your credentials.");
+            }
+          } catch (error) {
+            console.error("Login error:", error);
+            alert("An error occurred while logging in. Please try again.");
+          }
     };
     
 
