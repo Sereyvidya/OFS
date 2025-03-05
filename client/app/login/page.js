@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState } from 'react';
+import { useRouter } from "next/navigation";
 import { FaUser } from 'react-icons/fa';
 import { FaLock } from "react-icons/fa";
 
 const login = () => {
+    const router = useRouter();
     const [formData, setFormData] = useState({
         username: "",
         password: ""
@@ -22,6 +24,7 @@ const login = () => {
             });
             const data = await res.json();
             console.log(data)
+            router.push("/HomePage");
         } catch (error) {
             console.error("Login error:", error);
         }
