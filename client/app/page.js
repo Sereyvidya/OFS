@@ -1,10 +1,9 @@
-import Image from "next/image";
-import Homepage from "./components/Homepage";
+import React from "react";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div>
-      <Homepage />
+    <div className="flex min-h-screen items-center justify-center bg-gray-900 text-white">
+      <h1 className="text-4xl font-bold">Welcome to My App</h1>
     </div>
   );
 }
