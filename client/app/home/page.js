@@ -4,14 +4,14 @@ import React from "react";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen min-w-[700px] bg-gray-50 text-gray-900">
       {/* Header */}
-      <header className="flex items-center justify-between px-6 py-4 bg-gray-100 shadow">
+      <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-gray-100 shadow">
         {/* OFS Logo */}
         <div className="text-4xl font-bold">OFS</div>
 
         {/* Search Bar */}
-        <div className="flex-1 mx-50">
+        <div className="flex-1 min-w-75 max-w-150">
           <input
             type="text"
             placeholder="Search products"
@@ -20,9 +20,10 @@ export default function HomePage() {
         </div>
 
         {/* View Cart */}
-        <button className="font-semibold px-4 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+        <div className="flex justify-center">
+        {/* <button className="font-semibold px-4 py-2 inline-block whitespace-nowrap rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors">
           View Cart
-        </button>
+        </button> */}
 
         {/* Login */}
         <button className="mx-3 font-semibold px-4 py-2 border border-gray-300 rounded-full white-600 text-black hover:bg-gray-400 transition-colors">
@@ -30,9 +31,11 @@ export default function HomePage() {
         </button>
 
         {/* Sign Up */}
-        <button className="mx-1 font-semibold px-4 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+        <button className="mx-1 font-semibold px-4 py-2 inline-block whitespace-nowrap rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors">
           Sign Up
         </button>
+        </div>
+
 
       </header>
 
