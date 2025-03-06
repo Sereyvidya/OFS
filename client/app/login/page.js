@@ -13,60 +13,33 @@ const login = () => {
         password: ""
     })
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        router.push("/homepage");
-    
-        // Check if passwords match
-        if (formData.password !== formData.confirmPassword) {
-            alert("Passwords do not match. Please re-enter.");
-            return; // Stop form submission
-        }
-    
-        console.log("Sending data:", formData); // Debugging
-    
-        try {
-            const res = await fetch("http://127.0.0.1:5000/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
-            });
-    
-            const data = await res.json();
-            console.log("Response received:", data); // Debugging
-    
-            if (res.ok) {
-                alert("Registration successful!");
-            } else {
-                alert(`Registration failed: ${data.error || "Unknown error"}`);
-            }
-        } catch (error) {
-            console.error("Registration error:", error);
-            alert("An error occurred. Please try again.");
-        }
+    const [error, setError] = useState("");
 
-        try {
-            const res = await fetch("http://127.0.0.1:5000/login", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(formData),
-            });
-      
-            if (res.ok) {
-              const data = await res.json();
-              console.log("Login successful:", data);
-              // Redirect to the homepage after a successful login
-              router.push("/homepage");
-            } else {
-              alert("Login failed. Please check your credentials.");
-            }
-          } catch (error) {
-            console.error("Login error:", error);
-            alert("An error occurred while logging in. Please try again.");
-          }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(""); // clear previous errors
+
+    try {
+      const res = await fetch("http://127.0.0.1:5000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      console.log("Login response:", data);
+
+      if (res.ok) {
+        // Successful login
+        router.push("/homepage");
+      } else {
+        // If the login fails, show error message
+        setError(data.error || "Password doesn't match. Please try again.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("An error occurred while logging in. Please try again.");
+    }
+  };
     
 
     return (

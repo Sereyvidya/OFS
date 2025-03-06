@@ -23,9 +23,16 @@ export default function HomePage() {
         <button className="font-semibold px-4 py-2 rounded-full bg-green-600 text-white hover:bg-green-700 transition-colors">
           View Cart
         </button>
+
+        {/* Login */}
+        <button className="font-semibold px-4 py-2 rounded-full bg-green-600 text-white hover:bg-green-700 transition-colors">
+          Login
+        </button>
+
       </header>
 
-      {/* Body (Blank for Now) */}
+        
+      {/* Body */}
       <main className="flex-grow flex flex-col items-center justify-center p-6">
         <div className="max-w-4xl w-full text-center">
           <h1 className="text-4xl font-bold mb-4">Welcome to OFS Delivery Service</h1>
