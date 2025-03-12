@@ -49,7 +49,7 @@ export default function HomePage() {
             </button>
             <button 
               className="mx-1 font-semibold px-4 py-2 inline-block whitespace-nowrap rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors cursor-pointer"
-              onClick={(e) => setShowSignup(false)}>
+              onClick={(e) => setShowSignup(true)}>
               Sign up
             </button>
           </>
