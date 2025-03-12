@@ -10,12 +10,14 @@ const Login = ({ onClose, onSignupClick }) => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
 
     try {
-      const res = await fetch("http://127.0.0.1:5000/home", {
+      const res = await fetch("http://127.0.0.1:5000/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -23,14 +25,15 @@ const Login = ({ onClose, onSignupClick }) => {
       const data = await res.json();
       console.log("Login response:", data);
 
-    //   if (res.ok) {
-    //     router.push("/homepage");
-    //   } else {
-    //     setError(data.error || "Password doesn't match. Please try again.");
-    //   }
+    if (res.ok) {
+      alert("Login successful!");
+      onClose();
+      } else {
+        setErrorMessage(data.error || "Password doesn't match. Please try again.");
+      }
     } catch (error) {
       console.error("Login error:", error);
-      setError("An error occurred while logging in. Please try again.");
+      setErrorMessage("An error occurred while logging in. Please try again.");
     }
   };
 
@@ -50,6 +53,10 @@ const Login = ({ onClose, onSignupClick }) => {
         <div className="flex justify-center">
           <h1 className="font-display text-4xl font-bold">Log in</h1>
         </div>
+
+        {errorMessage && (
+          <p className="text-red-500 text-center mt-2">{errorMessage}</p>
+          )}
 
         {/* Email */}
         <div className="flex justify-between mt-6 border border-black rounded-md p-2">
