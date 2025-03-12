@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
 
-const Login = ({ onClose, onSignupClick }) => {
+const Login = ({ onClose, onSignupClick, onLoginSuccess }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -28,6 +28,7 @@ const Login = ({ onClose, onSignupClick }) => {
     if (res.ok) {
       alert("Login successful!");
       onClose();
+      onLoginSuccess();
       } else {
         setErrorMessage(data.error || "Password doesn't match. Please try again.");
       }

@@ -6,7 +6,8 @@ import Signup from "../components/Signup";
 
 export default function HomePage() {
   const [showLogin, setShowLogin] = useState(false);
-  const [showSignup, setShowSignup] = useState(false)
+  const [showSignup, setShowSignup] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <div className="min-h-screen min-w-[700px] bg-gray-50 text-gray-900">
@@ -25,16 +26,34 @@ export default function HomePage() {
           </div>
           {/* Buttons */}
           <div className="flex justify-center">
+          {isLoggedIn ? (
+            <>
+              <button 
+                className="mx-3 font-semibold px-4 py-2 border border-gray-300 rounded-full white-600 text-black hover:bg-gray-400 transition-colors cursor-pointer"
+              >
+                User Profile
+              </button>
+
+              <button 
+                className="mx-1 font-semibold px-4 py-2 inline-block whitespace-nowrap rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors cursor-pointer"
+              >
+                View Cart
+              </button>
+            </>
+          ) : (
+            <>
             <button 
               className="mx-3 font-semibold px-4 py-2 border border-gray-300 rounded-full white-600 text-black hover:bg-gray-400 transition-colors cursor-pointer"
-              onClick={(e) => setShowLogin(!showLogin)}>
+              onClick={(e) => setShowLogin(true)}>
               Log in
             </button>
             <button 
               className="mx-1 font-semibold px-4 py-2 inline-block whitespace-nowrap rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors cursor-pointer"
-              onClick={(e) => setShowSignup(!showSignup)}>
+              onClick={(e) => setShowSignup(false)}>
               Sign up
             </button>
+          </>
+          )}
           </div>
         </header>
 
@@ -62,7 +81,12 @@ export default function HomePage() {
             onSignupClick={() => {
               setShowLogin(false)
               setShowSignup(true)
-              }}/>
+              }}
+            onLoginSuccess={() => {
+              setIsLoggedIn(true);
+              setShowLogin(false);
+            }}
+          />
         </div>
       )}
 
