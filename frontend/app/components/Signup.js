@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Signup = ({ onClose, onLoginClick }) => {
   const [formData, setFormData] = useState({
@@ -20,8 +19,6 @@ const Signup = ({ onClose, onLoginClick }) => {
   });
 
   const [errorMessage, setErrorMessage] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,7 +33,7 @@ const Signup = ({ onClose, onLoginClick }) => {
     console.log("Sending data:", formData);
 
     try {
-      const res = await fetch("http://127.0.0.1:5000/register", {
+      const res = await fetch("http://127.0.0.1:5000/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -188,54 +185,6 @@ const Signup = ({ onClose, onLoginClick }) => {
                 onChange={(e) => setFormData({ ...formData, country: e.target.value })}/>
             </div>
           </div>
-
-          
-
-
-          {/* <div className="flex justify-between mt-4 border border-black rounded-full p-2">
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-full mx-2 focus:outline-none focus:border-none"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            />
-            <FaEnvelope className="my-auto mx-2" />
-          </div> */}
-
-          {/* Password */}
-          {/* <div className="flex justify-between mt-4 border border-black rounded-full p-2">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              className="w-full mx-2 focus:outline-none focus:border-none"
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            />
-            <span
-              className="my-auto mx-2 cursor-pointer"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </span>
-          </div> */}
-
-          {/* Confirm Password */}
-          {/* <div className="flex justify-between mt-4 border border-black rounded-full p-2">
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              placeholder="Confirm Password"
-              className="w-full mx-2 focus:outline-none focus:border-none"
-              value={formData.confirmPassword}
-              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-            />
-            <span
-              className="my-auto mx-2 cursor-pointer"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            >
-              {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-            </span>
-          </div> */}
 
           {/* Sign Up Button */}
           <button type="submit" className="text-center text-white mt-2 bg-blue-500 rounded-md p-2 mt-6">
