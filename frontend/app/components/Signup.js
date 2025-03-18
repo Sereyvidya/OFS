@@ -14,7 +14,7 @@ const Signup = ({ onClose, onLoginClick }) => {
     addressLine2: "",
     city: "",
     state: "",
-    zip: "",
+    zipCode: "",
     country: "",
   });
 
@@ -175,8 +175,8 @@ const Signup = ({ onClose, onLoginClick }) => {
                 type="text"
                 placeholder="Postal / Zip Code"
                 className="border border-black rounded-md p-2 w-68"
-                value={formData.zip}
-                onChange={(e) => setFormData({ ...formData, zip: e.target.value })}/>
+                value={formData.zipCode}
+                onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}/>
               <input
                 type="text"
                 placeholder="Country"

@@ -3,10 +3,12 @@
 import React, { useState } from "react";
 import Login from "../components/Login";
 import Signup from "../components/Signup";
+import Profile from "../components/Profile";
 
 export default function HomePage() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
@@ -27,32 +29,32 @@ export default function HomePage() {
           {/* Buttons */}
           <div className="flex justify-center">
           {isLoggedIn ? (
-            <>
+            <div className="flex flex-row">
               <button 
-                className="mx-3 font-semibold px-4 py-2 border border-gray-300 rounded-full white-600 text-black hover:bg-gray-400 transition-colors cursor-pointer"
-              >
-                User Profile
+                className="mx-3 font-semibold px-4 py-2 border border-gray-300 rounded-full white-600 text-black hover:bg-gray-400 transition-colors cursor-pointer whitespace-nowrap"
+                onClick={(e) => setShowProfile(true)}>
+                User
               </button>
 
               <button 
                 className="mx-1 font-semibold px-4 py-2 inline-block whitespace-nowrap rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors cursor-pointer"
-              >
+                >
                 View Cart
               </button>
-            </>
+            </div>
           ) : (
-            <>
-            <button 
-              className="mx-3 font-semibold px-4 py-2 border border-gray-300 rounded-full white-600 text-black hover:bg-gray-400 transition-colors cursor-pointer"
-              onClick={(e) => setShowLogin(true)}>
-              Log in
-            </button>
-            <button 
-              className="mx-1 font-semibold px-4 py-2 inline-block whitespace-nowrap rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors cursor-pointer"
-              onClick={(e) => setShowSignup(true)}>
-              Sign up
-            </button>
-          </>
+            <div className="flex flex-row">
+              <button 
+                className="mx-3 font-semibold px-4 py-2 border border-gray-300 rounded-full white-600 text-black hover:bg-gray-400 transition-colors cursor-pointer"
+                onClick={(e) => setShowLogin(true)}>
+                Log in
+              </button>
+              <button 
+                className="mx-1 font-semibold px-4 py-2 inline-block whitespace-nowrap rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors cursor-pointer"
+                onClick={(e) => setShowSignup(true)}>
+                Sign up
+              </button>
+            </div>
           )}
           </div>
         </header>
@@ -82,7 +84,8 @@ export default function HomePage() {
               setShowLogin(false)
               setShowSignup(true)
               }}
-            onLoginSuccess={() => {
+            onLoginSuccess={(token) => {
+              localStorage.setItem("authToken", token); 
               setIsLoggedIn(true);
               setShowLogin(false);
             }}
@@ -102,6 +105,15 @@ export default function HomePage() {
             />
         </div>
       )}
+
+      {/* Show Profile */}
+      {showProfile && (
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
+          <Profile 
+            onClose={() => setShowProfile(false)}
+          />
+        </div>
+        )}
     </div>  
   );
 }

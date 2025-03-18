@@ -25,10 +25,10 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess }) => {
       const data = await res.json();
       console.log("Login response:", data);
 
-    if (res.ok) {
-      alert("Login successful!");
-      onClose();
-      onLoginSuccess();
+      if (res.ok) {
+        alert("Login successful!");
+        onClose();
+        onLoginSuccess(data.token);
       } else {
         setErrorMessage(data.error || "Password doesn't match. Please try again.");
       }
