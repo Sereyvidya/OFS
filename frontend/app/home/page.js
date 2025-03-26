@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Login from "../components/Login";
 import Signup from "../components/Signup";
 import Profile from "../components/Profile";
+import Carousel from "../components/Carousel";
 
 export default function HomePage() {
   const [showLogin, setShowLogin] = useState(false);
@@ -12,7 +13,7 @@ export default function HomePage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
-    <div className="min-h-screen min-w-[700px] bg-gray-50 text-gray-900">
+    <div className="min-h-screen min-w-[700px] bg-white text-gray-900">
       <div>
         {/* Header */}
         <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-gray-100 shadow">
@@ -73,6 +74,9 @@ export default function HomePage() {
           </div>
         </main>
       </div>
+
+      {/* Carousel Section */}
+      <Carousel />
 
       {/* Login popup */}
       {showLogin && (
