@@ -1,4 +1,4 @@
-from . import db
+from backend.app import db 
 
 # User model
 class User(db.Model):
