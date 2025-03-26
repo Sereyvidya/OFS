@@ -1,5 +1,6 @@
 from . import db
 
+# User model
 class User(db.Model):
     userID = db.Column(db.Integer, primary_key=True)
     firstName = db.Column(db.String(100), nullable=False)

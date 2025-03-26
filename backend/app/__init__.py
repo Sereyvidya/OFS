@@ -2,24 +2,27 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from .config import Config
+from config import Config
 
+# Create SQLAlchemy object to interact with database
 db = SQLAlchemy()
 
 def create_app():
-    # Create app
+    # Create and configure Flask app
     app = Flask(__name__)
-
-    # Configure app
     app.config.from_object(Config)
+    
+    # Initialize the database, enable CORS, and set up JWT management
     db.init_app(app)
     CORS(app)
     JWTManager(app)
 
-    from . import routes  # Import routes after initializing the app
-    app.register_blueprint(routes.bp)
+    # Register the application's blueprints
+    from .routes import auth_bp, user_bp
+    app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(user_bp, url_prefix='/user')
 
-    print("Creating tables...")  # Debugging line
+    # Create database tables using the models defined in the application 
     with app.app_context():
         db.create_all()
 
