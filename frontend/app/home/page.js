@@ -60,20 +60,16 @@ export default function HomePage() {
           )}
           </div>
         </header>
-
-          
-        {/* Body */}
-        <main className="flex-grow flex flex-col items-center justify-center p-6">
-          <ProductGrid
-            isLoggedIn={isLoggedIn}
-            showLogin={showLogin}
-            setShowLogin={setShowLogin}
-          />
-        </main>
       </div>
-
+      
       {/* Carousel Section */}
       <Carousel />
+
+      <ProductGrid
+          isLoggedIn={isLoggedIn}
+          showLogin={showLogin}
+          setShowLogin={setShowLogin}
+      />
 
       {/* Login popup */}
       {showLogin && (

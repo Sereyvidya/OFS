@@ -18,7 +18,9 @@ class User(db.Model):
     def __repr__(self):
         return f"<User {self.email}>"
     
-class Products(db.Model):
+class Product(db.Model):
+    __tablename__ = 'products'
+
     productID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     productName = db.Column(db.String(100), nullable=False)
     productDesc = db.Column(db.String(255), nullable=True)
