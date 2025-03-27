@@ -18,9 +18,10 @@ def create_app():
     JWTManager(app)
 
     # Register the application's blueprints (including product blueprint)
-    from .routes import auth_bp, user_bp
+    from .routes import auth_bp, user_bp, product_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(user_bp, url_prefix='/user')
+    app.register_blueprint(product_bp, url_prefix='/api')
 
     # from .routes import product_bp
     # app.register_blueprint(product_bp)  # Register the product blueprint here

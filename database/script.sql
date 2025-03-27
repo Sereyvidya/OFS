@@ -7,7 +7,7 @@ create table user (
     firstName varchar(100) not null,
     lastName varchar(100) not null,
     email varchar(100) not null,
-    phone varchar(100) not null,
+    phone varchar(20) not null,
     password varchar(255) not null,
     addressLine1 varchar(100) not null,
     addressLine2 varchar(100),
@@ -20,7 +20,7 @@ create table user (
 create table products (
 	productID int auto_increment primary key,
     productName varchar(100) not null,         -- productName and productDesc and things users will see
-    productDesc text,
+    productDesc varchar(255),
     price decimal(10, 2) not null,
     quantity int not null,                     -- How much of the product is available?
     organic bool not null,                     -- Is the product organic? (For filter option)
