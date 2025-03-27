@@ -1,0 +1,12 @@
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
+
+# Ignore virtual environment folder
+venv/
+
+# Ignore frontend build directory (if applicable)
+client/
+
+# Ignore other unnecessary files
+*.log
