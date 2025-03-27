@@ -16,3 +16,15 @@ class User(db.Model):
 
     def __repr__(self):
         return f"<User {self.email}>"
+    
+class Products(db.Model):
+    productID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    productName = db.Column(db.String(100), nullable=False)
+    productDesc = db.Column(db.String(255), nullable=True)
+    price = db.Column(db.Numeric(10, 2), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    organic = db.Column(db.Boolean, nullable=False)
+    image = db.Column(db.LargeBinary, nullable=True)
+
+    def __repr__(self):
+        return f"<User {self.productName}>"

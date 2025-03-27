@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Login from "../components/Login";
 import Signup from "../components/Signup";
 import Profile from "../components/Profile";
+import ProductGrid from "../components/Product";;
 
 export default function HomePage() {
   const [showLogin, setShowLogin] = useState(false);
@@ -62,15 +63,11 @@ export default function HomePage() {
           
         {/* Body */}
         <main className="flex-grow flex flex-col items-center justify-center p-6">
-          <div className="max-w-4xl w-full text-center">
-            <h1 className="text-4xl font-bold mb-4">Welcome to OFS Delivery Service</h1>
-            <p className="mb-6 text-lg leading-relaxed">
-              We’re a local organic food retailer chain based in Downtown San Jose.
-              Our mission is to bring fresh, organic groceries straight to your door
-              via our self-driving delivery service. Enjoy convenient, healthy
-              shopping from the comfort of your home!
-            </p>
-          </div>
+          <ProductGrid
+            isLoggedIn={isLoggedIn}
+            showLogin={showLogin}
+            setShowLogin={setShowLogin}
+          />
         </main>
       </div>
 

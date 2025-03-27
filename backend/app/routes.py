@@ -1,8 +1,9 @@
 from flask import Blueprint, request, jsonify
 from . import db  # Import db object initialized in __init__.py
-from .models import User
+from .models import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+import base64
 
 bp = Blueprint('main', __name__)
 
@@ -69,3 +70,18 @@ def profile():
         })
     else:
         return jsonify({"error": "User not found"}), 404
+
+@bp.route('/getProducts', methods=['GET'])
+def getProducts():
+    products = Products.query.all()
+    
+    productList = [{
+        "productName": product.productName,
+        "productDesc": product.productDesc,
+        "price": product.price,
+        "quantity": product.quantity,
+        "organic": product.organic,
+        "image": base64.b64encode(product.image).decode('utf-8')
+    } for product in products]
+    
+    return jsonify(productList)
