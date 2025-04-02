@@ -62,6 +62,10 @@ for i in range(0, len(products)):
     # Read the image file as binary so SQL can store it
     with open("images\\" + products[i] + ".jpg", 'rb') as file:
         image_data = file.read()
+
+    # If you're using MacOS, uncomment and run this line instead
+    # with open("images/" + products[i] + ".jpg", 'rb') as file:
+    #     image_data = file.read()
     
     # Insert the binary data into the table
     insert_query = """

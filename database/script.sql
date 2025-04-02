@@ -8,13 +8,7 @@ create table user (
     lastName varchar(100) not null,
     email varchar(100) not null,
     phone varchar(20) not null,
-    password varchar(255) not null,
-    addressLine1 varchar(100) not null,
-    addressLine2 varchar(100),
-    city varchar(100) not null,
-    state varchar(100) not null,
-    zipCode varchar(100) not null,
-    country varchar(100) not null
+    password varchar(255) not null
 );
 
 create table products (

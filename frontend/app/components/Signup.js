@@ -10,12 +10,6 @@ const Signup = ({ onClose, onLoginClick }) => {
     phone: "",
     password: "",
     confirmPassword: "",
-    addressLine1: "",
-    addressLine2: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    country: "",
   });
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -88,13 +82,23 @@ const Signup = ({ onClose, onLoginClick }) => {
                 placeholder="First"
                 className="border border-black rounded-md p-2 w-68"
                 value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}/>
+                onChange={(e) => {
+                  const formattedName = e.target.value
+                    .toLowerCase()
+                    .replace(/^\w/, (c) => c.toUpperCase());
+                  setFormData({ ...formData, firstName: formattedName });
+                }}/>
               <input
                 type="text"
                 placeholder="Last"
                 className="border border-black rounded-md p-2 w-68"
                 value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}/>
+                onChange={(e) => {
+                  const formattedName = e.target.value
+                    .toLowerCase()
+                    .replace(/^\w/, (c) => c.toUpperCase());
+                  setFormData({ ...formData, lastName: formattedName });
+                }}/>
             </div>
           </div>
 
@@ -113,7 +117,7 @@ const Signup = ({ onClose, onLoginClick }) => {
               <p>Phone Number</p>
               <input 
                 type="tel"
-                placeholder="XXX-XXX-XXXX"
+                placeholder="XXXXXXXXXX"
                 className="border border-black rounded-md p-2 w-68 mt-2"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}/>
@@ -137,53 +141,10 @@ const Signup = ({ onClose, onLoginClick }) => {
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}/>
             </div>
-          </div>
-
-          {/* Address */}
-          <div className="flex flex-col mt-4">
-            <p>Address</p>
-            <div className="flex justify-between mt-2">
-              <input
-                type="text"
-                placeholder="Street Address"
-                className="border border-black rounded-md p-2 w-68"
-                value={formData.addressLine1}
-                onChange={(e) => setFormData({ ...formData, addressLine1: e.target.value })}/>
-              <input
-                type="text"
-                placeholder="Street Address Line 2"
-                className="border border-black rounded-md p-2 w-68"
-                value={formData.addressLine2}
-                onChange={(e) => setFormData({ ...formData, addressLine2: e.target.value })}/>
-            </div>
-            <div className="flex justify-between mt-4">
-              <input
-                type="text"
-                placeholder="City"
-                className="border border-black rounded-md p-2 w-68"
-                value={formData.city}
-                onChange={(e) => setFormData({ ...formData, city: e.target.value })}/>
-              <input
-                type="text"
-                placeholder="State"
-                className="border border-black rounded-md p-2 w-68"
-                value={formData.state}
-                onChange={(e) => setFormData({ ...formData, state: e.target.value })}/>
-            </div>
-            <div className="flex justify-between mt-4">
-              <input
-                type="text"
-                placeholder="Postal / Zip Code"
-                className="border border-black rounded-md p-2 w-68"
-                value={formData.zipCode}
-                onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}/>
-              <input
-                type="text"
-                placeholder="Country"
-                className="border border-black rounded-md p-2 w-68"
-                value={formData.country}
-                onChange={(e) => setFormData({ ...formData, country: e.target.value })}/>
-            </div>
+            <p className="text-xs italic text-gray-600 mt-2">
+                Password must be at least 8 characters long and contain 1 lowercase letters, 
+                1 upppercase letter, 1 digit, and 1 special character (@$!%*?&).
+            </p>
           </div>
 
           {/* Sign Up Button */}

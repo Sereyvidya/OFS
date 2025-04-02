@@ -54,7 +54,6 @@ const Profile = ({ onClose }) => {
             <p><strong>Last Name:</strong> {profile.lastName}</p>
             <p><strong>Email:</strong> {profile.email}</p>
             <p><strong>Phone:</strong> {profile.phone}</p>
-            <p><strong>Address:</strong> {profile.addressLine1}, {profile.city}, {profile.state}, {profile.zipCode}</p>
         </div>
       </div>
     </div>

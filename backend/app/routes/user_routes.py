@@ -20,12 +20,6 @@ def profile():
             "lastName": user.lastName,
             "email": user.email,
             "phone": user.phone,
-            "addressLine1": user.addressLine1,
-            "addressLine2": user.addressLine2,
-            "city": user.city,
-            "state": user.state,
-            "zipCode": user.zipCode,
-            "country": user.country
         })
     else:
         return jsonify({"error": "User not found"}), 404
