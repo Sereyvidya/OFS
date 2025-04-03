@@ -23,9 +23,6 @@ def create_app():
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(product_bp, url_prefix='/api')
 
-    # from .routes import product_bp
-    # app.register_blueprint(product_bp)  # Register the product blueprint here
-
     # Create database tables using the models defined in the application 
     with app.app_context():
         db.create_all()

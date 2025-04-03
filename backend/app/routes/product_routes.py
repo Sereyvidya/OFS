@@ -12,7 +12,7 @@ def add_product():
     name = data.get('name')
     price = data.get('price')
     description = data.get('description')
-    category = data.get('organic')
+    category = data.get('category')
 
     if not name or not price or not category:
         return jsonify({"error": "Missing required fields"}), 400
@@ -22,7 +22,7 @@ def add_product():
         name=name,
         price=price,
         description=description,
-        organic=category
+        category=category
     )
 
     db.session.add(new_product)
@@ -35,11 +35,11 @@ def get_products():
     products = Product.query.all()
     
     productList = [{
-        "productName": product.productName,
-        "productDesc": product.productDesc,
+        "name": product.name,
+        "description": product.description,
         "price": product.price,
         "quantity": product.quantity,
-        "organic": product.organic,
+        "category": product.category,
         "image": base64.b64encode(product.image).decode('utf-8')
     } for product in products]
     

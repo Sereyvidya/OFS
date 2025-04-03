@@ -2,22 +2,22 @@ drop database if exists OFS;                   -- These first lines select a dat
 create database OFS;
 use OFS;
 
-create table user (
+CREATE TABLE user (
 	userID int auto_increment primary key,     -- userID will automatically increment by 1 every time a user is added
-    firstName varchar(100) not null,
-    lastName varchar(100) not null,
-    email varchar(100) not null,
-    phone varchar(20) not null,
-    password varchar(255) not null
+    firstName varchar(50) not null,
+    lastName varchar(50) not null,
+    email varchar(320) not null,
+    phone varchar(10) not null,
+    password varchar(128) not null
 );
 
-create table products (
+CREATE TABLE product (
 	productID int auto_increment primary key,
-    productName varchar(100) not null,         -- productName and productDesc and things users will see
-    productDesc varchar(255),
-    price decimal(10, 2) not null,
+    name varchar(50) not null,                 -- productName and productDesc and things users will see
+    description varchar(255) not null,
+    price decimal(5, 2) not null,
     quantity int not null,                     -- How much of the product is available?
-    organic bool not null,                     -- Is the product organic? (For filter option)
+    category varchar(50) not null,                     -- Product's category (For filter option)
     image longblob                             -- Blobs store binary data for images (We can change to image url (varchar) if it helps)
 );
 

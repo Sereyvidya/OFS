@@ -10,10 +10,10 @@ const AddToCart = ({ product, onClose, onAddToCart }) => {
         <div className="flex flex-col items-center">
           <h2 className="text-2xl font-bold mb-4">Add Product to Cart</h2>
           <div className="flex flex-col space-y-2">
-            <p><strong>Item:</strong> {product.productName}</p>
+            <p><strong>Item:</strong> {product.name}</p>
             <p><strong>Price Per Unit:</strong> ${product.price}</p>
             <p>{product.productDesc}</p>
-            <p><strong>Organic? </strong> {product.organic ? 'Yes' : 'No'}</p>
+            {/* <p><strong>Organic? </strong> {product.organic ? 'Yes' : 'No'}</p> */}
             <p><strong>In Stock:</strong> {product.quantity}</p>
             <img
               src={`data:image/jpeg;base64,${product.image}`}

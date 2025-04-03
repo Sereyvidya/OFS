@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Login from "../components/Login";
 import Signup from "../components/Signup";
 import Profile from "../components/Profile";
-import ProductGrid from "../components/Product";;
+import ProductGrid from "../components/ProductGrid";;
 import Carousel from "../components/Carousel";
 
 export default function HomePage() {
