@@ -6,12 +6,20 @@ import Signup from "../components/Signup";
 import Profile from "../components/Profile";
 import ProductGrid from "../components/ProductGrid";;
 import Carousel from "../components/Carousel";
+import { FaFilter } from "react-icons/fa";
 
 export default function HomePage() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [category, setCategory] = useState("");
+
+  const categories = [
+    "All", "Fruits", "Vegetables", "Meat", "Seafood", "Dairy",
+    "Pantry", "Beverages", "Bakery", "Spices", "Vegetarian"
+  ];
 
   return (
     <div className="min-h-screen min-w-[700px] bg-white text-gray-900">
@@ -26,8 +34,29 @@ export default function HomePage() {
               type="text"
               placeholder="Search products"
               className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
+
+          {/* Categories Dropdown */}
+          <div className="flex justify-between mx-3 font-semibold px-4 py-2 border border-gray-300 rounded-full text-black hover:bg-gray-400 transition-colors cursor-pointer whitespace-nowrap">
+            <select
+              className="appearance-none focus:outline-none focus:ring-0"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+            <div className="flex items-center">
+              <FaFilter className=" text-gray-600 ml-2" />
+            </div>
+          </div>
+
           {/* Buttons */}
           <div className="flex justify-center">
           {isLoggedIn ? (
@@ -47,7 +76,7 @@ export default function HomePage() {
           ) : (
             <div className="flex flex-row">
               <button 
-                className="mx-3 font-semibold px-4 py-2 border border-gray-300 rounded-full white-600 text-black hover:bg-gray-400 transition-colors cursor-pointer"
+                className="mx-3 font-semibold px-4 py-2 border border-gray-300 rounded-full white-600 text-black hover:bg-gray-400 transition-colors cursor-pointer whitespace-nowrap"
                 onClick={(e) => setShowLogin(true)}>
                 Log in
               </button>
@@ -63,12 +92,13 @@ export default function HomePage() {
       </div>
       
       {/* Carousel Section */}
-      <Carousel />
+      {/* <Carousel /> */}
 
       <ProductGrid
           isLoggedIn={isLoggedIn}
-          showLogin={showLogin}
           setShowLogin={setShowLogin}
+          searchQuery={searchQuery}
+          category={category}
       />
 
       {/* Login popup */}
