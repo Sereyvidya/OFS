@@ -103,6 +103,8 @@ export default function HomePage() {
         setShowLogin={setShowLogin}
         searchQuery={searchQuery}
         category={category}
+        cartItems={cartItems}
+        setCartItems={setCartItems}
       />
 
       {/* Login popup */}
@@ -151,6 +153,8 @@ export default function HomePage() {
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
         <Cart 
           onClose={() => setShowCart(false)}
+          cartItems={cartItems}
+          setCartItems={setCartItems}
         />
       </div>
       )}

@@ -3,9 +3,8 @@
 import React, { useEffect, useState } from "react";
 import AddToCart from "./AddToCart";
 
-const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category }) => {
+const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItems, setCartItems }) => {
   const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState([]);
   const [addedToCart, setAddedToCart] = useState([]);
 
   // Get cartItems

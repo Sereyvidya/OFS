@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 
-const Cart = ({ onClose }) => {
-  const [cartItems, setCartItems] = useState([]);
+const Cart = ({ onClose, cartItems, setCartItems }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchCartItems = async () => {
