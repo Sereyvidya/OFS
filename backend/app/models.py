@@ -1,6 +1,6 @@
 from . import db
 
-# User model
+# User
 class User(db.Model):
     userID = db.Column(db.Integer, primary_key=True)
     firstName = db.Column(db.String(50), nullable=False)
@@ -23,4 +23,15 @@ class Product(db.Model):
     image = db.Column(db.LargeBinary, nullable=False)
 
     def __repr__(self):
-        return f"<User {self.productName}>"
+        return f"<User {self.name}>"
+
+# CartItem 
+class CartItem(db.Model):
+    cartItemID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    userID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
+    productID = db.Column(db.Integer, db.ForeignKey('product.productID'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False, default=1)
+
+
+    def __repr__(self):
+        return f"<CartItem belonging to userID {userID} and productID {productID}>"

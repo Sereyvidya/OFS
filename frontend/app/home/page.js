@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Login from "../components/Login";
 import Signup from "../components/Signup";
 import Profile from "../components/Profile";
+import Cart from "../components/Cart";
 import ProductGrid from "../components/ProductGrid";;
 import Carousel from "../components/Carousel";
 import { FaFilter } from "react-icons/fa";
@@ -12,9 +13,12 @@ export default function HomePage() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [showCart, setShowCart] = useState(false);
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("");
+  const [cartItems, setCartItems] = useState([]);
 
   const categories = [
     "All", "Fruits", "Vegetables", "Meat", "Seafood", "Dairy",
@@ -29,7 +33,7 @@ export default function HomePage() {
           {/* OFS Logo */}
           <div className="text-4xl font-bold">OFS</div>
           {/* Search Bar */}
-          <div className="flex-1 min-w-75 max-w-150">
+          <div className="flex-1 min-w-40 max-w-150">
             <input
               type="text"
               placeholder="Search products"
@@ -69,8 +73,8 @@ export default function HomePage() {
 
               <button 
                 className="mx-1 font-semibold px-4 py-2 inline-block whitespace-nowrap rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors cursor-pointer"
-                >
-                View Cart
+                onClick={(e) => setShowCart(true)}>
+                Cart
               </button>
             </div>
           ) : (
@@ -95,10 +99,10 @@ export default function HomePage() {
       {/* <Carousel /> */}
 
       <ProductGrid
-          isLoggedIn={isLoggedIn}
-          setShowLogin={setShowLogin}
-          searchQuery={searchQuery}
-          category={category}
+        isLoggedIn={isLoggedIn}
+        setShowLogin={setShowLogin}
+        searchQuery={searchQuery}
+        category={category}
       />
 
       {/* Login popup */}
@@ -141,6 +145,15 @@ export default function HomePage() {
           />
         </div>
         )}
+
+      {/* Show Cart */}
+      {showCart && (
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
+        <Cart 
+          onClose={() => setShowCart(false)}
+        />
+      </div>
+      )}
     </div>  
   );
 }
