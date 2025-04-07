@@ -158,6 +158,11 @@ export default function HomePage() {
         />
       </div>
       )}
+
+      {/* Admin Dashboard Link */}
+      {isLoggedIn && localStorage.getItem("isAdmin") === "true" && (
+        <a href="/admin" className="text-blue-500 hover:underline">Admin Dashboard</a>
+      )}
     </div>  
   );
 }

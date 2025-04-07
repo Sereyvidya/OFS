@@ -114,6 +114,7 @@ def login():
     if user and check_password_hash(user.password, data.get('password')):
         # Create a JWT token for the user
         access_token = create_access_token(identity=str(user.userID))
+        is_admin = user.email.endswith("@OFS.com")  # Check if the user is an admin
         return jsonify({"message": "Login successful", "token": access_token}), 200
     else:
         return jsonify({"error": "Invalid email or password."}), 401

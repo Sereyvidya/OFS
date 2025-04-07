@@ -27,8 +27,15 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess }) => {
 
       if (res.ok) {
         alert("Login successful!");
-        onClose();
-        onLoginSuccess(data.token);
+        localStorage.setItem("authToken", data.token);
+        localStorage.setItem("isAdmin", data.isAdmin); // Store admin status
+  
+        if (data.isAdmin) {
+          window.location.href = "/admin"; // Redirect to admin page
+        } else {
+          onClose();
+          onLoginSuccess(data.token);
+        }
       } else {
         setErrorMessage(data.error || "Password doesn't match. Please try again.");
       }
