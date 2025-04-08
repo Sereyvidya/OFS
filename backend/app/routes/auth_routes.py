@@ -84,6 +84,7 @@ def signup():
 
     # Hash the password before storing
     hashed_password = generate_password_hash(data.get('password'))
+    print(len(hashed_password), hashed_password)
 
     # Create a new user
     new_user = User(

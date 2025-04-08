@@ -8,7 +8,7 @@ CREATE TABLE user (
     lastName varchar(50) not null,
     email varchar(320) not null,
     phone varchar(10) not null,
-    password varchar(128) not null
+    password varchar(256) not null
 );
 
 CREATE TABLE product (
