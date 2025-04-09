@@ -41,20 +41,27 @@ const Profile = ({ onClose }) => {
 
   return (
     <div className="flex flex-col w-100 h-auto m-auto bg-white p-4 rounded-lg shadow-lg">
-      {/* Close button */}
-      <div>
-        <button className="text-lg font-bold text-gray-600 hover:text-black" onClick={onClose}>
-          ×
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold text-gray-800">Profile</h2>
+        <button
+          className="bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow"
+          onClick={onClose}
+        >
+          &times;
         </button>
       </div>
-      <div className="flex flex-col items-center">
-        <h2 className="text-2xl font-bold mb-4">Profile</h2>
-        <div className="flex flex-col space-y-2">
-            <p><strong>First Name:</strong> {profile.firstName}</p>
-            <p><strong>Last Name:</strong> {profile.lastName}</p>
-            <p><strong>Email:</strong> {profile.email}</p>
-            <p><strong>Phone:</strong> {profile.phone}</p>
-        </div>
+      <div className="flex flex-col space-y-4 w-full">
+        {[
+          ["First Name", profile.firstName],
+          ["Last Name", profile.lastName],
+          ["Email", profile.email],
+          ["Phone", profile.phone],
+        ].map(([label, value]) => (
+          <div key={label} className="flex justify-between items-center bg-gray-100 px-4 py-2 rounded-md shadow-sm">
+            <span className="font-medium text-gray-600">{label}:</span>
+            <span className="text-gray-800">{value}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
