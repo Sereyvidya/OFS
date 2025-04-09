@@ -28,9 +28,12 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess }) => {
       if (res.ok) {
         alert("Login successful!");
         localStorage.setItem("authToken", data.token);
-        localStorage.setItem("isAdmin", data.isAdmin); // Store admin status
-  
-        if (data.isAdmin) {
+
+        // Check if the user is an admin based on their email
+        const isAdmin = formData.email.endsWith("@OFS.com");
+        localStorage.setItem("isAdmin", isAdmin); // Store admin status
+
+        if (isAdmin) {
           window.location.href = "/admin"; // Redirect to admin page
         } else {
           onClose();

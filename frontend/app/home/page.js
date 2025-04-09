@@ -16,6 +16,7 @@ export default function HomePage() {
   const [showCart, setShowCart] = useState(false);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("");
   const [cartItems, setCartItems] = useState([]);
@@ -61,9 +62,22 @@ export default function HomePage() {
             </div>
           </div>
 
+          
+
           {/* Buttons */}
           <div className="flex justify-center">
+
+          {isAdmin ?
+            <div className="flex flex-row">
+              <button 
+                className="mx-3 font-semibold px-4 py-2 border border-gray-300 rounded-full white-600 text-black hover:bg-gray-400 transition-colors cursor-pointer whitespace-nowrap"
+                onClick={(e) => setShowProfile(true)}>
+                AdminPage
+              </button>
+            </div> : null}
+          
           {isLoggedIn ? (
+            
             <div className="flex flex-row">
               <button 
                 className="mx-3 font-semibold px-4 py-2 border border-gray-300 rounded-full white-600 text-black hover:bg-gray-400 transition-colors cursor-pointer whitespace-nowrap"
@@ -100,6 +114,7 @@ export default function HomePage() {
 
       <ProductGrid
         isLoggedIn={isLoggedIn}
+        isAdmin={isAdmin}
         setShowLogin={setShowLogin}
         searchQuery={searchQuery}
         category={category}
@@ -120,6 +135,11 @@ export default function HomePage() {
             onLoginSuccess={(token) => {
               localStorage.setItem("authToken", token); 
               setIsLoggedIn(true);
+              const isAdmin = localStorage.getItem("isAdmin") === "true";
+              if (isAdmin) {
+                setIsAdmin(true);
+                console.log("Admin logged in");
+              }
               setShowLogin(false);
             }}
           />
@@ -157,11 +177,6 @@ export default function HomePage() {
           setCartItems={setCartItems}
         />
       </div>
-      )}
-
-      {/* Admin Dashboard Link */}
-      {isLoggedIn && localStorage.getItem("isAdmin") === "true" && (
-        <a href="/admin" className="text-blue-500 hover:underline">Admin Dashboard</a>
       )}
     </div>  
   );
