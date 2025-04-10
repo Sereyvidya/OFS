@@ -41,6 +41,7 @@ def get_products():
         "price": product.price,
         "quantity": product.quantity,
         "category": product.category,
+        "weight": product.weight,
         "image": base64.b64encode(product.image).decode('utf-8')
     } for product in products]
     

@@ -98,10 +98,7 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
   });
 
   const isInCart = (id) => {
-    const boo = cartItems.some((item) => item.product.productID === id);
-    console.log(boo)
-    if (boo) {console.log(true)}
-    return boo
+    return cartItems.some((item) => item.product.productID === id);
   };
 
   if (!products.length) {

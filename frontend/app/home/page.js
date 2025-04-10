@@ -6,6 +6,7 @@ import Signup from "../components/Signup";
 import Profile from "../components/Profile";
 import Cart from "../components/Cart";
 import ProductGrid from "../components/ProductGrid";;
+import Checkout from "../components/Checkout";;
 import Carousel from "../components/Carousel";
 import { FaFilter } from "react-icons/fa";
 
@@ -14,6 +15,7 @@ export default function HomePage() {
   const [showSignup, setShowSignup] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showCart, setShowCart] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -146,17 +148,28 @@ export default function HomePage() {
             onClose={() => setShowProfile(false)}
           />
         </div>
-        )}
+      )}
 
       {/* Show Cart */}
       {showCart && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
-        <Cart 
-          onClose={() => setShowCart(false)}
-          cartItems={cartItems}
-          setCartItems={setCartItems}
-        />
-      </div>
+          <Cart 
+            onClose={() => setShowCart(false)}
+            cartItems={cartItems}
+            setCartItems={setCartItems}
+            setShowCheckout={setShowCheckout}
+          />
+        </div>
+      )}
+
+      {/* Show Checkout */}
+      {showCheckout && (
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
+          <Checkout
+            onClose={() => setShowCheckout(false)}
+            cartItems={cartItems}
+          />
+        </div>
       )}
     </div>  
   );

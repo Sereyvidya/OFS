@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 
-const Cart = ({ onClose, cartItems, setCartItems }) => {
+const Cart = ({ onClose, cartItems, setCartItems, setShowCheckout }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchCartItems = async () => {
@@ -46,8 +46,7 @@ const Cart = ({ onClose, cartItems, setCartItems }) => {
     const token = localStorage.getItem("authToken");
   
     try {
-      const response = await fetch(
-        `http://127.0.0.1:5000/cartItem/update/${cartItemID}`,
+      const response = await fetch(`http://127.0.0.1:5000/cartItem/update/${cartItemID}`,
         {
           method: "PUT",
           headers: {
@@ -83,9 +82,10 @@ const Cart = ({ onClose, cartItems, setCartItems }) => {
       return;
     }
 
+    console.log(token)
+
     try {
-      const response = await fetch(
-        `http://127.0.0.1:5000/cartItem/remove/${cartItemID}`,
+      const response = await fetch(`http://127.0.0.1:5000/cartItem/remove/${cartItemID}`,
         {
           method: "DELETE",
           headers: {
@@ -169,7 +169,12 @@ const Cart = ({ onClose, cartItems, setCartItems }) => {
         <div className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md text-lg mt-4">
           Total: ${totalPrice.toFixed(2)}
         </div>
-        <button className="bg-green-600 text-white hover:bg-green-700 hover:scale-103 text-white py-2 px-4 rounded-lg shadow-md text-lg mt-4">
+        <button 
+          className="bg-green-600 text-white hover:bg-green-700 hover:scale-103 text-white py-2 px-4 rounded-lg shadow-md text-lg mt-4"
+          onClick={() => {
+            setShowCheckout(true)
+            onClose()
+          }}>
           Checkout
         </button>
       </div>
