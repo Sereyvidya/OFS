@@ -42,10 +42,11 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess }) => {
     <div className="flex flex-col w-100 h-auto m-auto bg-white p-4 rounded-lg">
       {/* Close button */}
       <div>
-        <button 
-          className="text-lg font-bold text-gray-600 hover:text-black"
-          onClick={onClose}>
-          x
+        <button
+            className="bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow transition-colors"
+            onClick={onClose}
+          >
+            &times;
         </button>
       </div>
 
@@ -60,28 +61,28 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess }) => {
           )}
 
         {/* Email */}
-        <div className="flex justify-between mt-6 border border-black rounded-md p-2">
+        <div className="relative w-full mt-6">
           <input 
             type="text" 
             placeholder="Email" 
-            className="w-full mx-2 focus:outline-none focus:border-none"
+            className="w-full border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
             value={formData.email}
             onChange={(e) => setFormData({...formData, email: e.target.value})}
           />
-          <FaEnvelope className="my-auto mx-2"/> 
+          <FaEnvelope className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"/> 
         </div>
 
         {/* Password */}
-        <div className="flex justify-between mt-6 border border-black rounded-md p-2">
+        <div className="relative w-full mt-6">
           <input 
             type={showPassword ? "text" : "password"}
             placeholder="Password" 
-            className="w-full mx-2 focus:outline-none focus:border-none"
+            className="w-full border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
             value={formData.password}
             onChange={(e) => setFormData({...formData, password: e.target.value})}
           />
           <span
-              className="my-auto mx-2 cursor-pointer"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -89,12 +90,14 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess }) => {
         </div>
 
         {/* Forget password */}
-        <div className="mt-2 text-right">
+        {/* <div className="mt-2 text-right">
           <a href="#" className="text-black">Forget Password?</a>
-        </div>
+        </div> */}
 
         {/* Log in button */}
-        <button type="submit" className="text-center text-white mt-2 bg-blue-500 rounded-md p-2">
+        <button 
+          type="submit" 
+          className="font-semibold px-4 py-2 mt-6 border border-blue-300 rounded-full bg-blue-600 text-white hover:bg-blue-400 hover:scale-101 shadow transition-colors cursor-pointer whitespace-nowrap">
           Log in
         </button>
 
@@ -102,7 +105,7 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess }) => {
         <div className="flex justify-center mt-2">
           <p className="mr-1">Don't have an account?</p>
           <p 
-            className="font-semibold text-blue-400 hover:underline"
+            className="font-semibold text-blue-400 hover:underline cursor-pointer"
             onClick={onSignupClick}>
             Sign up
           </p>

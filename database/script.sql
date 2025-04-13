@@ -52,23 +52,3 @@ CREATE TABLE order_item (
     foreign key (orderID) references `order`(orderID) on delete cascade,
     foreign key (productID) references product(productID) on delete cascade
 );
-
--- create table orders (
--- 	orderID int auto_increment not null primary key,
---     userID int not null,
---     totalCost decimal(10, 2),                   -- Cost calculated from items in the order
---     created_at timestamp default current_timestamp,  -- When the order was placed so that OFS employees can see this
---     deliveryStatus varchar(10),                 -- delivery status
---     orderRating int,                            -- Orders can be rated by customers (1-5 stars)
---     ratingDesc text,                            -- Decription of possible improvements from the user
---     foreign key (userID) references user(userID)
--- );
-
--- CREATE TABLE orderItems (  -- You can't store arrays, so this table stores items within each order
---     orderItemID int auto_increment primary key,
---     orderID int not null,
---     productID int not null,
---     quantity int default 1,
---     foreign key (orderID) references orders(orderID),
---     foreign key (productID) references products(productID)
--- );

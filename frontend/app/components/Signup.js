@@ -55,10 +55,11 @@ const Signup = ({ onClose, onLoginClick }) => {
       <div className="flex flex-col w-150 h-auto m-auto bg-white p-4 rounded-lg">
         {/* Close button */}
         <div>
-          <button 
-            className="text-lg font-bold text-gray-600 hover:text-black"
-            onClick={onClose}>
-            x
+          <button
+            className="bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow transition-colors"
+            onClick={onClose}
+          >
+            &times;
           </button>
         </div>
 
@@ -76,11 +77,11 @@ const Signup = ({ onClose, onLoginClick }) => {
           {/* Full Name */}
           <div className="flex flex-col">
             <p>Full Name</p>
-            <div className="flex justify-between mt-2">
+            <div className="flex flex-col sm:flex-row justify-between mt-2 gap-6">
               <input
                 type="text"
                 placeholder="First"
-                className="border border-black rounded-md p-2 w-68"
+                className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
                 value={formData.firstName}
                 onChange={(e) => {
                   const formattedName = e.target.value
@@ -91,7 +92,7 @@ const Signup = ({ onClose, onLoginClick }) => {
               <input
                 type="text"
                 placeholder="Last"
-                className="border border-black rounded-md p-2 w-68"
+                className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
                 value={formData.lastName}
                 onChange={(e) => {
                   const formattedName = e.target.value
@@ -103,22 +104,22 @@ const Signup = ({ onClose, onLoginClick }) => {
           </div>
 
           {/* Email & Phone Number */}
-          <div className="flex justify-between mt-4">
-            <div className="flex flex-col">
+          <div className="flex flex-col sm:flex-row justify-between mt-4 gap-6">
+            <div className="flex flex-col w-full">
               <p>Email</p>
               <input 
                 type="email"
                 placeholder="example@gmail.com"
-                className="border border-black rounded-md p-2 w-68 mt-2"
+                className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}/>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col w-full">
               <p>Phone Number</p>
               <input 
                 type="tel"
                 placeholder="XXXXXXXXXX"
-                className="border border-black rounded-md p-2 w-68 mt-2"
+                className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}/>
             </div>
@@ -127,17 +128,16 @@ const Signup = ({ onClose, onLoginClick }) => {
           {/* Password */}
           <div className="flex flex-col mt-4">
             <p>Password</p>
-            <div className="flex justify-between mt-2">
+            <div className="flex flex-col sm:flex-row justify-between mt-2 gap-6">
               <input
                 type="password"
                 placeholder="Password"
-                className="border border-black rounded-md p-2 w-68"
-                value={formData.password}
+                className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}/>
               <input
                 type="password"
                 placeholder="Confirm Password"
-                className="border border-black rounded-md p-2 w-68"
+                className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}/>
             </div>
@@ -148,7 +148,9 @@ const Signup = ({ onClose, onLoginClick }) => {
           </div>
 
           {/* Sign Up Button */}
-          <button type="submit" className="text-center text-white mt-2 bg-blue-500 rounded-md p-2 mt-6">
+          <button 
+            type="submit" 
+            className="font-semibold px-4 py-2 mt-6 border border-blue-300 rounded-full bg-blue-600 text-white hover:bg-blue-400 hover:scale-101 shadow transition-colors cursor-pointer whitespace-nowrap">
             Sign up
           </button>
 
@@ -156,7 +158,7 @@ const Signup = ({ onClose, onLoginClick }) => {
           <div className="flex justify-center mt-4">
             <p className="mr-1">Already have an account?</p>
             <p 
-              className="font-semibold text-blue-400 hover:underline"
+              className="font-semibold text-blue-400 hover:underline cursor-pointer"
               onClick={onLoginClick}>
               Log in
             </p>

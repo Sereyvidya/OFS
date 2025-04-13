@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-const Checkout = ({ onClose, cartItems }) => {
+const DeliveryAddress = ({ onClose, cartItems, setShowCart, setShowDeliveryAddress }) => {
   const [address, setAddress] = useState({
     street: "",
     city: "",
@@ -20,8 +20,6 @@ const Checkout = ({ onClose, cartItems }) => {
       alert("Please fill out the full address.");
       return;
     }
-
-    //productID: item.product.id
 
     const arr = cartItems.map((item) => ({
       productID: item.product.productID,
@@ -81,9 +79,9 @@ const Checkout = ({ onClose, cartItems }) => {
   };
 
   return (
-    <div className="flex flex-col w-100 max-h-[400px] overflow-y-auto m-auto bg-white p-6 rounded-lg shadow-lg">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-800">Checkout</h2>
+    <div className="flex flex-col gap-4 w-100 h-auto m-auto bg-white p-4 rounded-lg shadow-lg">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-semibold text-sky-950">Delivery Address</h2>
         <button
           className="bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow"
           onClick={onClose}
@@ -92,39 +90,54 @@ const Checkout = ({ onClose, cartItems }) => {
         </button>
       </div>
 
-      <form className="flex flex-col gap-4 mb-6">
-        <h3 className="text-lg font-semibold text-gray-700">Shipping Address</h3>
+      <form className="flex flex-col gap-4">
         <input
           type="text"
           placeholder="Street Address"
-          className="border border-black rounded-md p-2"
+          className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
           value={address.street}
           onChange={(e) => handleInputChange("street", e.target.value)}
         />
         <input
           type="text"
           placeholder="City"
-          className="border border-black rounded-md p-2"
+          className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
           value={address.city}
           onChange={(e) => handleInputChange("city", e.target.value)}
         />
         <input
           type="text"
           placeholder="State"
-          className="border border-black rounded-md p-2"
+          className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
           value={address.state}
           onChange={(e) => handleInputChange("state", e.target.value)}
         />
         <input
           type="text"
           placeholder="ZIP Code"
-          className="border border-black rounded-md p-2"
+          className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
           value={address.zip}
           onChange={(e) => handleInputChange("zip", e.target.value)}
         />
+        <div className="flex justify-between">
+          <button
+            className="border border-blue-300 bg-blue-600 text-white hover:bg-blue-400 hover:scale-103 shadow transition-colors cursor-pointer whitespace-nowrap py-2 px-4 rounded-lg shadow-md text-lg"
+            onClick={(e) => {
+              setShowDeliveryAddress(false)
+              setShowCart(true)
+              onClose()
+            }}>
+            Go Back
+          </button>
+          <button
+            className="border border-green-300 bg-green-600 text-white hover:bg-green-400 hover:scale-103 shadow transition-colors cursor-pointer whitespace-nowrap py-2 px-4 rounded-lg shadow-md text-lg"
+            >
+            Proceed
+          </button>
+        </div>
       </form>
 
-      <div className="space-y-2 ">
+      {/* <div className="space-y-2 ">
         <h3 className="text-lg font-semibold text-gray-700">Your Cart</h3>
         <div className="space-y-1">
           {cartItems.map((item) => (
@@ -163,9 +176,9 @@ const Checkout = ({ onClose, cartItems }) => {
         >
           Place Order
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };
 
-export default Checkout;
+export default DeliveryAddress;

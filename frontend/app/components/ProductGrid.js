@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import AddToCart from "./AddToCart";
 
-const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItems, setCartItems }) => {
+const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItems, setCartItems, setShowCart }) => {
   const [products, setProducts] = useState([]);
   const [addedToCart, setAddedToCart] = useState([]);
 
@@ -52,7 +51,7 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
     };
     fetchProducts();
     if (isLoggedIn) {fetchCartItems()}; // call get cartItems just once to initialize cartItems
-  }, []);
+  }, [isLoggedIn]);
 
   // Add product to cart 
   const handleAddToCart = async (product) => {
@@ -105,30 +104,42 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
     return <div className="flex items-center justify-center h-screen text-xl">Loading...</div>;
   }
 
+  //max-w-5xl
+
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 px-2 py-6 max-w-5xl mx-auto">
+    <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 px-6 py-6 w-full mx-auto">
       {filteredProducts.length > 0 ? (
         filteredProducts.map((product, index) => {
           const isAdded = isInCart(product.productID);
-          if (isAdded) {console.log("hi")}
           return (
-            <div key={index} className="border border-gray-300 rounded-md p-3 bg-white shadow-md flex flex-col items-center text-sm">
-              <h3 className="text-base font-medium">{product.name}</h3>
-              <p className="text-gray-500">{product.description}</p>
-              <p className="text-gray-500">${product.price}</p>
+            <div key={index} className="border border-gray-300 rounded-md p-3 bg-gray-200 shadow flex flex-col items-center text-sm">
+              <div className="w-full flex justify-center bg-sky-950 py-2 rounded-md shadow">
+                <h3 className="font-semibold text-lg text-white">{product.name}</h3>
+              </div>
               <img
                 src={`data:image/jpeg;base64,${product.image}`}
                 alt={product.name}
-                className="w-full aspect-1 object-cover rounded-md mt-1"
+                className="w-full aspect-1 object-cover rounded-md mt-3"
               />
+              <div className="flex flex-col items-center mt-3">
+                <p className="text-gray-500">{product.description}</p>
+                <p className="text-gray-500">${product.price}</p>
+              </div>
               <button
                 className={`mt-3 px-3 py-1.5 text-sm font-medium rounded-full transition shadow
-                  ${isAdded ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'}
+                  ${isAdded ? 
+                    'border border-green-300 bg-green-600 text-white hover:bg-green-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap' : 
+                    'border border-blue-300 bg-blue-600 text-white hover:bg-blue-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap'}
                 `}
-                disabled={isAdded}
-                onClick={() => handleAddToCart(product)}
+                onClick={() => {
+                  if (isAdded) {
+                    setShowCart(true);
+                  } else {
+                    handleAddToCart(product);
+                  }
+                }}
               >
-                {isAdded ? 'Added to Cart' : 'Add to Cart'}
+                {isAdded ? 'View Cart' : 'Add to Cart'}
               </button>
             </div>
           );
