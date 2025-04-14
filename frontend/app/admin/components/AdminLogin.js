@@ -17,7 +17,7 @@ const AdminLogin = ({ onLoginSuccess }) => {
     setErrorMessage("");
 
     try {
-      const res = await fetch("http://127.0.0.1:5000/auth/login", {
+      const res = await fetch("http://127.0.0.1:5000/employee/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -28,17 +28,7 @@ const AdminLogin = ({ onLoginSuccess }) => {
       if (res.ok) {
         alert("Login successful!");
         localStorage.setItem("authToken", data.token);
-
-        // Check if the user is an admin based on their email
-        const isAdmin = formData.email.endsWith("@OFS.com");
-        localStorage.setItem("isAdmin", isAdmin); // Store admin status
-
-        if (isAdmin) {
-          window.location.href = "/admin"; // Redirect to admin page
-        } else {
-          onClose();
-          onLoginSuccess(data.token);
-        }
+        onLoginSuccess(data.token);
       } else {
         setErrorMessage(data.error || "Password doesn't match. Please try again.");
       }
@@ -53,7 +43,7 @@ const AdminLogin = ({ onLoginSuccess }) => {
       {/* Form */}
       <form onSubmit={handleSubmit} className="flex flex-col">
         <div className="flex justify-center">
-          <h1 className="font-display text-4xl font-bold">Admin Log in</h1>
+          <h1 className="font-display text-4xl font-bold">Log in</h1>
         </div>
 
         {errorMessage && (

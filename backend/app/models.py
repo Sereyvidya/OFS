@@ -66,3 +66,16 @@ class OrderItem(db.Model):
     productID = db.Column(db.Integer, db.ForeignKey('product.productID'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     priceAtPurchase = db.Column(db.Numeric(5, 2), nullable=False)
+
+# Employee
+class Employee(db.Model):
+    __tablename__ = 'employee'
+    employeeID = db.Column(db.Integer, primary_key=True)
+    firstName = db.Column(db.String(50), nullable=False)
+    lastName = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(320), unique=True, nullable=False)
+    phone = db.Column(db.String(10), nullable=False)
+    password = db.Column(db.String(256), nullable=False)
+
+    def __repr__(self):
+        return f"<Employee {self.email}>"

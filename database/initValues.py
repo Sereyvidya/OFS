@@ -1,5 +1,5 @@
 import mysql.connector
-import hashlib
+from werkzeug.security import generate_password_hash
 
 connection = mysql.connector.connect(
     host = "localhost",
@@ -116,7 +116,7 @@ email = "alice.smith@ofs.com"
 phone = "1234567890"
 plain_password = "Password123$"
 
-hashed_password = hashlib.sha256(plain_password.encode()).hexdigest()
+hashed_password = generate_password_hash(plain_password)
 
 try:
     insert_query = """

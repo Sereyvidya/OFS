@@ -42,11 +42,15 @@ def add_product():
         weight = request.form.get("weight")
         image = request.files.get("image")
 
+        print(repr(weight))
+        print(weight.replace('.', '', 1).isdigit())
         # Validation
         if not name or len(name) > 50:
             return jsonify({"error": "Product name must be provided and 50 characters or less."}), 400
         if not price or not price.replace('.', '', 1).isdigit():
             return jsonify({"error": "Product price must be a valid number."}), 400
+        if not weight or not weight.replace('.', '', 1).isdigit():
+            return jsonify({"error": "Product weight must be a valid number."}), 400
         if not description or len(description) > 255:
             return jsonify({"error": "Product description must be provided and 255 characters or less."}), 400
         if not category:

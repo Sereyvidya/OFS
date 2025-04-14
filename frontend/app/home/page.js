@@ -54,7 +54,7 @@ export default function HomePage() {
     };
 
     fetchProfile();
-  }, []);
+  }, [isLoggedIn]);
 
   const categories = [
     "All", "Fruits", "Vegetables", "Meat", "Seafood", "Dairy",
@@ -130,7 +130,7 @@ export default function HomePage() {
               </button>
             </div>
           ) : (
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-row gap-4">
               <button 
                 className="font-semibold px-4 py-2 border border-gray-300 rounded-full bg-white-600 text-black hover:bg-gray-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={(e) => setShowLogin(true)}>

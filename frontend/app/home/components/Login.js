@@ -28,17 +28,8 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess }) => {
       if (res.ok) {
         alert("Login successful!");
         localStorage.setItem("authToken", data.token);
-
-        // Check if the user is an admin based on their email
-        const isAdmin = formData.email.endsWith("@OFS.com");
-        localStorage.setItem("isAdmin", isAdmin); // Store admin status
-
-        if (isAdmin) {
-          window.location.href = "/admin"; // Redirect to admin page
-        } else {
-          onClose();
-          onLoginSuccess(data.token);
-        }
+        onClose();
+        onLoginSuccess(data.token);
       } else {
         setErrorMessage(data.error || "Password doesn't match. Please try again.");
       }

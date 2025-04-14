@@ -110,7 +110,7 @@ const Signup = ({ onClose, onLoginClick }) => {
               <input 
                 type="email"
                 placeholder="example@gmail.com"
-                className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+                className="mt-2 w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}/>
             </div>
@@ -119,7 +119,7 @@ const Signup = ({ onClose, onLoginClick }) => {
               <input 
                 type="tel"
                 placeholder="XXXXXXXXXX"
-                className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+                className="mt-2 w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}/>
             </div>

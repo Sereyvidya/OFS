@@ -39,6 +39,7 @@ const AddProduct = ({ onClose }) => {
       const formData = new FormData();
       formData.append("name", product.name);
       formData.append("price", product.price);
+      formData.append("weight", product.weight);
       formData.append("description", product.description);
       formData.append("category", product.category);
       formData.append("quantity", product.quantity);
@@ -75,87 +76,122 @@ const AddProduct = ({ onClose }) => {
       {/* Close button */}
       <div>
         <button
-          className="text-lg font-bold text-gray-600 hover:text-black"
+          className="bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow transition-colors"
           onClick={onClose}
         >
-          x
+          &times;
         </button>
       </div>
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-        <h1 className="text-2xl font-bold text-center">Add Product</h1>
+        <div className="flex justify-center">
+          <h1 className="font-display text-4xl font-bold">Add Product</h1>
+        </div>
 
         {errorMessage && (
           <p className="text-red-500 text-center">{errorMessage}</p>
         )}
 
-        <input
-          name="name"
-          type="text"
-          placeholder="Product Name"
-          value={product.name}
-          onChange={handleChange}
-          required
-          className="border p-2 rounded"
-        />
-        <input
-          name="price"
-          type="float"
-          placeholder="Price"
-          value={product.price}
-          onChange={handleChange}
-          required
-          className="border p-2 rounded"
-        />
-        <input
-          name="weight"
-          type="float"
-          placeholder="weight"
-          value={product.weight}
-          onChange={handleChange}
-          required
-          className="border p-2 rounded"
-        />
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={product.description}
-          onChange={handleChange}
-          required
-          className="border p-2 rounded"
-        ></textarea>
-        <select
-          name="category"
-          value={product.category}
-          onChange={handleChange}
-          required
-          className="border p-2 rounded"
-        >
-          <option value="" disabled>
-            Select a Category
-          </option>
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
-        <input
-          name="quantity"
-          type="number"
-          placeholder="Quantity"
-          value={product.quantity || ""}
-          onChange={handleChange}
-          required
-          className="border p-2 rounded"
-        />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="border p-2 rounded"
-        />
+
+        {/* Product Name & Price */}
+        <div className="flex flex-col sm:flex-row justify-between gap-6">
+          <div className="flex flex-col w-full">
+            <p>Product Name</p>
+            <input 
+              type="text"
+              placeholder="Apple, Beef, Cheese..."
+              className="mt-2 w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+              value={product.name}
+              onChange={(e) => setProduct({ ...product, name: e.target.value })}/>
+          </div>
+          <div className="flex flex-col w-full">
+            <p>Price ($)</p>
+            <input 
+              type="number"
+              step="0.01"
+              min="0.10"
+              placeholder="$5.99, $10.00, $X.XX ..."
+              className="mt-2 w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+              value={product.price}
+              onChange={(e) => setProduct({ ...product, price: e.target.value.replace(",", ".") })}/>
+          </div>
+        </div>
+
+        {/* Weight & Quantity */}
+        <div className="flex flex-col sm:flex-row justify-between gap-6">
+          <div className="flex flex-col w-full">
+            <p>Weight (lbs)</p>
+            <input 
+              type="number"
+              step="0.001"
+              min="0.125"
+              placeholder="1.0, 3.375, X.XXX ..."
+              className="mt-2 w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+              value={product.weight}
+              onChange={(e) => setProduct({ ...product, weight: e.target.value.replace(",", ".") })}/>
+          </div>
+          <div className="flex flex-col w-full">
+            <p>Quantity (in stock)</p>
+            <input 
+              type="number"
+              step="1"
+              min="0"
+              placeholder="50, 90, 126, XXX ..."
+              className="mt-2 w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+              value={product.quantity}
+              onChange={(e) => setProduct({ ...product, quantity: e.target.value })}/>
+          </div>
+        </div>
+
+        {/* Description & Category */}
+        <div className="flex flex-col sm:flex-row justify-between gap-6">
+          <div className="flex flex-col w-full">
+            <p>Description</p>
+            <input 
+              type="text"
+              placeholder="1 pack of ..."
+              className="mt-2 w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+              value={product.description}
+              onChange={(e) => setProduct({ ...product, description: e.target.value})}/>
+          </div>
+          <div className="flex flex-col w-full">
+            <p>Category</p>
+            <select
+              name="category"
+              value={product.category}
+              onChange={handleChange}
+              required
+              className="mt-2 w-full h-full p-2 rounded-md bg-white border border-gray-300 shadow transition-colors focus:outline-gray-400"
+            >
+              <option value="" disabled>
+                Select a Category
+              </option>
+              {categories.map((category) => (
+                <option 
+                  key={category} 
+                  value={category}
+                  className="p-2 hover:bg-gray-200 cursor-pointer"
+                  >
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+              
+        <div className="flex flex-col sm:flex-row gap-6">
+          <div className="flex flex-col w-full">
+            <p>Image</p>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="mt-2 w-full h-full p-2 rounded-md bg-white border border-gray-300 shadow transition-colors focus:outline-gray-400"
+            />
+          </div>
+        </div>
+
         <button
           type="submit"
           className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
