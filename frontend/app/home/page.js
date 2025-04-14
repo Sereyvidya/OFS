@@ -5,8 +5,10 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Profile from "./components/Profile";
 import Cart from "./components/Cart";
-import ProductGrid from "./components/ProductGrid";;
-import DeliveryAddress from "./components/DeliveryAddress";;
+import ProductGrid from "./components/ProductGrid";
+import DeliveryAddress from "./components/DeliveryAddress";
+import PaymentInformation from "./components/PaymentInformation";
+import OrderSummary from "./components/OrderSummary";
 import Carousel from "./components/Carousel";
 import { FaFilter } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
@@ -18,6 +20,8 @@ export default function HomePage() {
   const [showProfile, setShowProfile] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [showDeliveryAddress, setShowDeliveryAddress] = useState(false);
+  const [showPaymentInformation, setShowPaymentInformation] = useState(false);
+  const [showOrderSummary, setShowOrderSummary] = useState(false);
   const [profile, setProfile] = useState(null);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -25,34 +29,46 @@ export default function HomePage() {
   const [category, setCategory] = useState("All");
   const [cartItems, setCartItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [address, setAddress] = useState({
+    street: "",
+    city: "",
+    state: "",
+    zip: "",
+  });
+  const [paymentInformation, setPaymentInformation] = useState({
+    name: "",
+    number: "",
+    expirationDate: "",
+    cvc: "",
+  });
+
+  const fetchProfile = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.log("No token found.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/user/profile", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setProfile(data);
+      } else {
+        console.error("Failed to fetch profile");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      const token = localStorage.getItem("authToken");
-      if (!token) {
-        console.log("No token found.");
-        return;
-      }
-
-      try {
-        const response = await fetch("http://127.0.0.1:5000/user/profile", {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setProfile(data);
-        } else {
-          console.error("Failed to fetch profile");
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
     fetchProfile();
   }, [isLoggedIn]);
 
@@ -171,6 +187,7 @@ export default function HomePage() {
               }}
             onLoginSuccess={(token) => {
               localStorage.setItem("authToken", token); 
+              fetchProfile();
               setIsLoggedIn(true);
               setShowLogin(false);
             }}
@@ -221,10 +238,39 @@ export default function HomePage() {
             onClose={() => setShowDeliveryAddress(false)}
             cartItems={cartItems}
             setShowCart={setShowCart}
-            setShowDeliveryAddress={setShowDeliveryAddress}
+            address={address}
+            setAddress={setAddress}
+            setShowPaymentInformation={setShowPaymentInformation}
           />
         </div>
       )}
+
+      {/* Show Payment Information */}
+      {showPaymentInformation && (
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
+          <PaymentInformation 
+            onClose={() => setShowPaymentInformation(false)}
+            setShowDeliveryAddress={setShowDeliveryAddress}
+            paymentInformation={paymentInformation}
+            setPaymentInformation={setPaymentInformation}
+            setShowOrderSummary={setShowOrderSummary}
+          />
+        </div>
+      )}
+
+      {/* Show Order Summary */}
+      {showOrderSummary && (
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
+          <OrderSummary
+            onClose={() => setShowOrderSummary(false)}
+            cartItems={cartItems}
+            address={address}
+            paymentInformation={paymentInformation}
+            setShowPaymentInformation={setShowPaymentInformation}
+          />
+        </div>
+      )}
+
     </div>  
   );
 }
