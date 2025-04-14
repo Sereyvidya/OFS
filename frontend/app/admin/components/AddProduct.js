@@ -2,14 +2,17 @@
 
 import React, { useState } from "react";
 
-const AddProduct = ({ onClose }) => {
-  const [product, setProduct] = useState({
-    name: "",
-    price: "",
-    description: "",
-    category: "",
-    weight: ""
-  });
+const AddProduct = ({ onClose, editingProduct, setEditingProduct }) => {
+  const [product, setProduct] = useState(
+    editingProduct || {
+      name: "",
+      price: "",
+      description: "",
+      category: "",
+      weight: "",
+      quantity: "",
+    }
+  );
   const [image, setImage] = useState(null); // State for the image file
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -25,6 +28,14 @@ const AddProduct = ({ onClose }) => {
   const handleImageChange = (e) => {
     setImage(e.target.files[0]); // Store the selected image file
   };
+
+  const isEditing = editingProduct && editingProduct.productID;
+
+  const endpoint = isEditing
+    ? `http://127.0.0.1:5000/product/edit/${editingProduct.productID}`
+    : "http://127.0.0.1:5000/product/add";
+
+  const method = isEditing ? "PUT" : "POST";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,14 +60,18 @@ const AddProduct = ({ onClose }) => {
         console.log(`Image content type: ${image.type}`);
       }
 
-      const response = await fetch("http://127.0.0.1:5000/product/add", {
-        method: "POST",
+      const response = await fetch(endpoint, {
+        method: method,
         body: formData, // Send FormData instead of JSON
       });
 
       if (response.ok) {
-        alert("Product added successfully!");
-        setProduct({ name: "", price: "", description: "", category: "" });
+        if (isEditing) {
+          alert("Product edited successfully!");
+        } else {
+          alert("Product added successfully!");
+        }
+        setProduct({ name: "", price: "", description: "", category: "", weight: "", quantity: "" });
         setImage(null); // Reset the image state
         onClose();
       } else {
@@ -77,7 +92,10 @@ const AddProduct = ({ onClose }) => {
       <div>
         <button
           className="bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow transition-colors"
-          onClick={onClose}
+          onClick={() => {
+            onClose()
+            setEditingProduct(null);
+          }}
         >
           &times;
         </button>
@@ -86,7 +104,7 @@ const AddProduct = ({ onClose }) => {
       {/* Form */}
       <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
         <div className="flex justify-center">
-          <h1 className="font-display text-4xl font-bold">Add Product</h1>
+          <h1 className="font-display text-4xl font-bold">{isEditing ? "Edit Product": "Add Product"}</h1>
         </div>
 
         {errorMessage && (
@@ -196,7 +214,7 @@ const AddProduct = ({ onClose }) => {
           type="submit"
           className="font-semibold px-4 py-2 border border-blue-300 rounded-full bg-blue-600 text-white hover:bg-blue-400 hover:scale-101 shadow transition-colors cursor-pointer whitespace-nowrap"
         >
-          Add Product
+          {isEditing ? "Save Changes": "Add Product"}
         </button>
       </form>
     </div>

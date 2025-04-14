@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-const ProductGrid = ({ searchQuery, category }) => {
+const ProductGrid = ({ searchQuery, category, setEditingProduct, setShowAddProduct }) => {
   const [products, setProducts] = useState([]);
 
   // Get product
@@ -54,6 +54,10 @@ const ProductGrid = ({ searchQuery, category }) => {
               </div>
               <button
                 className="mt-3 px-3 py-1.5 text-sm font-medium rounded-full transition shadow border border-blue-300 bg-blue-600 text-white hover:bg-blue-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                onClick={() => {
+                  setEditingProduct(product)
+                  setShowAddProduct(true)
+                }}
               >
                 Edit
               </button>

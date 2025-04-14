@@ -8,7 +8,7 @@ import AddProduct from "./components/AddProduct.js";
 
 export default function AdminPage() {
   const [showLogin, setShowLogin] = useState(true);
-  const [showProfile, setShowProfile] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
 
   const [isOpen, setIsOpen] = useState(false);
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -105,6 +105,8 @@ export default function AdminPage() {
         <ProductGrid
           searchQuery={searchQuery}
           category={category}
+          setEditingProduct={setEditingProduct}
+          setShowAddProduct={setShowAddProduct}
         />
 
         {/* Show Profile */}
@@ -112,6 +114,8 @@ export default function AdminPage() {
           <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
             <AddProduct 
               onClose={() => setShowAddProduct(false)}
+              editingProduct={editingProduct}
+              setEditingProduct={setEditingProduct}
             />
           </div>
         )}
