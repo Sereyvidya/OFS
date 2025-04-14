@@ -2,39 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 
-const Profile = ({ onClose }) => {
-  const [profile, setProfile] = useState(null);
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const token = localStorage.getItem("authToken");
-      if (!token) {
-        console.log("No token found.");
-        return;
-      }
-
-      try {
-        const response = await fetch("http://127.0.0.1:5000/user/profile", {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setProfile(data);
-        } else {
-          console.error("Failed to fetch profile");
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchProfile();
-  }, []);
-
+const Profile = ({ onClose, profile }) => {
   if (!profile) {
     return <div className="flex items-center justify-center h-screen text-xl">Loading...</div>;
   }
@@ -44,7 +12,7 @@ const Profile = ({ onClose }) => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-gray-800">Profile</h2>
         <button
-          className="bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow"
+          className="bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow transition-colors"
           onClick={onClose}
         >
           &times;

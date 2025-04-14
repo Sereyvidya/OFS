@@ -23,7 +23,8 @@ def get_products():
         "price": product.price,
         "quantity": product.quantity,
         "category": product.category,
-        "image": base64.b64encode(product.image).decode('utf-8') if product.image else None
+        "weight": product.weight,
+        "image": base64.b64encode(product.image).decode('utf-8')
     } for product in products]
     
     return jsonify(productList)
@@ -38,6 +39,7 @@ def add_product():
         description = request.form.get("description")
         category = request.form.get("category")
         quantity = request.form.get("quantity")
+        weight = request.form.get("weight")
         image = request.files.get("image")
 
         # Validation
@@ -61,6 +63,7 @@ def add_product():
         new_product = Product(
             name=name,
             price=float(price),
+            weight=float(weight),
             description=description,
             category=category,
             quantity=int(quantity),

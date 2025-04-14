@@ -18,11 +18,12 @@ def create_app():
     JWTManager(app)
 
     # Register the application's blueprints (including product blueprint)
-    from .routes import auth_bp, user_bp, product_bp, cartItem_bp
+    from .routes import auth_bp, user_bp, product_bp, cartItem_bp, order_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(product_bp, url_prefix='/product')
     app.register_blueprint(cartItem_bp, url_prefix='/cartItem')
+    app.register_blueprint(order_bp, url_prefix='/order')
 
     # Create database tables using the models defined in the application 
     with app.app_context():

@@ -51,6 +51,7 @@ def get_cart_items():
                 "price": product.price,
                 "quantity": product.quantity,
                 "category": product.category,
+                "weight": product.weight,
                 "image": base64.b64encode(product.image).decode('utf-8')
             },
             'quantity': cart_item.quantity

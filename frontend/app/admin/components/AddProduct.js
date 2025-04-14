@@ -8,6 +8,7 @@ const AddProduct = ({ onClose }) => {
     price: "",
     description: "",
     category: "",
+    weight: ""
   });
   const [image, setImage] = useState(null); // State for the image file
   const [errorMessage, setErrorMessage] = useState("");
@@ -103,6 +104,15 @@ const AddProduct = ({ onClose }) => {
           type="float"
           placeholder="Price"
           value={product.price}
+          onChange={handleChange}
+          required
+          className="border p-2 rounded"
+        />
+        <input
+          name="weight"
+          type="float"
+          placeholder="weight"
+          value={product.weight}
           onChange={handleChange}
           required
           className="border p-2 rounded"

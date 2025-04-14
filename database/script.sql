@@ -18,10 +18,11 @@ CREATE TABLE product (
     price decimal(5, 2) not null,
     quantity int not null,                     -- How much of the product is available?
     category varchar(50) not null,                     -- Product's category (For filter option)
-    image longblob                             -- Blobs store binary data for images (We can change to image url (varchar) if it helps)
+    weight decimal(5, 3) not null,
+    image longblob not null                          -- Blobs store binary data for images (We can change to image url (varchar) if it helps)
 );
 
-CREATE TABLE cartItem (
+CREATE TABLE cart_item (
 	cartItemID int auto_increment primary key,
 	userID int not null,
     productID int not null, 
@@ -30,22 +31,33 @@ CREATE TABLE cartItem (
     foreign key (productID) references product(productID) on delete cascade
 );
 
--- create table orders (
--- 	orderID int auto_increment not null primary key,
---     userID int not null,
---     totalCost decimal(10, 2),                   -- Cost calculated from items in the order
---     created_at timestamp default current_timestamp,  -- When the order was placed so that OFS employees can see this
---     deliveryStatus varchar(10),                 -- delivery status
---     orderRating int,                            -- Orders can be rated by customers (1-5 stars)
---     ratingDesc text,                            -- Decription of possible improvements from the user
---     foreign key (userID) references user(userID)
--- );
+CREATE TABLE `order` (
+    orderID int auto_increment primary key,
+    userID int not null,
+    orderDate datetime default current_timestamp,
+    street varchar(100) not null,
+    city varchar(50) not null,
+    state varchar(50) not null,
+    zip varchar(10) not null,
+    total decimal(7, 2) not null,
+    foreign key (userID) references user(userID) on delete cascade
+);
 
--- CREATE TABLE orderItems (  -- You can't store arrays, so this table stores items within each order
---     orderItemID int auto_increment primary key,
---     orderID int not null,
---     productID int not null,
---     quantity int default 1,
---     foreign key (orderID) references orders(orderID),
---     foreign key (productID) references products(productID)
--- );
+CREATE TABLE order_item (
+    orderItemID int auto_increment primary key,
+    orderID int not null,
+    productID int not null,
+    quantity int not null,
+    priceAtPurchase decimal(5,2) not null,  -- Store the price at time of purchase
+    foreign key (orderID) references `order`(orderID) on delete cascade,
+    foreign key (productID) references product(productID) on delete cascade
+);
+
+CREATE TABLE employee (
+	employeeID int auto_increment primary key,     -- employeeID will automatically increment by 1 every time a user is added
+    firstName varchar(50) not null,
+    lastName varchar(50) not null,
+    email varchar(320) not null,
+    phone varchar(10) not null,
+    password varchar(256) not null
+);
