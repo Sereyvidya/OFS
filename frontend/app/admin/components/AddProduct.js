@@ -194,7 +194,7 @@ const AddProduct = ({ onClose }) => {
 
         <button
           type="submit"
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          className="font-semibold px-4 py-2 border border-blue-300 rounded-full bg-blue-600 text-white hover:bg-blue-400 hover:scale-101 shadow transition-colors cursor-pointer whitespace-nowrap"
         >
           Add Product
         </button>
