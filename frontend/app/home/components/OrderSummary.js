@@ -34,7 +34,7 @@ const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShow
   
       if (response.ok) {
         alert("Order placed successfully!");
-        onClose(); // Close modal or redirect
+        onClose();
       } else {
         const error = await response.json();
         console.error("Error placing order:", error);

@@ -13,6 +13,11 @@ import Carousel from "./components/Carousel";
 import { FaFilter } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+/* Stripe public key */
+const stripePromise = loadStripe("pk_test_51RDvDzGOAAM8reJn1NZjLvZgNTVSnx3mx5YppUNnTpdu9lK79H9nwjL1GkMGkJI660Bn9pmmuQ2265NtPn8O4AIv00oNVIz1Qt");
 
 export default function HomePage() {
   const [showLogin, setShowLogin] = useState(false);
@@ -29,18 +34,8 @@ export default function HomePage() {
   const [category, setCategory] = useState("All");
   const [cartItems, setCartItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [address, setAddress] = useState({
-    street: "",
-    city: "",
-    state: "",
-    zip: "",
-  });
-  const [paymentInformation, setPaymentInformation] = useState({
-    name: "",
-    number: "",
-    expirationDate: "",
-    cvc: "",
-  });
+  const [address, setAddress] = useState("");
+  const [paymentMethodId, setPaymentMethodId] = useState("");
 
   const fetchProfile = async () => {
     const token = localStorage.getItem("authToken");
@@ -248,13 +243,16 @@ export default function HomePage() {
       {/* Show Payment Information */}
       {showPaymentInformation && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
-          <PaymentInformation 
-            onClose={() => setShowPaymentInformation(false)}
-            setShowDeliveryAddress={setShowDeliveryAddress}
-            paymentInformation={paymentInformation}
-            setPaymentInformation={setPaymentInformation}
-            setShowOrderSummary={setShowOrderSummary}
-          />
+          <Elements stripe={stripePromise}>
+            <PaymentInformation 
+              onClose={() => setShowPaymentInformation(false)}
+              setShowDeliveryAddress={setShowDeliveryAddress}
+              setShowOrderSummary={setShowOrderSummary}
+              setPaymentMethodId={setPaymentMethodId}
+              address={address}
+              cartItems={cartItems}
+            />
+          </Elements>
         </div>
       )}
 
@@ -265,7 +263,7 @@ export default function HomePage() {
             onClose={() => setShowOrderSummary(false)}
             cartItems={cartItems}
             address={address}
-            paymentInformation={paymentInformation}
+            paymentMethodId={paymentMethodId}
             setShowPaymentInformation={setShowPaymentInformation}
           />
         </div>

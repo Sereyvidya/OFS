@@ -1,12 +1,84 @@
 "use client";
 
 import React from "react";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 
-const PaymentInformation = ({ onClose, setShowDeliveryAddress, paymentInformation, setPaymentInformation, setShowOrderSummary }) => {
+const PaymentInformation = ({
+  onClose,
+  setShowDeliveryAddress,
+  setShowOrderSummary,
+  setPaymentMethodId,
+  address,
+  cartItems
+}) => {
+  const stripe = useStripe();
+  const elements = useElements();
 
-  const isPaymentInformationComplete =
-    paymentInformation.name && paymentInformation.number && 
-    paymentInformation.expirationDate && paymentInformation.cvc;
+  const handleNext = async (e) => {
+    e.preventDefault();
+  
+    if (!stripe || !elements) return;
+  
+    const cardElement = elements.getElement(CardElement);
+    const result = await stripe.createPaymentMethod({
+      type: "card",
+      card: cardElement,
+    });
+  
+    if (result.error) {
+      console.error(result.error.message);
+      alert("Payment info error: " + result.error.message);
+    } else {
+      const paymentMethodId = result.paymentMethod.id;
+      
+      const totalPrice = cartItems.reduce(
+        (total, item) => total + item.product.price * item.quantity,
+        0
+      );
+
+      const reducedCartItems = cartItems.map(item => ({
+        productID: item.product.productID,
+        quantity: item.quantity,
+        priceAtPurchase: parseFloat(item.product.price)
+      }));
+
+      const orderData = {
+        street: address.street,
+        city: address.city,
+        state: address.state,
+        zip: address.zip,
+        total: totalPrice,
+        cartItems: reducedCartItems,
+        paymentMethodId: paymentMethodId,
+      };
+      console.log("🟡 Sending order data:", JSON.stringify(orderData, null, 2));
+  
+      try {
+        const response = await fetch("http://localhost:5000/order/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(orderData),
+        });
+  
+        const data = await response.json();
+        console.log("Full response from server:", data);
+  
+        if (response.ok) {
+          alert("Order placed successfully!");
+          onClose();
+          setShowOrderSummary(true);
+        } else {
+          alert("Payment error: " + data.error);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Something went wrong during order placement");
+      }
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4 w-100 h-auto m-auto bg-white p-4 rounded-lg shadow-lg">
@@ -20,51 +92,27 @@ const PaymentInformation = ({ onClose, setShowDeliveryAddress, paymentInformatio
         </button>
       </div>
 
-      <form className="flex flex-col gap-4">
-        <input
-          type="text"
-          placeholder="Card Holder Name"
-          className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
-          value={paymentInformation.name}
-          onChange={(e) => setPaymentInformation({ ...paymentInformation, name: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Card Number"
-          className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
-          value={paymentInformation.number}
-          onChange={(e) => setPaymentInformation({ ...paymentInformation, number: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Expiration Date"
-          className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
-          value={paymentInformation.expirationDate}
-          onChange={(e) => setPaymentInformation({ ...paymentInformation, expirationDate: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="CVC"
-          className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
-          value={paymentInformation.cvc}
-          onChange={(e) => setPaymentInformation({ ...paymentInformation, cvc: e.target.value })}
-        />
-        <div className="flex justify-between">
+      <form className="flex flex-col gap-4" onSubmit={handleNext}>
+        <div className="border border-gray-300 rounded-md p-4 hover:bg-gray-100 shadow">
+          <CardElement options={{ style: { base: { fontSize: "16px" } } }} />
+        </div>
+
+        <div className="flex justify-between mt-4">
           <button
+            type="button"
             className="border border-blue-300 bg-blue-600 text-white hover:bg-blue-400 hover:scale-103 shadow transition-colors cursor-pointer whitespace-nowrap py-2 px-4 rounded-lg shadow-md text-lg"
-            onClick={(e) => {
-              onClose()
-              setShowDeliveryAddress(true)
-            }}>
+            onClick={() => {
+              onClose();
+              setShowDeliveryAddress(true);
+            }}
+          >
             Go Back
           </button>
           <button
+            type="submit"
             className="border border-green-300 bg-green-600 text-white hover:bg-green-400 hover:scale-103 shadow transition-colors cursor-pointer whitespace-nowrap py-2 px-4 rounded-lg shadow-md text-lg"
-            disabled={!isPaymentInformationComplete}
-            onClick={(e) => {
-              onClose()
-              setShowOrderSummary(true)
-            }}>
+            disabled={!stripe}
+          >
             Next
           </button>
         </div>
