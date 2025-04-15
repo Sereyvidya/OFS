@@ -1,7 +1,3 @@
-"use client";
-
-import React from "react";
-
 const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShowPaymentInformation }) => {
 
   const handlePlaceOrder = async () => {
@@ -10,11 +6,9 @@ const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShow
     const arr = cartItems.map((item) => ({
       productID: item.product.productID,
       quantity: item.quantity,
-      priceAtPurchase: item.product.price,
-    }))
+      priceAtPurchase: parseFloat(item.product.price),
+    }));
 
-    console.log(arr)
-  
     try {
       const response = await fetch("http://127.0.0.1:5000/order/add", {
         method: "POST",
@@ -31,17 +25,16 @@ const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShow
           cartItems: arr,
         }),
       });
-  
+
+      const data = await response.json();
+
       if (response.ok) {
         alert("Order placed successfully!");
         onClose();
       } else {
-        const error = await response.json();
-        console.error("Error placing order:", error);
-        alert("Something went wrong. Please try again.");
+        alert("Payment error: " + data.error);
       }
     } catch (error) {
-      console.error("Fetch error:", error);
       alert("There was an error placing your order.");
     }
   };
@@ -56,14 +49,13 @@ const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShow
   );
   const deliveryFee = cartWeight > 20 ? 10 : 0;
   const TAX_RATE = 0.0825;
-  const totalWithTaxes = subTotal * (1 + TAX_RATE);
-  const totalCost = totalWithTaxes + deliveryFee;
+  const taxes = subTotal * TAX_RATE;
+  const totalCost = subTotal + taxes + deliveryFee;
 
-  const lastFourDigits =
-  paymentInformation.number && paymentInformation.number.length >= 4
-    ? paymentInformation.number.slice(-4)
-    : "****";
-
+  const lastFourDigits = paymentInformation?.card?.last4 ?? "****";
+  const expirationDate = paymentInformation?.card?.exp_month && paymentInformation?.card?.exp_year
+    ? `${paymentInformation.card.exp_month.toString().padStart(2, '0')}/${paymentInformation.card.exp_year.toString().slice(-2)}`
+    : "N/A";
 
   return (
     <div className="flex flex-col gap-4 w-100 h-auto m-auto bg-white p-4 rounded-lg shadow-lg">
@@ -82,30 +74,32 @@ const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShow
         {cartItems.map((item) => (
           <div className="flex justify-between" key={item.cartItemID}>
             <span className="text-gray-700">{item.product.name}</span>
-            <span className="text-gray-700">
-              ${(item.product.price * item.quantity).toFixed(2)}
-            </span>
+            <span className="text-gray-700">${(item.product.price * item.quantity).toFixed(2)}</span>
           </div>
         ))}
       </div>
-
 
       {/* Payment Information & Delivery Address */}
       <div className="border-t border-gray-300 pt-4">
         <h3 className="text-lg font-medium text-sky-950 mb-2">Payment & Delivery</h3>
         <div className="text-gray-700">
-            <p><span className="font-semibold">Cardholder:</span> {paymentInformation.name}</p>
-            <p>
-              <span className="font-semibold">Card Number:</span> **** **** **** {lastFourDigits}
-            </p>
-            <p>
-              <span className="font-semibold">Expires:</span> {paymentInformation.expirationDate}
-            </p>
-            <p>
-              <span className="font-semibold">Delivery to:</span> 
-              {address.street}, {address.city}, {address.state} {address.zip}
-            </p>
-          </div>
+          <p>
+            <span className="font-semibold">Cardholder:</span> 
+            {paymentInformation?.billing_details?.name ?? "N/A"}
+          </p>
+          <p>
+            <span className="font-semibold">Card Number:</span> 
+            **** **** **** {lastFourDigits}
+          </p>
+          <p>
+            <span className="font-semibold">Expires:</span> 
+            {expirationDate}
+          </p>
+          <p>
+            <span className="font-semibold">Delivery to:</span> 
+            {address.street}, {address.city}, {address.state} {address.zip}
+          </p>
+        </div>
       </div>
 
       {/* Cost Summary Section */}
@@ -115,8 +109,8 @@ const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShow
           <p className="text-gray-700">${subTotal.toFixed(2)}</p>
         </div>
         <div className="flex justify-between">
-          <p className="text-gray-700">After taxes</p>
-          <p className="text-gray-700">${totalWithTaxes.toFixed(2)}</p>
+          <p className="text-gray-700">Tax</p>
+          <p className="text-gray-700">${taxes.toFixed(2)}</p>
         </div>
         <div className="flex justify-between">
           <p className="text-gray-700">Delivery Fee</p>
@@ -148,7 +142,6 @@ const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShow
       </div>
     </div>
   );
-
 }
 
 export default OrderSummary;

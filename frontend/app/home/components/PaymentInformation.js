@@ -30,6 +30,7 @@ const PaymentInformation = ({
       alert("Payment info error: " + result.error.message);
     } else {
       const paymentMethodId = result.paymentMethod.id;
+      setPaymentMethodId(paymentMethodId);
       
       const totalPrice = cartItems.reduce(
         (total, item) => total + item.product.price * item.quantity,
@@ -51,14 +52,13 @@ const PaymentInformation = ({
         cartItems: reducedCartItems,
         paymentMethodId: paymentMethodId,
       };
-      console.log("🟡 Sending order data:", JSON.stringify(orderData, null, 2));
   
       try {
-        const response = await fetch("http://localhost:5000/order/add", {
+        const response = await fetch("http://127.0.0.1:5000/order/add", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
           body: JSON.stringify(orderData),
         });

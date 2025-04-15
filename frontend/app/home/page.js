@@ -17,7 +17,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
 /* Stripe public key */
-const stripePromise = loadStripe("pk_test_51RDvDzGOAAM8reJn1NZjLvZgNTVSnx3mx5YppUNnTpdu9lK79H9nwjL1GkMGkJI660Bn9pmmuQ2265NtPn8O4AIv00oNVIz1Qt");
+const stripePromise = loadStripe("");
 
 export default function HomePage() {
   const [showLogin, setShowLogin] = useState(false);
@@ -34,7 +34,12 @@ export default function HomePage() {
   const [category, setCategory] = useState("All");
   const [cartItems, setCartItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState({
+    street: "",
+    city: "",
+    state: "",
+    zip: ""
+  });  
   const [paymentMethodId, setPaymentMethodId] = useState("");
 
   const fetchProfile = async () => {
@@ -64,8 +69,12 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    fetchProfile();
+    const token = localStorage.getItem("authToken");
+    if (isLoggedIn && token) {
+      fetchProfile();
+    }
   }, [isLoggedIn]);
+  
 
   const categories = [
     "All", "Fruits", "Vegetables", "Meat", "Seafood", "Dairy",
@@ -130,7 +139,7 @@ export default function HomePage() {
                 className="flex gap-2 font-semibold px-4 py-2 border border-gray-300 rounded-full bg-white-600 text-black hover:bg-gray-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={(e) => setShowProfile(true)}>
                   <FaUser className="mt-1 text-sm text-sky-950"/>
-                  <p>{profile.firstName.charAt(0)}{profile.lastName.charAt(0)}</p>
+                  <p>{(profile?.firstName && profile?.lastName) ? `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}` : <span className="animate-pulse">--</span>}</p>
               </button>
 
               <button 

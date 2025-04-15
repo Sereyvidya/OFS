@@ -32,11 +32,14 @@ def place_order():
         total_in_cents = int(float(total) * 100)
 
         intent = stripe.PaymentIntent.create(
-            amount = total_in_cents,
-            currency = 'usd',
-            payment_method = payment_method_id,
-            confirm = True,
-        )
+        amount=total_in_cents,
+        currency='usd',
+        payment_method=payment_method_id,
+        confirm=True,
+        automatic_payment_methods={
+            'enabled': True,
+            'allow_redirects': 'never'
+        })
 
         if intent['status'] == 'succeeded':
             order = Order(
@@ -51,13 +54,26 @@ def place_order():
             db.session.flush()
 
             for item in cart_items:
+                product_id = item['productID']
+                amount = item['quantity']
+
                 order_item = OrderItem(
                     orderID=order.orderID,
-                    productID=item['productID'],
-                    quantity=item['quantity'],
+                    productID=product_id,
+                    quantity=amount,
                     priceAtPurchase=item['priceAtPurchase']
                 )
                 db.session.add(order_item)
+
+                CartItem.query.filter_by(userID=user_id, productID=product_id).delete()
+
+                product = Product.query.filter_by(productID=product_id).first()
+                if product:
+                    if product.quantity >= amount:
+                        product.quantity -= amount
+                    else:
+                        db.session.rollback()
+                        return jsonify({'error': f'Insufficient stock for product {product_id}'}), 400
 
             db.session.commit()
             return jsonify({'message': 'Order placed and payment successful'}), 201
