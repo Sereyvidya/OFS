@@ -1,13 +1,37 @@
 const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShowPaymentInformation }) => {
 
+  const subTotal = cartItems.reduce(
+    (total, item) => total + item.product.price * item.quantity,
+    0
+  );
+  const cartWeight = cartItems.reduce(
+    (total, item) => total + item.product.weight * item.quantity,
+    0
+  );
+
+  const deliveryFee = cartWeight > 20 ? 10 : 0;
+  const TAX_RATE = 0.0825;
+  const taxes = subTotal * TAX_RATE;
+  const totalCost = subTotal + taxes + deliveryFee;
+
+  const lastFourDigits = paymentInformation?.card?.last4 ?? "****";
+  const expirationDate = paymentInformation?.card?.exp_month && paymentInformation?.card?.exp_year
+    ? `${paymentInformation.card.exp_month.toString().padStart(2, '0')}/${paymentInformation.card.exp_year.toString().slice(-2)}`
+    : "N/A";
+
   const handlePlaceOrder = async () => {
     const token = localStorage.getItem("authToken");
 
-    const arr = cartItems.map((item) => ({
+    const orderItems = cartItems.map((item) => ({
       productID: item.product.productID,
       quantity: item.quantity,
       priceAtPurchase: parseFloat(item.product.price),
     }));
+
+    if (!paymentInformation?.id) {
+      alert("Payment method not found. Please go back and add payment info.");
+      return;
+    }
 
     try {
       const response = await fetch("http://127.0.0.1:5000/order/add", {
@@ -22,7 +46,8 @@ const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShow
           state: address.state,
           zip: address.zip,
           total: totalCost,
-          cartItems: arr,
+          cartItems: orderItems,
+          paymentMethodId: paymentInformation.id,
         }),
       });
 
@@ -38,24 +63,6 @@ const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShow
       alert("There was an error placing your order.");
     }
   };
-
-  const subTotal = cartItems.reduce(
-    (total, item) => total + item.product.price * item.quantity,
-    0
-  );
-  const cartWeight = cartItems.reduce(
-    (total, item) => total + item.product.weight * item.quantity,
-    0
-  );
-  const deliveryFee = cartWeight > 20 ? 10 : 0;
-  const TAX_RATE = 0.0825;
-  const taxes = subTotal * TAX_RATE;
-  const totalCost = subTotal + taxes + deliveryFee;
-
-  const lastFourDigits = paymentInformation?.card?.last4 ?? "****";
-  const expirationDate = paymentInformation?.card?.exp_month && paymentInformation?.card?.exp_year
-    ? `${paymentInformation.card.exp_month.toString().padStart(2, '0')}/${paymentInformation.card.exp_year.toString().slice(-2)}`
-    : "N/A";
 
   return (
     <div className="flex flex-col gap-4 w-100 h-auto m-auto bg-white p-4 rounded-lg shadow-lg">

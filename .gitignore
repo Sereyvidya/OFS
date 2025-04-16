@@ -10,3 +10,4 @@ client/
 
 # Ignore other unnecessary files
 *.log
+stripe.env

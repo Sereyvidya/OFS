@@ -17,7 +17,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
 /* Stripe public key */
-const stripePromise = loadStripe("");
+const stripePromise = loadStripe("pk_test_51RDvDzGOAAM8reJn1NZjLvZgNTVSnx3mx5YppUNnTpdu9lK79H9nwjL1GkMGkJI660Bn9pmmuQ2265NtPn8O4AIv00oNVIz1Qt");
 
 export default function HomePage() {
   const [showLogin, setShowLogin] = useState(false);
@@ -40,7 +40,7 @@ export default function HomePage() {
     state: "",
     zip: ""
   });  
-  const [paymentMethodId, setPaymentMethodId] = useState("");
+  const [paymentInformation, setPaymentInformation] = useState("");
 
   const fetchProfile = async () => {
     const token = localStorage.getItem("authToken");
@@ -257,9 +257,8 @@ export default function HomePage() {
               onClose={() => setShowPaymentInformation(false)}
               setShowDeliveryAddress={setShowDeliveryAddress}
               setShowOrderSummary={setShowOrderSummary}
-              setPaymentMethodId={setPaymentMethodId}
-              address={address}
-              cartItems={cartItems}
+              setShowPaymentInformation={setShowPaymentInformation}
+              setPaymentInformation={setPaymentInformation}
             />
           </Elements>
         </div>
@@ -272,7 +271,7 @@ export default function HomePage() {
             onClose={() => setShowOrderSummary(false)}
             cartItems={cartItems}
             address={address}
-            paymentMethodId={paymentMethodId}
+            paymentInformation={paymentInformation}
             setShowPaymentInformation={setShowPaymentInformation}
           />
         </div>

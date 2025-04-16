@@ -2,10 +2,20 @@ from flask import Blueprint, request, jsonify
 from ..models import User, Product, CartItem, Order, OrderItem
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from .. import db
+from dotenv import load_dotenv
+import os
 import stripe
 
-# This is where you add your stripe secret key
-stripe.api_key = ''
+# For this to work, you need to install the following: pip install python-dotenv
+# Make sure to create a stripe.env file inside the routes folder containing the stripe secret key
+# You will NOT be able to push any commits if the secret key isn't in a .env file that is in .gitignore
+dotenv_path = os.path.join(os.path.dirname(__file__), "stripe.env")
+load_dotenv(dotenv_path=dotenv_path)
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+
+# A check to make sure the stripe.env file is correctly set up
+if not stripe.api_key:
+    raise ValueError("Stripe secret key not found.")
 
 # Create a Blueprint for order-related routes
 order_bp = Blueprint('order', __name__)

@@ -7,9 +7,8 @@ const PaymentInformation = ({
   onClose,
   setShowDeliveryAddress,
   setShowOrderSummary,
-  setPaymentMethodId,
-  address,
-  cartItems
+  setShowPaymentInformation,
+  setPaymentInformation
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -29,54 +28,10 @@ const PaymentInformation = ({
       console.error(result.error.message);
       alert("Payment info error: " + result.error.message);
     } else {
-      const paymentMethodId = result.paymentMethod.id;
-      setPaymentMethodId(paymentMethodId);
-      
-      const totalPrice = cartItems.reduce(
-        (total, item) => total + item.product.price * item.quantity,
-        0
-      );
-
-      const reducedCartItems = cartItems.map(item => ({
-        productID: item.product.productID,
-        quantity: item.quantity,
-        priceAtPurchase: parseFloat(item.product.price)
-      }));
-
-      const orderData = {
-        street: address.street,
-        city: address.city,
-        state: address.state,
-        zip: address.zip,
-        total: totalPrice,
-        cartItems: reducedCartItems,
-        paymentMethodId: paymentMethodId,
-      };
-  
-      try {
-        const response = await fetch("http://127.0.0.1:5000/order/add", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-          body: JSON.stringify(orderData),
-        });
-  
-        const data = await response.json();
-        console.log("Full response from server:", data);
-  
-        if (response.ok) {
-          alert("Order placed successfully!");
-          onClose();
-          setShowOrderSummary(true);
-        } else {
-          alert("Payment error: " + data.error);
-        }
-      } catch (err) {
-        console.error(err);
-        alert("Something went wrong during order placement");
-      }
+      const paymentInformation = result.paymentMethod;
+      setPaymentInformation(paymentInformation);
+      setShowOrderSummary(true);
+      setShowPaymentInformation(false);
     }
   };
 
