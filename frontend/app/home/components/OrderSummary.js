@@ -1,4 +1,8 @@
-const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShowPaymentInformation }) => {
+"use client";
+
+import React from "react";
+
+const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShowPaymentInformation, apiUrl }) => {
 
   const subTotal = cartItems.reduce(
     (total, item) => total + item.product.price * item.quantity,
@@ -34,7 +38,7 @@ const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShow
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/order/add", {
+      const response = await fetch(`${apiUrl}/order/add`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

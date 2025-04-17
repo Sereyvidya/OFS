@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
 
-const Login = ({ onClose, onSignupClick, onLoginSuccess }) => {
+const Login = ({ onClose, onSignupClick, onLoginSuccess, apiUrl }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -16,8 +16,10 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess }) => {
     e.preventDefault();
     setErrorMessage("");
 
+    console.log(apiUrl)
+    
     try {
-      const res = await fetch("http://127.0.0.1:5000/auth/login", {
+      const res = await fetch(`${apiUrl}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

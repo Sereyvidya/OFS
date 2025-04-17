@@ -3,13 +3,13 @@
 import React from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 
-const PaymentInformation = ({
-  onClose,
+const PaymentInformation = ({ onClose,
   setShowDeliveryAddress,
   setShowOrderSummary,
   setShowPaymentInformation,
   setPaymentInformation
 }) => {
+  
   const stripe = useStripe();
   const elements = useElements();
 

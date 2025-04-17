@@ -16,8 +16,8 @@ import { FaUser } from "react-icons/fa";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
-/* Stripe public key */
-const stripePromise = loadStripe("pk_test_51RDvDzGOAAM8reJn1NZjLvZgNTVSnx3mx5YppUNnTpdu9lK79H9nwjL1GkMGkJI660Bn9pmmuQ2265NtPn8O4AIv00oNVIz1Qt");
+// Stripe publishable key 
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
 export default function HomePage() {
   const [showLogin, setShowLogin] = useState(false);
@@ -42,15 +42,17 @@ export default function HomePage() {
   });  
   const [paymentInformation, setPaymentInformation] = useState("");
 
+  const apiUrl = "http://127.0.0.1:5000";
+  // const apiUrl = "https://888c-76-132-78-134.ngrok-free.app";
+
   const fetchProfile = async () => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       console.log("No token found.");
       return;
     }
-
     try {
-      const response = await fetch("http://127.0.0.1:5000/user/profile", {
+      const response = await fetch(`${apiUrl}/user/profile`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -178,6 +180,7 @@ export default function HomePage() {
         cartItems={cartItems}
         setCartItems={setCartItems}
         setShowCart={setShowCart}
+        apiUrl={apiUrl}
       />
 
       {/* Login popup */}
@@ -195,6 +198,7 @@ export default function HomePage() {
               setIsLoggedIn(true);
               setShowLogin(false);
             }}
+            apiUrl={apiUrl}
           />
         </div>
       )}
@@ -208,6 +212,7 @@ export default function HomePage() {
               setShowLogin(true)
               setShowSignup(false)
             }}
+            apiUrl={apiUrl}
             />
         </div>
       )}
@@ -231,6 +236,7 @@ export default function HomePage() {
             setCartItems={setCartItems}
             setShowCart={setShowCart}
             setShowDeliveryAddress={setShowDeliveryAddress}
+            apiUrl={apiUrl}
           />
         </div>
       )}
@@ -273,6 +279,7 @@ export default function HomePage() {
             address={address}
             paymentInformation={paymentInformation}
             setShowPaymentInformation={setShowPaymentInformation}
+            apiUrl={apiUrl}
           />
         </div>
       )}

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 
-const Cart = ({ onClose, cartItems, setCartItems, setShowCart, setShowDeliveryAddress }) => {
+const Cart = ({ onClose, cartItems, setCartItems, setShowCart, setShowDeliveryAddress, apiUrl }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchCartItems = async () => {
@@ -15,7 +15,7 @@ const Cart = ({ onClose, cartItems, setCartItems, setShowCart, setShowDeliveryAd
     }
     
     try {
-      const response = await fetch(`http://127.0.0.1:5000/cartItem/get`, {
+      const response = await fetch(`${apiUrl}/cartItem/get`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -46,7 +46,7 @@ const Cart = ({ onClose, cartItems, setCartItems, setShowCart, setShowDeliveryAd
     const token = localStorage.getItem("authToken");
   
     try {
-      const response = await fetch(`http://127.0.0.1:5000/cartItem/update/${cartItemID}`,
+      const response = await fetch(`${apiUrl}/cartItem/update/${cartItemID}`,
         {
           method: "PUT",
           headers: {
@@ -85,7 +85,7 @@ const Cart = ({ onClose, cartItems, setCartItems, setShowCart, setShowDeliveryAd
     console.log(token)
 
     try {
-      const response = await fetch(`http://127.0.0.1:5000/cartItem/remove/${cartItemID}`,
+      const response = await fetch(`${apiUrl}/cartItem/remove/${cartItemID}`,
         {
           method: "DELETE",
           headers: {

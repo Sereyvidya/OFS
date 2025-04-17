@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-const Signup = ({ onClose, onLoginClick }) => {
+const Signup = ({ onClose, onLoginClick, apiUrl }) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -27,7 +27,7 @@ const Signup = ({ onClose, onLoginClick }) => {
     console.log("Sending data:", formData);
 
     try {
-      const res = await fetch("http://127.0.0.1:5000/auth/signup", {
+      const res = await fetch(`${apiUrl}/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
