@@ -51,8 +51,12 @@ const DeliveryAddress = ({
           const getContext = (id) =>
             context.find((c) => c.id.includes(id))?.text || "";
 
+          let num = ""
+          if (feature.address != null) {
+            num += feature.address + " "
+          }
           setAddress({
-            street: feature.text || "",
+            street: num + feature.text || "",
             city: getContext("place") || "San Jose",
             state: getContext("region") || "",
             zip: getContext("postcode") || "",

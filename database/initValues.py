@@ -63,7 +63,7 @@ products = [
     {"name": "Strawberry", "description": "16 oz pack", "price": 3.49, "quantity": 30, "category": "Fruits", "weight": 1.0},
     {"name": "Sugar", "description": "4 lb bag", "price": 3.99, "quantity": 45, "category": "Pantry", "weight": 4.0},
     {"name": "Tea Leaves", "description": "8 oz box", "price": 6.99, "quantity": 20, "category": "Beverages", "weight": 0.5},
-    {"name": "Tofu", "description": "14 oz block", "price": 2.49, "quantity": 40, "category": "Dairy", "weight": 0.875},
+    {"name": "Tofu", "description": "14 oz block", "price": 2.49, "quantity": 40, "category": "Vegetarian", "weight": 0.875},
     {"name": "Tomato", "description": "1 lb bag", "price": 1.99, "quantity": 50, "category": "Vegetables", "weight": 1.0},
     {"name": "Tuna", "description": "5 oz can", "price": 1.29, "quantity": 50, "category": "Seafood", "weight": 0.312},
     {"name": "Vinegar", "description": "16 oz bottle", "price": 2.49, "quantity": 30, "category": "Pantry", "weight": 1.0},

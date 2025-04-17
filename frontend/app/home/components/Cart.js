@@ -118,7 +118,7 @@ const Cart = ({ onClose, cartItems, setCartItems, setShowCart, setShowDeliveryAd
   return (
     <div className="flex flex-col w-100 h-auto m-auto bg-white p-4 rounded-lg shadow-lg">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold text-gray-800 [text-shadow:_0_1px_0_rgb(107_114_128_/_30%)]">
+        <h2 className="text-2xl font-semibold text-sky-950 [text-shadow:_0_1px_0_rgb(107_114_128_/_30%)]">
           Your Cart
         </h2>
         <button

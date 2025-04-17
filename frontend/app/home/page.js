@@ -86,7 +86,7 @@ export default function HomePage() {
     <div className="min-h-screen min-w-[700px] bg-white text-sky-950">
       <div>
         {/* Header */}
-        <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-gray-200 shadow">
+        <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-gray-200 border-b border-gray-300 shadow">
           {/* OFS Logo */}
           <div 
             className="text-4xl font-bold text-sky-950 tracking-wide">

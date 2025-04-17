@@ -54,9 +54,9 @@ const Signup = ({ onClose, onLoginClick, apiUrl }) => {
   return (
       <div className="flex flex-col w-150 h-auto m-auto bg-white p-4 rounded-lg">
         {/* Close button */}
-        <div>
+        <div className="relative">
           <button
-            className="bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow transition-colors"
+            className="absolute right-0 bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow transition-colors"
             onClick={onClose}
           >
             &times;
@@ -66,7 +66,7 @@ const Signup = ({ onClose, onLoginClick, apiUrl }) => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col">
-          <div className="flex justify-center">
+          <div className="mt-2 flex justify-center">
             <h1 className="font-display text-4xl font-bold">Sign up</h1>
           </div>
 

@@ -44,18 +44,18 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess, apiUrl }) => {
   return (
     <div className="flex flex-col w-100 h-auto m-auto bg-white p-4 rounded-lg">
       {/* Close button */}
-      <div>
+      <div className="relative">
         <button
-            className="bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow transition-colors"
-            onClick={onClose}
-          >
-            &times;
+          className="absolute right-0 bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow transition-colors"
+          onClick={onClose}
+        >
+          &times;
         </button>
       </div>
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="flex flex-col">
-        <div className="flex justify-center">
+        <div className="mt-2 flex justify-center">
           <h1 className="font-display text-4xl font-bold">Log in</h1>
         </div>
 
@@ -64,7 +64,7 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess, apiUrl }) => {
           )}
 
         {/* Email */}
-        <div className="relative w-full mt-6">
+        <div className="mt-4 relative w-full">
           <input 
             type="text" 
             placeholder="Email" 
