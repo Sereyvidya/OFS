@@ -7,7 +7,6 @@ import Profile from "./components/Profile";
 import Cart from "./components/Cart";
 import ProductGrid from "./components/ProductGrid";
 import DeliveryAddress from "./components/DeliveryAddress";
-import PaymentInformation from "./components/PaymentInformation";
 import OrderSummary from "./components/OrderSummary";
 import Carousel from "./components/Carousel";
 import { FaFilter } from "react-icons/fa";
@@ -246,17 +245,17 @@ export default function HomePage() {
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
           <DeliveryAddress
             onClose={() => setShowDeliveryAddress(false)}
-            cartItems={cartItems}
             setShowCart={setShowCart}
             address={address}
             setAddress={setAddress}
-            setShowPaymentInformation={setShowPaymentInformation}
+            setShowOrderSummary={setShowOrderSummary}
+            // setShowPaymentInformation={setShowPaymentInformation}
           />
         </div>
       )}
 
       {/* Show Payment Information */}
-      {showPaymentInformation && (
+      {/* {showPaymentInformation && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
           <Elements stripe={stripePromise}>
             <PaymentInformation 
@@ -268,19 +267,22 @@ export default function HomePage() {
             />
           </Elements>
         </div>
-      )}
+      )} */}
 
       {/* Show Order Summary */}
       {showOrderSummary && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
-          <OrderSummary
-            onClose={() => setShowOrderSummary(false)}
-            cartItems={cartItems}
-            address={address}
-            paymentInformation={paymentInformation}
-            setShowPaymentInformation={setShowPaymentInformation}
-            apiUrl={apiUrl}
-          />
+          <Elements stripe={stripePromise}>
+            <OrderSummary
+              onClose={() => setShowOrderSummary(false)}
+              cartItems={cartItems}
+              address={address}
+              setShowDeliveryAddress={setShowDeliveryAddress}
+              apiUrl={apiUrl}
+              paymentInformation={paymentInformation}
+              setPaymentInformation={setPaymentInformation}
+            />
+          </Elements>
         </div>
       )}
 

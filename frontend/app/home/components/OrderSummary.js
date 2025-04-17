@@ -1,29 +1,39 @@
 "use client";
 
 import React from "react";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 
-const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShowPaymentInformation, apiUrl }) => {
+const OrderSummary = ({ onClose, cartItems, address, setShowDeliveryAddress, apiUrl, paymentInformation, setPaymentInformation }) => {
 
-  const subTotal = cartItems.reduce(
-    (total, item) => total + item.product.price * item.quantity,
-    0
-  );
-  const cartWeight = cartItems.reduce(
-    (total, item) => total + item.product.weight * item.quantity,
-    0
-  );
+  const subTotal = cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
+  const cartWeight = cartItems.reduce((total, item) => total + item.product.weight * item.quantity, 0);
 
   const deliveryFee = cartWeight > 20 ? 10 : 0;
-  const TAX_RATE = 0.0825;
-  const taxes = subTotal * TAX_RATE;
-  const totalCost = subTotal + taxes + deliveryFee;
+  const totalCost = subTotal + deliveryFee;
 
-  const lastFourDigits = paymentInformation?.card?.last4 ?? "****";
-  const expirationDate = paymentInformation?.card?.exp_month && paymentInformation?.card?.exp_year
-    ? `${paymentInformation.card.exp_month.toString().padStart(2, '0')}/${paymentInformation.card.exp_year.toString().slice(-2)}`
-    : "N/A";
+  const stripe = useStripe();
+  const elements = useElements();
 
-  const handlePlaceOrder = async () => {
+  const handlePlaceOrder = async (e) => {
+    e.preventDefault();
+
+    // Stripe
+    if (!stripe || !elements) return;
+  
+    const cardElement = elements.getElement(CardElement);
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: "card",
+      card: cardElement,
+    });
+
+    if (error) {
+      console.error(error.message);
+      alert("Payment info error: " + error.message);
+      return;
+    }
+    setPaymentInformation(paymentMethod);
+
+    //Place order
     const token = localStorage.getItem("authToken");
 
     const orderItems = cartItems.map((item) => ({
@@ -71,7 +81,7 @@ const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShow
   return (
     <div className="flex flex-col gap-4 w-100 h-auto m-auto bg-white p-4 rounded-lg shadow-lg">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold text-sky-950">Order Summary</h2>
+        <h2 className="text-2xl font-semibold text-sky-950">Order Summary</h2>
         <button
           className="bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow"
           onClick={onClose}
@@ -81,55 +91,72 @@ const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShow
       </div>
 
       {/* Cart Items */}
-      <div className="space-y-1">
-        {cartItems.map((item) => (
-          <div className="flex justify-between" key={item.cartItemID}>
-            <span className="text-gray-700">{item.product.name}</span>
-            <span className="text-gray-700">${(item.product.price * item.quantity).toFixed(2)}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Payment Information & Delivery Address */}
-      <div className="border-t border-gray-300 pt-4">
-        <h3 className="text-lg font-medium text-sky-950 mb-2">Payment & Delivery</h3>
-        <div className="text-gray-700">
-          <p>
-            <span className="font-semibold">Cardholder:</span> 
-            {paymentInformation?.billing_details?.name ?? "N/A"}
-          </p>
-          <p>
-            <span className="font-semibold">Card Number:</span> 
-            **** **** **** {lastFourDigits}
-          </p>
-          <p>
-            <span className="font-semibold">Expires:</span> 
-            {expirationDate}
-          </p>
-          <p>
-            <span className="font-semibold">Delivery to:</span> 
-            {address.street}, {address.city}, {address.state} {address.zip}
-          </p>
-        </div>
+      <div className="overflow-y-auto max-h-65 rounded-md border border-gray-300">
+        <table className="min-w-full table-auto">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="py-2 px-4 text-left text-sm font-medium text-gray-600">Product</th>
+              <th className="py-2 px-4 text-left text-sm font-medium text-gray-600">Quantity x Price</th>
+              <th className="py-2 px-4 text-left text-sm font-medium text-gray-600">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cartItems.map((item) => (
+              <tr key={item.cartItemID} className="border-t border-gray-300">
+                <td className="py-2 px-4 text-sm text-gray-700">{item.product.name}</td>
+                <td className="py-2 px-4 text-sm text-gray-700">
+                  {item.quantity} x ${item.product.price}
+                </td>
+                <td className="py-2 px-4 text-sm text-gray-700">
+                  ${(item.product.price * item.quantity).toFixed(2)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* Cost Summary Section */}
-      <div className="my-4 border-t border-gray-300 pt-4">
+      <div className="">
         <div className="flex justify-between">
-          <p className="text-gray-700">Subtotal</p>
+          <p className="font-semibold text-sky-950">Subtotal:</p>
           <p className="text-gray-700">${subTotal.toFixed(2)}</p>
         </div>
         <div className="flex justify-between">
-          <p className="text-gray-700">Tax</p>
-          <p className="text-gray-700">${taxes.toFixed(2)}</p>
-        </div>
-        <div className="flex justify-between">
-          <p className="text-gray-700">Delivery Fee</p>
+          <p className="font-semibold text-sky-950">Delivery Fee:</p>
           <p className="text-gray-700">${deliveryFee.toFixed(2)}</p>
         </div>
-        <div className="flex justify-between font-bold text-green-700">
-          <p>Total</p>
+        <div className="flex justify-between text-sky-950">
+          <p className="font-semibold">Total:</p>
           <p>${totalCost.toFixed(2)}</p>
+        </div>
+      </div>
+
+      {/* Delivery Address */}
+      <div className="flex flex-col">
+        <span className="font-semibold">Delivery to:</span> 
+        <p className="">
+          {address.street}, {address.city}, {address.state} {address.zip}
+        </p>
+      </div>
+
+      {/* Payment Information */}
+      <div className="flex flex-col">
+        <p className="font-semibold">Payment Information:</p>
+        <div className="mt-1 border border-gray-300 rounded-md p-4 hover:bg-gray-200 shadow focus-within:outline focus-within:outline-gray-400">
+          <CardElement
+            options={{
+              style: {
+                base: {
+                  fontSize: "16px",
+                  transition: "background-color 150ms ease-in-out, color 150ms ease-in-out",
+                },
+                ":focus": {
+                  outline: "2px solid #9CA3AF", 
+                },
+              },
+            }}
+          />
         </div>
       </div>
 
@@ -139,7 +166,7 @@ const OrderSummary = ({ onClose, cartItems, address, paymentInformation, setShow
           className="border border-blue-300 bg-blue-600 text-white hover:bg-blue-400 hover:scale-103 transition-colors cursor-pointer whitespace-nowrap py-2 px-4 rounded-lg shadow-md text-lg"
           onClick={() => {
             onClose();
-            setShowPaymentInformation(true);
+            setShowDeliveryAddress(true);
           }}
         >
           Go Back

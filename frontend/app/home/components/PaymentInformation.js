@@ -38,7 +38,7 @@ const PaymentInformation = ({ onClose,
   return (
     <div className="flex flex-col gap-4 w-100 h-auto m-auto bg-white p-4 rounded-lg shadow-lg">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold text-sky-950">Payment Information</h2>
+        <h2 className="text-2xl font-semibold text-sky-950">Payment Information</h2>
         <button
           className="bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow"
           onClick={onClose}
