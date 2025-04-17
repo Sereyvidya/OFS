@@ -3,7 +3,7 @@
 import React from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 
-const OrderSummary = ({ onClose, cartItems, address, setShowDeliveryAddress, apiUrl, paymentInformation, setPaymentInformation }) => {
+const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDeliveryAddress, apiUrl, paymentInformation, setPaymentInformation }) => {
 
   const subTotal = cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
   const cartWeight = cartItems.reduce((total, item) => total + item.product.weight * item.quantity, 0);
@@ -69,6 +69,7 @@ const OrderSummary = ({ onClose, cartItems, address, setShowDeliveryAddress, api
 
       if (response.ok) {
         alert("Order placed successfully!");
+        setCartItems([]);
         onClose();
       } else {
         alert("Payment error: " + data.error);

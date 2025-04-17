@@ -276,6 +276,7 @@ export default function HomePage() {
             <OrderSummary
               onClose={() => setShowOrderSummary(false)}
               cartItems={cartItems}
+              setCartItems={setCartItems}
               address={address}
               setShowDeliveryAddress={setShowDeliveryAddress}
               apiUrl={apiUrl}
