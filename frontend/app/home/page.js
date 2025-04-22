@@ -8,13 +8,13 @@ import Cart from "./components/Cart";
 import ProductGrid from "./components/ProductGrid";
 import DeliveryAddress from "./components/DeliveryAddress";
 import OrderSummary from "./components/OrderSummary";
+import OrderHistory from "./components/OrderHistory";
 import Carousel from "./components/Carousel";
 import { FaFilter } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import OrderHistory from "./components/OrderHistory";
 
 // Stripe publishable key 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
@@ -155,7 +155,7 @@ export default function HomePage() {
           <div className="flex justify-center">
           {isLoggedIn ? (
             <div className="flex flex-row gap-4">
-              {/* ← Order History button */}
+              {/* Order History button */}
               <button
                 className="flex gap-2 font-semibold px-4 py-2 border border-gray-300 rounded-full bg-white-600 text-black hover:bg-gray-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={() => setShowHistory(true)}

@@ -106,12 +106,18 @@ const DeliveryAddress = ({
         />
         <p className="mt-2 text-sm text-gray-400 italic">© Mapbox © OpenStreetMap Improve this map</p>
 
-        {address.street && (
-        <div className="mt-2 text-sky-950">
-          <p className="font-semibold">Selected Address:</p> 
-          <p>{address.street}, {address.city},{" "}{address.state} {address.zip}</p>
-        </div>
-      )}
+        {address.street ? (
+            <div className="mt-2 text-sky-950">
+              <p className="font-semibold">Selected Address:</p> 
+              <p>{address.street}, {address.city},{" "}{address.state} {address.zip}</p>
+            </div>
+          ) : (
+            <div className="mt-2 text-sky-950">
+              <p className="font-semibold">Selected Address:</p> 
+              <p className="text-sm text-gray-500 italic">Please click on the map to choose address.</p>
+            </div>
+          )
+        }
 
       {errorMessage && (
         <div className="text-red-600 text-sm">{errorMessage}</div>
