@@ -97,3 +97,45 @@ def place_order():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
+    
+@order_bp.route('/history', methods=['GET'])
+@jwt_required()
+def order_history():
+    user_id = get_jwt_identity()
+
+    orders = (
+        Order.query
+        .filter_by(userID=user_id)
+        .order_by(Order.orderDate.desc())
+        .all()
+     )
+
+    result = []
+    for order in orders:
+        items = OrderItem.query.filter_by(orderID=order.orderID).all()
+        result.append({
+            "orderID": order.orderID,
+            "orderDate": order.orderDate.isoformat(),
+            "total": float(order.total),
+            "shippingAddress": {
+                "street": order.street,
+                "city": order.city,
+                "state": order.state,
+                "zip": order.zip
+            },
+            "items": [
+                {
+                    "productID": i.productID,
+                    "productName": (
+                        Product.query.get(i.productID).name
+                        if Product.query.get(i.productID) else "Unknown"
+                    ),
+                    "quantity": i.quantity,
+                    "priceAtPurchase": float(i.priceAtPurchase)
+                }
+                for i in items
+            ]
+        })
+
+    return jsonify(result), 200
+

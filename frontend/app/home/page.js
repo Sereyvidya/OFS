@@ -14,6 +14,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import OrderHistory from "./components/OrderHistory";
 
 // Stripe publishable key 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
@@ -27,6 +28,9 @@ export default function HomePage() {
   const [showPaymentInformation, setShowPaymentInformation] = useState(false);
   const [showOrderSummary, setShowOrderSummary] = useState(false);
   const [profile, setProfile] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
+
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -69,12 +73,27 @@ export default function HomePage() {
     }
   };
 
+  const fetchHistory = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) return setOrders([]);
+    const res = await fetch(`${apiUrl}/order/history`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) setOrders(await res.json());
+    else setOrders([]);
+    };
+
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (isLoggedIn && token) {
       fetchProfile();
     }
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (showHistory && isLoggedIn) fetchHistory();
+  }, [showHistory, isLoggedIn]);
+    
   
 
   const categories = [
@@ -136,6 +155,15 @@ export default function HomePage() {
           <div className="flex justify-center">
           {isLoggedIn ? (
             <div className="flex flex-row gap-4">
+              {/* ← Order History button */}
+              <button
+                className="flex gap-2 font-semibold px-4 py-2 border border-gray-300 rounded-full bg-white-600 text-black hover:bg-gray-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                onClick={() => setShowHistory(true)}
+              >
+                Orders
+              </button>
+
+              {/* Profile */}
               <button 
                 className="flex gap-2 font-semibold px-4 py-2 border border-gray-300 rounded-full bg-white-600 text-black hover:bg-gray-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={(e) => setShowProfile(true)}>
@@ -287,6 +315,15 @@ export default function HomePage() {
         </div>
       )}
 
+      {/* Order History */}
+      {showHistory && (
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
+          <OrderHistory
+            onClose={() => setShowHistory(false)}
+            orders={orders}
+          />
+        </div>
+      )}
     </div>  
   );
 }
