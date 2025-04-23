@@ -6,7 +6,6 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
   const [products, setProducts] = useState([]);
   const [addedToCart, setAddedToCart] = useState([]);
 
-  // Get cartItems
   const fetchCartItems = async () => {
     const token = localStorage.getItem("authToken");
     if (!token) {
@@ -34,7 +33,6 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
     }
   };
 
-  // Get product
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -50,10 +48,9 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
       }
     };
     fetchProducts();
-    if (isLoggedIn) {fetchCartItems()}; // call get cartItems just once to initialize cartItems
+    if (isLoggedIn) {fetchCartItems()}; 
   }, [isLoggedIn]);
 
-  // Add product to cart 
   const handleAddToCart = async (product) => {
     if (!isLoggedIn) {
       console.log("Not logged in.");
@@ -84,7 +81,7 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
 
     if (response.ok) {
         console.log("Product added to cart!");
-        fetchCartItems(); // Call get cartItems to update the state
+        fetchCartItems();
     } else {
         console.error("Failed to add product to cart");
     }
@@ -103,8 +100,6 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
   if (!products.length) {
     return <div className="flex items-center justify-center h-screen text-xl">Loading...</div>;
   }
-
-  //max-w-5xl
 
   return (
     <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 px-6 py-6 w-full mx-auto">
@@ -126,20 +121,24 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
                 <p className="text-gray-500">${product.price}</p>
               </div>
               <button
-                className={`mt-3 px-3 py-1.5 text-sm font-medium rounded-full transition shadow
-                  ${isAdded ? 
-                    'border border-green-300 bg-green-600 text-white hover:bg-green-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap' : 
-                    'border border-blue-300 bg-blue-600 text-white hover:bg-blue-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap'}
+                className={`mt-3 px-3 py-1.5 text-sm font-medium rounded-full transition shadow whitespace-nowrap
+                  ${
+                    product.quantity === 0 ? 'bg-red-500 text-white cursor-not-allowed opacity-70'
+                      : isAdded ? 'border border-green-300 bg-green-600 text-white hover:bg-green-400 hover:scale-105'
+                      : 'border border-blue-300 bg-blue-600 text-white hover:bg-blue-400 hover:scale-105'
+                  }
                 `}
                 onClick={() => {
-                  if (isAdded) {
+                  if (product.quantity === 0) return;
+                  if (isAdded) { 
                     setShowCart(true);
                   } else {
                     handleAddToCart(product);
                   }
                 }}
+                disabled={product.quantity === 0}
               >
-                {isAdded ? 'View Cart' : 'Add to Cart'}
+                {product.quantity === 0 ? 'Out of Stock' : isAdded ? 'View Cart' : 'Add to Cart'}
               </button>
             </div>
           );

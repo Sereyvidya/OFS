@@ -39,7 +39,7 @@ const ProductGrid = ({ searchQuery, category, setEditingProduct, setShowAddProdu
       {filteredProducts.length > 0 ? (
         filteredProducts.map((product, index) => {
           return (
-            <div key={index} className="border border-gray-300 rounded-md p-3 bg-gray-200 shadow flex flex-col items-center text-sm">
+            <div key={index} className="border border-gray-300 rounded-md p-3 bg-gray-200 shadow flex flex-col items-center text-sm relative">
               <div className="w-full flex justify-center bg-sky-950 py-2 rounded-md shadow">
                 <h3 className="font-semibold text-lg text-white">{product.name}</h3>
               </div>
@@ -52,15 +52,43 @@ const ProductGrid = ({ searchQuery, category, setEditingProduct, setShowAddProdu
                 <p className="text-gray-500">{product.description}</p>
                 <p className="text-gray-500">${product.price}</p>
               </div>
+
+              {/* Container for Exclamation Mark and Edit Button */}
+              <div className="w-full mt-3 flex justify-center relative items-center">
+              {/* Edit Button - stays centered */}
               <button
-                className="mt-3 px-3 py-1.5 text-sm font-medium rounded-full transition shadow border border-blue-300 bg-blue-600 text-white hover:bg-blue-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                className="px-3 py-1.5 text-sm font-medium rounded-full transition shadow border border-blue-300 bg-blue-600 text-white hover:bg-blue-400 hover:scale-105 transition-colors cursor-pointer whitespace-nowrap z-10"
                 onClick={() => {
-                  setEditingProduct(product)
-                  setShowAddProduct(true)
+                  setEditingProduct(product);
+                  setShowAddProduct(true);
                 }}
               >
                 Edit
               </button>
+            
+              {/* Exclamation Mark - positioned left of Edit, not off-grid */}
+              {product.quantity === 0 && (
+                <div className="absolute -left-2.5 group z-20">
+                  <div className="relative flex items-center justify-center w-6 h-6 bg-red-500 text-white rounded-full text-xl font-bold">
+                    !
+                    <span className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 w-max px-2 py-1 text-xs text-white bg-black rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      Out of Stock
+                    </span>
+                  </div>
+                </div>
+              )}
+              
+              {product.quantity > 0 && product.quantity < 10 && (
+                <div className="absolute -left-2.5 group z-20">
+                  <div className="relative flex items-center justify-center w-6 h-6 bg-yellow-400 text-black rounded-full text-xl font-bold">
+                    !
+                    <span className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 w-max px-2 py-1 text-xs text-white bg-black rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      Low Stock
+                    </span>
+                  </div>
+                </div>
+              )}
+              </div>
             </div>
           );
         })
@@ -69,7 +97,6 @@ const ProductGrid = ({ searchQuery, category, setEditingProduct, setShowAddProdu
       )}
     </div>
   );
-  
 };
 
 export default ProductGrid;
