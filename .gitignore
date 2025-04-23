@@ -11,3 +11,9 @@ client/
 # Ignore other unnecessary files
 *.log
 *.env
+
+# Ignore ALL .env files in any directory
+**/.env
+**/.env.*
+!.env.example  # Keep .env.example (optional)
+

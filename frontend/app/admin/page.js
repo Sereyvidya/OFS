@@ -1,125 +1,172 @@
 "use client";
 
-import React, { useState } from "react";
-import AdminLogin from "./components/AdminLogin.js"; 
-import ProductGrid from "./components/ProductGrid.js";;
-import { FaFilter } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import AdminLogin from "./components/AdminLogin.js";
+import ProductGrid from "./components/ProductGrid.js";
 import AddProduct from "./components/AddProduct.js";
+import { FaFilter } from "react-icons/fa";
 
 export default function AdminPage() {
   const [showLogin, setShowLogin] = useState(true);
   const [editingProduct, setEditingProduct] = useState(null);
-
   const [isOpen, setIsOpen] = useState(false);
   const [showAddProduct, setShowAddProduct] = useState(false);
+  const [showOrders, setShowOrders] = useState(false);
+  const [pendingOrders, setPendingOrders] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("All");
 
   const categories = [
-    "All", "Fruits", "Vegetables", "Meat", "Seafood", "Dairy",
-    "Pantry", "Beverages", "Bakery", "Spices", "Vegetarian"
+    "All",
+    "Fruits",
+    "Vegetables",
+    "Meat",
+    "Seafood",
+    "Dairy",
+    "Pantry",
+    "Beverages",
+    "Bakery",
+    "Spices",
+    "Vegetarian",
   ];
 
-  return (
-    showLogin ? (
-      <div className="min-h-screen min-w-[700px] bg-white text-sky-950">
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
-        <AdminLogin 
+  useEffect(() => {
+    if (showOrders) {
+      fetch("http://127.0.0.1:5000/order/optimized-route")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.orders) setPendingOrders(data.orders);
+        })
+        .catch((err) => console.error("Error fetching orders:", err));
+    }
+  }, [showOrders]);
+
+  return showLogin ? (
+    <div className="min-h-screen min-w-[700px] bg-white text-sky-950">
+      <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
+        <AdminLogin
           onLoginSuccess={(token) => {
-            localStorage.setItem("authToken", token); 
+            localStorage.setItem("authToken", token);
             setShowLogin(false);
           }}
         />
-        </div>
       </div>
-    ) : (
-      <div className="min-h-screen min-w-[700px] bg-white text-sky-950">
-        <div>
-          {/* Header */}
-          <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-gray-200 shadow">
-            {/* OFS Logo */}
-            <div 
-              className="text-4xl font-bold text-sky-950 tracking-wide">
-              OFS
-            </div>
-            {/* Search Bar */}
-            <div className="flex-1 min-w-40 max-w-150">
-              <input
-                type="text"
-                placeholder="Search products"
-                className="w-full px-4 py-2 border border-gray-300 rounded-full bg-white-600 hover:bg-gray-300 hover:scale-102 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
+    </div>
+  ) : (
+    <div className="min-h-screen min-w-[700px] bg-white text-sky-950">
+      {/* Header */}
+      <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-gray-200 shadow">
+        <div className="text-4xl font-bold text-sky-950 tracking-wide">OFS</div>
 
-            {/* Categories Dropdown */}
-            <div className="relative w-37 inline-block text-left">
-              <div
-                onClick={() => setIsOpen(!isOpen)}
-                className="flex justify-between items-center font-semibold px-4 py-2 border border-gray-300 rounded-full text-black hover:bg-gray-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
-              >
-                <span className="text-sky-950">{category}</span>
-                <FaFilter className="text-gray-600 ml-2" />
-              </div>
-
-              {isOpen && (
-                <div className="absolute z-10 mt-2 w-full max-h-60 overflow-y-auto rounded-md bg-white border border-gray-300 shadow-lg">
-                  {categories.map((cat) => (
-                    <div
-                      key={cat}
-                      onClick={() => {
-                        setCategory(cat);
-                        setIsOpen(false);
-                      }}
-                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-sky-950"
-                    >
-                      {cat}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-
-            {/* Buttons */}
-            <div className="flex justify-center">
-              <div className="flex flex-row gap-4">
-                <button 
-                  className="flex gap-2 font-semibold px-4 py-2 border border-gray-300 rounded-full bg-white-600 text-black hover:bg-gray-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
-                  >
-                  View Orders
-                </button>
-
-                <button 
-                  className="flex gap-2 font-semibold px-4 py-2 border border-blue-300 rounded-full bg-blue-600 text-white hover:bg-blue-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
-                  onClick={(e) => setShowAddProduct(true)}
-                  >
-                  Add Product
-                </button>
-              </div>
-            </div>
-          </header>
+        <div className="flex-1 min-w-40 max-w-150">
+          <input
+            type="text"
+            placeholder="Search products"
+            className="w-full px-4 py-2 border border-gray-300 rounded-full shadow focus:outline-gray-400"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
 
-        <ProductGrid
-          searchQuery={searchQuery}
-          category={category}
-          setEditingProduct={setEditingProduct}
-          setShowAddProduct={setShowAddProduct}
-        />
-
-        {/* Show Profile */}
-        {showAddProduct && (
-          <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
-            <AddProduct 
-              onClose={() => setShowAddProduct(false)}
-              editingProduct={editingProduct}
-              setEditingProduct={setEditingProduct}
-            />
+        <div className="relative w-37 inline-block text-left">
+          <div
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex justify-between items-center font-semibold px-4 py-2 border border-gray-300 rounded-full shadow cursor-pointer"
+          >
+            <span>{category}</span>
+            <FaFilter className="text-gray-600 ml-2" />
           </div>
-        )}
-      </div>
-    )
-  )
+
+          {isOpen && (
+            <div className="absolute z-10 mt-2 w-full max-h-60 overflow-y-auto rounded-md bg-white border shadow-lg">
+              {categories.map((cat) => (
+                <div
+                  key={cat}
+                  onClick={() => {
+                    setCategory(cat);
+                    setIsOpen(false);
+                  }}
+                  className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                >
+                  {cat}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Buttons */}
+        <div className="flex gap-4">
+          <button
+            className="font-semibold px-4 py-2 border rounded-full bg-white-600 text-black hover:bg-gray-400 shadow"
+            onClick={() => setShowOrders(true)}
+          >
+            View Orders
+          </button>
+          <button
+            className="font-semibold px-4 py-2 border rounded-full bg-blue-600 text-white hover:bg-blue-400 shadow"
+            onClick={() => setShowAddProduct(true)}
+          >
+            Add Product
+          </button>
+        </div>
+      </header>
+
+      <ProductGrid
+        searchQuery={searchQuery}
+        category={category}
+        setEditingProduct={setEditingProduct}
+        setShowAddProduct={setShowAddProduct}
+      />
+
+      {/* Add Product Modal */}
+      {showAddProduct && (
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50 z-50">
+          <AddProduct
+            onClose={() => setShowAddProduct(false)}
+            editingProduct={editingProduct}
+            setEditingProduct={setEditingProduct}
+          />
+        </div>
+      )}
+
+      {/* View Orders Modal */}
+      {showOrders && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white w-[90%] h-[90%] p-6 overflow-auto rounded-lg shadow-xl relative">
+            <button
+              onClick={() => setShowOrders(false)}
+              className="absolute top-4 right-6 text-gray-600 hover:text-black text-xl"
+            >
+              ✕
+            </button>
+
+            <h2 className="text-2xl font-bold mb-4">
+              Optimized Delivery Route
+            </h2>
+            <iframe
+              src="http://127.0.0.1:5000/order/optimized-route-map"
+              title="Delivery Route Map"
+              className="w-full h-[400px] border mb-6"
+            />
+
+            <h3 className="text-xl font-semibold mb-2">Pending Orders</h3>
+            <ul className="space-y-2">
+              {pendingOrders.map((order) => (
+                <li
+                  key={order.orderID}
+                  className="border px-4 py-2 rounded shadow-sm bg-gray-50"
+                >
+                  <p>
+                    <strong>#{order.orderID}</strong> — {order.address}
+                  </p>
+                  <p>Weight: {order.weight.toFixed(2)} lbs</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }

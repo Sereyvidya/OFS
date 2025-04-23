@@ -1,8 +1,13 @@
+import os
+
+from config import Config
+from dotenv import load_dotenv
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from config import Config
+from flask_sqlalchemy import SQLAlchemy
+
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'stripe.env'))
 
 # Create SQLAlchemy object to interact with the database
 db = SQLAlchemy()
@@ -18,7 +23,8 @@ def create_app():
     JWTManager(app)
 
     # Register the application's blueprints (including product blueprint)
-    from .routes import auth_bp, user_bp, product_bp, cartItem_bp, order_bp, employee_bp
+    from .routes import (auth_bp, cartItem_bp, employee_bp, order_bp,
+                         product_bp, user_bp)
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(product_bp, url_prefix='/product')

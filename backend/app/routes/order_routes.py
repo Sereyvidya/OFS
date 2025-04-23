@@ -1,10 +1,15 @@
-from flask import Blueprint, request, jsonify
-from ..models import User, Product, CartItem, Order, OrderItem
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from .. import db
-from dotenv import load_dotenv
 import os
+import tempfile
+
+import folium
+import requests
 import stripe
+from dotenv import load_dotenv
+from flask import Blueprint, jsonify, request, send_file
+from flask_jwt_extended import get_jwt_identity, jwt_required
+
+from .. import db
+from ..models import CartItem, Order, OrderItem, Product, User
 
 # For this to work, you need to install the following: pip install python-dotenv
 # Make sure to create a stripe.env file inside the routes folder containing the stripe secret key
@@ -138,4 +143,198 @@ def order_history():
         })
 
     return jsonify(result), 200
+
+@order_bp.route('/optimized-route', methods=['GET'])
+def get_optimized_route():
+    MAPBOX_TOKEN = os.getenv("MAPBOX_TOKEN")
+    if not MAPBOX_TOKEN:
+        return jsonify({"error": "Mapbox token not set"}), 500
+
+    def calculate_order_weight(order):
+        total_weight = 0
+        for item in order.order_items:
+            product = Product.query.get(item.productID)
+            if product:
+                total_weight += item.quantity * float(product.weight)
+        return total_weight
+
+    def get_order_coordinates(order):
+        address = f"{order.street}, {order.city}, {order.state} {order.zip}"
+        response = requests.get(
+            f"https://api.mapbox.com/geocoding/v5/mapbox.places/{address}.json",
+            params={"access_token": MAPBOX_TOKEN}
+        )
+        response.raise_for_status()
+        data = response.json()
+        if not data['features']:
+            raise ValueError(f"Could not geocode address: {address}")
+        return data['features'][0]['geometry']['coordinates']
+
+    all_orders = Order.query.order_by(Order.orderDate.asc()).all()
+    trip_orders = []
+    total_weight = 0
+
+    for order in all_orders:
+        weight = calculate_order_weight(order)
+        if len(trip_orders) < 10 and (total_weight + weight) <= 200:
+            coords = get_order_coordinates(order)
+            trip_orders.append((order, coords))
+            total_weight += weight
+
+    if not trip_orders:
+        return jsonify({"error": "No eligible orders found"}), 404
+
+    origin_coords = [-121.8863, 37.3382]
+
+    if len(trip_orders) == 1:
+        # Use Directions API
+        order, dest_coords = trip_orders[0]
+        coord_str = f"{origin_coords[0]},{origin_coords[1]};{dest_coords[0]},{dest_coords[1]}"
+        mapbox_url = (
+            f"https://api.mapbox.com/directions/v5/mapbox/driving/{coord_str}"
+            f"?geometries=geojson&access_token={MAPBOX_TOKEN}"
+        )
+        response = requests.get(mapbox_url).json()
+
+        if "routes" not in response:
+            return jsonify({"error": "Mapbox failed to create route", "details": response}), 500
+
+        route = response['routes'][0]['geometry']['coordinates']
+
+        return jsonify({
+            "route": route,
+            "stops": [origin_coords, dest_coords],
+            "orders": [{
+                "orderID": order.orderID,
+                "address": f"{order.street}, {order.city}, {order.state} {order.zip}",
+                "weight": calculate_order_weight(order)
+            }],
+            "total_weight": calculate_order_weight(order)
+        }), 200
+
+    # Multiple orders — use Optimized Trips API
+    coord_str = ";".join([f"{lng},{lat}" for _, (lng, lat) in trip_orders])
+    mapbox_url = (
+        f"https://api.mapbox.com/optimized-trips/v1/mapbox/driving/{coord_str}"
+        f"?geometries=geojson&source=first&access_token={MAPBOX_TOKEN}"
+    )
+    response = requests.get(mapbox_url).json()
+
+    if "trips" not in response:
+        return jsonify({"error": "Mapbox failed to generate route", "details": response}), 500
+
+    route = response['trips'][0]['geometry']['coordinates']
+    waypoints = response['waypoints']
+    ordered_coords = [None] * len(waypoints)
+    for wp in waypoints:
+        index = wp['waypoint_index']
+        ordered_coords[index] = wp['location']
+
+    return jsonify({
+        "route": route,
+        "stops": ordered_coords,
+        "orders": [
+            {
+                "orderID": o.orderID,
+                "address": f"{o.street}, {o.city}, {o.state} {o.zip}",
+                "weight": calculate_order_weight(o)
+            }
+            for o, _ in trip_orders
+        ],
+        "total_weight": total_weight
+    }), 200
+
+
+@order_bp.route('/optimized-route-map', methods=['GET'])
+def get_optimized_route_map():
+    MAPBOX_TOKEN = os.getenv("MAPBOX_TOKEN")
+    if not MAPBOX_TOKEN:
+        return jsonify({"error": "Mapbox token not set"}), 500
+
+    def calculate_order_weight(order):
+        total_weight = 0
+        for item in order.order_items:
+            product = Product.query.get(item.productID)
+            if product:
+                total_weight += item.quantity * float(product.weight)
+        return total_weight
+
+    def get_order_coordinates(order):
+        address = f"{order.street}, {order.city}, {order.state} {order.zip}"
+        response = requests.get(
+            f"https://api.mapbox.com/geocoding/v5/mapbox.places/{address}.json",
+            params={"access_token": MAPBOX_TOKEN}
+        )
+        response.raise_for_status()
+        data = response.json()
+        if not data['features']:
+            raise ValueError(f"Could not geocode address: {address}")
+        return data['features'][0]['geometry']['coordinates']  # [lng, lat]
+
+    all_orders = Order.query.order_by(Order.orderDate.asc()).all()
+    trip_orders = []
+    total_weight = 0
+
+    for order in all_orders:
+        weight = calculate_order_weight(order)
+        if len(trip_orders) < 10 and (total_weight + weight) <= 200:
+            coords = get_order_coordinates(order)
+            trip_orders.append((order, coords))
+            total_weight += weight
+
+    if not trip_orders:
+        return jsonify({"error": "No eligible orders found"}), 404
+
+    origin_coords = [-121.8863, 37.3382]  # SJSU
+
+    if len(trip_orders) == 1:
+        _, dest_coords = trip_orders[0]
+        coord_str = f"{origin_coords[0]},{origin_coords[1]};{dest_coords[0]},{dest_coords[1]}"
+        url = (
+            f"https://api.mapbox.com/directions/v5/mapbox/driving/{coord_str}"
+            f"?geometries=geojson&access_token={MAPBOX_TOKEN}"
+        )
+        response = requests.get(url).json()
+        if "routes" not in response:
+            return jsonify({"error": "Mapbox failed", "details": response}), 500
+        route = response['routes'][0]['geometry']['coordinates']
+        ordered_coords = [origin_coords, dest_coords]
+    else:
+        coord_str = ";".join([f"{lng},{lat}" for _, (lng, lat) in trip_orders])
+        url = (
+            f"https://api.mapbox.com/optimized-trips/v1/mapbox/driving/{coord_str}"
+            f"?geometries=geojson&source=first&access_token={MAPBOX_TOKEN}"
+        )
+        response = requests.get(url).json()
+        if "trips" not in response:
+            return jsonify({"error": "Mapbox failed", "details": response}), 500
+        route = response['trips'][0]['geometry']['coordinates']
+        waypoints = response['waypoints']
+        ordered_coords = [None] * len(waypoints)
+        for wp in waypoints:
+            index = wp['waypoint_index']
+            ordered_coords[index] = wp['location']
+
+    # 🔄 Generate Folium map
+    m = folium.Map(location=[ordered_coords[0][1], ordered_coords[0][0]], zoom_start=13, tiles="CartoDB positron")
+    folium.PolyLine(locations=[(lat, lng) for lng, lat in route], color='purple', weight=5).add_to(m)
+
+    folium.Marker(location=[ordered_coords[0][1], ordered_coords[0][0]],
+                  popup="Start (SJSU)",
+                  icon=folium.Icon(color='green')).add_to(m)
+
+    folium.Marker(location=[ordered_coords[-1][1], ordered_coords[-1][0]],
+                  popup="Final Stop",
+                  icon=folium.Icon(color='red')).add_to(m)
+
+    for i, (lng, lat) in enumerate(ordered_coords[1:-1], 1):
+        folium.Marker(
+            location=[lat, lng],
+            popup=f"Stop {i}",
+            icon=folium.Icon(color='blue')
+        ).add_to(m)
+
+    tmp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.html')
+    m.save(tmp_file.name)
+    return send_file(tmp_file.name, mimetype='text/html')
 

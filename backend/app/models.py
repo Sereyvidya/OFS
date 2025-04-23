@@ -1,6 +1,8 @@
-from . import db
-from flask import Blueprint, request, jsonify
 import base64
+
+from flask import Blueprint, jsonify, request
+
+from . import db
 
 product_bp = Blueprint('product_bp', __name__)
 
