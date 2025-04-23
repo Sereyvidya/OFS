@@ -107,9 +107,13 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
         filteredProducts.map((product, index) => {
           const isAdded = isInCart(product.productID);
           return (
-            <div key={index} className="border border-gray-300 rounded-md p-3 bg-gray-200 shadow flex flex-col items-center text-sm">
+            <div key={index} className="border border-gray-300 rounded-md p-3 bg-gray-200 shadow flex flex-col items-center text-sm transition-transform duration-300 hover:scale-105 hover:shadow-lg">
               <div className="w-full flex justify-center bg-sky-950 py-2 rounded-md shadow">
                 <h3 className="font-semibold text-lg text-white">{product.name}</h3>
+                {product.quantity > 0 && product.quantity <= 5 && (
+                    <span className="ml-2 text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full">
+                      Low Stock
+                    </span>)}
               </div>
               <img
                 src={`data:image/jpeg;base64,${product.image}`}

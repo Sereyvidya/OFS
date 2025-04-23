@@ -31,8 +31,6 @@ export default function HomePage() {
   const [profile, setProfile] = useState(null);
   const [orders, setOrders] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
-
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("All");
@@ -108,8 +106,7 @@ export default function HomePage() {
         {/* Header */}
         <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-gray-200 border-b border-gray-300 shadow">
           {/* OFS Logo */}
-          <div 
-            className="text-4xl font-bold text-sky-950 tracking-wide">
+          <div className="text-4xl font-bold text-sky-950 tracking-wide">
             OFS
           </div>
           {/* Search Bar */}
@@ -199,7 +196,7 @@ export default function HomePage() {
       
       {/* Carousel Section */}
       {/* <Carousel /> */}
-      
+
       <BannerCarousel />
 
       <ProductGrid
