@@ -15,6 +15,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import BannerCarousel from './components/BannerCarousel';
 
 // Stripe publishable key 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
@@ -198,6 +199,8 @@ export default function HomePage() {
       
       {/* Carousel Section */}
       {/* <Carousel /> */}
+      
+      <BannerCarousel />
 
       <ProductGrid
         isLoggedIn={isLoggedIn}
