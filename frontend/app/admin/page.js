@@ -14,6 +14,7 @@ export default function AdminPage() {
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("All");
+  const [rerenderProductGrid, setRerenderProductGrid] = useState(0);
 
   const categories = [
     "All", "Fruits", "Vegetables", "Meat", "Seafood", "Dairy",
@@ -107,6 +108,7 @@ export default function AdminPage() {
           category={category}
           setEditingProduct={setEditingProduct}
           setShowAddProduct={setShowAddProduct}
+          rerenderProductGrid={rerenderProductGrid}
         />
 
         {/* Show Profile */}
@@ -116,6 +118,7 @@ export default function AdminPage() {
               onClose={() => setShowAddProduct(false)}
               editingProduct={editingProduct}
               setEditingProduct={setEditingProduct}
+              setRerenderProductGrid={setRerenderProductGrid}
             />
           </div>
         )}

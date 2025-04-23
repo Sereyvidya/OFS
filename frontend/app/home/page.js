@@ -9,7 +9,6 @@ import ProductGrid from "./components/ProductGrid";
 import DeliveryAddress from "./components/DeliveryAddress";
 import OrderSummary from "./components/OrderSummary";
 import OrderHistory from "./components/OrderHistory";
-import Carousel from "./components/Carousel";
 import { FaFilter } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
@@ -193,9 +192,6 @@ export default function HomePage() {
           </div>
         </header>
       </div>
-      
-      {/* Carousel Section */}
-      {/* <Carousel /> */}
 
       <BannerCarousel />
 

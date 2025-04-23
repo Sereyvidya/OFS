@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-const ProductGrid = ({ searchQuery, category, setEditingProduct, setShowAddProduct }) => {
+const ProductGrid = ({ searchQuery, category, setEditingProduct, setShowAddProduct, rerenderProductGrid }) => {
   const [products, setProducts] = useState([]);
 
   // Get product
@@ -21,7 +21,7 @@ const ProductGrid = ({ searchQuery, category, setEditingProduct, setShowAddProdu
       }
     };
     fetchProducts();
-  }, []);
+  }, [rerenderProductGrid]);
 
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -53,40 +53,42 @@ const ProductGrid = ({ searchQuery, category, setEditingProduct, setShowAddProdu
                 <p className="text-gray-500">${product.price}</p>
               </div>
 
-              {/* Container for Exclamation Mark and Edit Button */}
+              {/* Edit, Low on stock and Out of stock buttons */}
               <div className="w-full mt-3 flex justify-center relative items-center">
-              {/* Edit Button - stays centered */}
-              <button
-                className="px-3 py-1.5 text-sm font-medium rounded-full transition shadow border border-blue-300 bg-blue-600 text-white hover:bg-blue-400 hover:scale-105 transition-colors cursor-pointer whitespace-nowrap z-10"
-                onClick={() => {
-                  setEditingProduct(product);
-                  setShowAddProduct(true);
-                }}
-              >
-                Edit
-              </button>
+              {product.quantity > 10 && (
+                <button
+                  className="px-3 py-1.5 text-sm font-medium rounded-full transition shadow border border-blue-300 bg-blue-600 text-white hover:bg-blue-400 hover:scale-105 transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={() => {
+                    setEditingProduct(product);
+                    setShowAddProduct(true);
+                  }}
+                >
+                  Edit
+                </button>
+              )}
             
-              {/* Exclamation Mark - positioned left of Edit, not off-grid */}
               {product.quantity === 0 && (
-                <div className="absolute -left-2.5 group z-20">
-                  <div className="relative flex items-center justify-center w-6 h-6 bg-red-500 text-white rounded-full text-xl font-bold">
-                    !
-                    <span className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 w-max px-2 py-1 text-xs text-white bg-black rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                      Out of Stock
-                    </span>
-                  </div>
-                </div>
+                <button
+                  className="px-3 py-1.5 text-sm font-medium rounded-full transition shadow border border-red-300 bg-red-600 text-white hover:bg-red-400 hover:scale-105 transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={() => {
+                    setEditingProduct(product);
+                    setShowAddProduct(true);
+                  }}
+                >
+                  Out of stock
+                </button>
               )}
               
-              {product.quantity > 0 && product.quantity < 10 && (
-                <div className="absolute -left-2.5 group z-20">
-                  <div className="relative flex items-center justify-center w-6 h-6 bg-yellow-400 text-black rounded-full text-xl font-bold">
-                    !
-                    <span className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 w-max px-2 py-1 text-xs text-white bg-black rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                      Low Stock
-                    </span>
-                  </div>
-                </div>
+              {product.quantity > 0 && product.quantity <= 10 && (
+                <button
+                  className="px-3 py-1.5 text-sm font-medium rounded-full transition shadow border border-yellow-300 bg-yellow-600 text-white hover:bg-yellow-400 hover:scale-105 transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={() => {
+                    setEditingProduct(product);
+                    setShowAddProduct(true);
+                  }}
+                >
+                  Low on stock
+                </button>
               )}
               </div>
             </div>
