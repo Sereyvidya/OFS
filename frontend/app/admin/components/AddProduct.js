@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-const AddProduct = ({ onClose, editingProduct, setEditingProduct }) => {
+const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderProductGrid }) => {
   const [product, setProduct] = useState(
     editingProduct || {
       name: "",
@@ -73,6 +73,7 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct }) => {
         }
         setProduct({ name: "", price: "", description: "", category: "", weight: "", quantity: "" });
         setImage(null); // Reset the image state
+        setRerenderProductGrid(prev => prev + 1);
         onClose();
       } else {
         const errorData = await response.json();

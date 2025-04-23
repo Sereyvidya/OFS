@@ -15,6 +15,7 @@ export default function AdminPage() {
   const [pendingOrders, setPendingOrders] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("All");
+  const [rerenderProductGrid, setRerenderProductGrid] = useState(0);
 
   const categories = [
     "All",
@@ -117,6 +118,7 @@ export default function AdminPage() {
         category={category}
         setEditingProduct={setEditingProduct}
         setShowAddProduct={setShowAddProduct}
+        rerenderProductGrid={rerenderProductGrid}
       />
 
       {/* Add Product Modal */}
@@ -126,6 +128,7 @@ export default function AdminPage() {
             onClose={() => setShowAddProduct(false)}
             editingProduct={editingProduct}
             setEditingProduct={setEditingProduct}
+            setRerenderProductGrid={setRerenderProductGrid}
           />
         </div>
       )}
