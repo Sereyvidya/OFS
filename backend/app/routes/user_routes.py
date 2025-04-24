@@ -23,3 +23,19 @@ def profile():
         })
     else:
         return jsonify({"error": "User not found"}), 404
+
+# To delete account
+@user_bp.route('/delete', methods=['DELETE'])
+@jwt_required()
+def del_user():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+
+    # If the user exists, delete the user
+    if user:
+        from .. import db 
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({"message": "Account successfully deleted"}), 200
+    else:
+        return jsonify({"error": "User not found"}), 404

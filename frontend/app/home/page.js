@@ -246,6 +246,9 @@ export default function HomePage() {
           <Profile 
             onClose={() => setShowProfile(false)}
             profile={profile}
+            apiUrl={apiUrl}
+            setIsLoggedIn={setIsLoggedIn}
+            setProfile={setProfile}
           />
         </div>
       )}
