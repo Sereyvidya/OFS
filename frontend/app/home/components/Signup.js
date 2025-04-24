@@ -52,11 +52,12 @@ const Signup = ({ onClose, onLoginClick, apiUrl }) => {
   };
 
   return (
-      <div className="flex flex-col w-150 h-auto m-auto bg-white p-4 rounded-lg">
-        {/* Close button */}
-        <div className="relative">
+      <div className="flex flex-col w-150 h-auto m-auto bg-[#f1f0e9] pb-4 rounded-lg">
+        {/* Sign up and Close button */}
+        <div className="relative bg-[#41644a] border-b border-[#90b89b] text-white flex justify-between items-center h-20 px-4 py-4 rounded-t-lg">
+          <h1 className="absolute left-1/2 top-4 transform -translate-x-1/2 font-display text-4xl font-bold text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b]">Sign in</h1>
           <button
-            className="absolute right-0 bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow transition-colors"
+            className="absolute right-4 top-4 bg-[#f1f0e9] border border-[#90b89b] text-[#41644a] px-2 rounded hover:bg-[#73977b] hover:scale-103 shadow transition-colors"
             onClick={onClose}
           >
             &times;
@@ -65,10 +66,7 @@ const Signup = ({ onClose, onLoginClick, apiUrl }) => {
 
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="flex flex-col">
-          <div className="mt-2 flex justify-center">
-            <h1 className="font-display text-4xl font-bold">Sign up</h1>
-          </div>
+        <form onSubmit={handleSubmit} className="flex flex-col px-4 mt-2">
 
           {errorMessage && (
             <p className="text-red-500 text-center mt-2">{errorMessage}</p>
@@ -76,12 +74,12 @@ const Signup = ({ onClose, onLoginClick, apiUrl }) => {
           
           {/* Full Name */}
           <div className="flex flex-col">
-            <p>Full Name</p>
+            <p className="text-[#0d4715]">Full Name</p>
             <div className="flex flex-col sm:flex-row justify-between mt-2 gap-6">
               <input
                 type="text"
                 placeholder="First"
-                className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+                className="w-full border border-gray-300 text-[#0d4715] placeholder-[#73977b] hover:bg-[#90b89b] rounded-md p-2 shadow transition-colors whitespace-nowrap focus:outline-[#0d4715]"
                 value={formData.firstName}
                 onChange={(e) => {
                   const formattedName = e.target.value
@@ -92,7 +90,7 @@ const Signup = ({ onClose, onLoginClick, apiUrl }) => {
               <input
                 type="text"
                 placeholder="Last"
-                className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+                className="w-full border border-gray-300 text-[#0d4715] placeholder-[#73977b] hover:bg-[#90b89b] rounded-md p-2 shadow transition-colors whitespace-nowrap focus:outline-[#0d4715]"
                 value={formData.lastName}
                 onChange={(e) => {
                   const formattedName = e.target.value
@@ -106,20 +104,20 @@ const Signup = ({ onClose, onLoginClick, apiUrl }) => {
           {/* Email & Phone Number */}
           <div className="flex flex-col sm:flex-row justify-between mt-4 gap-6">
             <div className="flex flex-col w-full">
-              <p>Email</p>
+              <p className="text-[#0d4715]">Email</p>
               <input 
                 type="email"
                 placeholder="example@gmail.com"
-                className="mt-2 w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+                className="mt-2 w-full border border-gray-300 text-[#0d4715] placeholder-[#73977b] hover:bg-[#90b89b] rounded-md p-2 shadow transition-colors whitespace-nowrap focus:outline-[#0d4715]"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}/>
             </div>
             <div className="flex flex-col w-full">
-              <p>Phone Number</p>
+              <p className="text-[#0d4715]">Phone Number</p>
               <input 
                 type="tel"
                 placeholder="XXXXXXXXXX"
-                className="mt-2 w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+                className="mt-2 w-full border border-gray-300 text-[#0d4715] placeholder-[#73977b] hover:bg-[#90b89b] rounded-md p-2 shadow transition-colors whitespace-nowrap focus:outline-[#0d4715]"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}/>
             </div>
@@ -127,21 +125,21 @@ const Signup = ({ onClose, onLoginClick, apiUrl }) => {
 
           {/* Password */}
           <div className="flex flex-col mt-4">
-            <p>Password</p>
+            <p className="text-[#0d4715]">Password</p>
             <div className="flex flex-col sm:flex-row justify-between mt-2 gap-6">
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+                className="w-full border border-gray-300 text-[#0d4715] placeholder-[#73977b] hover:bg-[#90b89b] rounded-md p-2 shadow transition-colors whitespace-nowrap focus:outline-[#0d4715]"
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}/>
               <input
                 type="password"
                 placeholder="Confirm Password"
-                className="w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+                className="w-full border border-gray-300 text-[#0d4715] placeholder-[#73977b] hover:bg-[#90b89b] rounded-md p-2 shadow transition-colors whitespace-nowrap focus:outline-[#0d4715]"
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}/>
             </div>
-            <p className="text-xs italic text-gray-600 mt-2">
+            <p className="text-xs italic text-[#0d4715] mt-2">
                 Password must be at least 8 characters long and contain 1 lowercase letters, 
                 1 upppercase letter, 1 digit, and 1 special character (@$!%*?&).
             </p>
@@ -150,15 +148,15 @@ const Signup = ({ onClose, onLoginClick, apiUrl }) => {
           {/* Sign Up Button */}
           <button 
             type="submit" 
-            className="font-semibold px-4 py-2 mt-6 border border-blue-300 rounded-full bg-blue-600 text-white hover:bg-blue-400 hover:scale-101 shadow transition-colors cursor-pointer whitespace-nowrap">
+            className="mt-6 font-semibold px-4 py-2 bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full hover:scale-102 shadow transition-colors cursor-pointer whitespace-nowrap">
             Sign up
           </button>
 
           {/* Login Link */}
           <div className="flex justify-center mt-4">
-            <p className="mr-1">Already have an account?</p>
+            <p className="mr-1 text-[#0d4715]">Already have an account?</p>
             <p 
-              className="font-semibold text-blue-400 hover:underline cursor-pointer"
+              className="font-semibold text-[#73977b] hover:underline cursor-pointer"
               onClick={onLoginClick}>
               Log in
             </p>

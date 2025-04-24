@@ -107,9 +107,9 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
         filteredProducts.map((product, index) => {
           const isAdded = isInCart(product.productID);
           return (
-            <div key={index} className="border border-gray-300 rounded-md p-3 bg-gray-200 shadow flex flex-col items-center text-sm transition-transform duration-300 hover:scale-105 hover:shadow-lg">
-              <div className="w-full flex justify-center bg-sky-950 py-2 rounded-md shadow">
-                <h3 className="font-semibold text-lg text-white">{product.name}</h3>
+            <div key={index} className="rounded-md p-3 bg-[#f1f0e9] shadow flex flex-col items-center text-sm transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+              <div className="w-full flex justify-center bg-[#41644a] py-2 rounded-md">
+                <h3 className="font-semibold text-lg text-[#f1f0e9]">{product.name}</h3>
                 {product.quantity > 0 && product.quantity <= 5 && (
                     <span className="ml-2 text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full">
                       Low Stock
@@ -121,15 +121,15 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
                 className="w-full aspect-1 object-cover rounded-md mt-3"
               />
               <div className="flex flex-col items-center mt-3">
-                <p className="text-gray-500">{product.description}</p>
-                <p className="text-gray-500">${product.price}</p>
+                <p className="text-[#41644a]">{product.description}</p>
+                <p className="text-[#41644a]">${product.price}</p>
               </div>
               <button
                 className={`mt-3 px-3 py-1.5 text-sm font-medium rounded-full transition shadow whitespace-nowrap
                   ${
-                    product.quantity === 0 ? 'bg-red-500 text-white cursor-not-allowed opacity-70'
+                    product.quantity === 0 ? 'border border-red-200 bg-red-400 text-white cursor-not-allowed'
                       : isAdded ? 'border border-green-300 bg-green-600 text-white hover:bg-green-400 hover:scale-105'
-                      : 'border border-blue-300 bg-blue-600 text-white hover:bg-blue-400 hover:scale-105'
+                      : 'bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 hover:scale-105'
                   }
                 `}
                 onClick={() => {

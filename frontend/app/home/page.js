@@ -100,12 +100,12 @@ export default function HomePage() {
   ];
   
   return (
-    <div className="min-h-screen min-w-[700px] bg-white text-sky-950">
+    <div className="min-h-screen min-w-[700px] bg-[#f1f0e9] text-sky-950">
       <div>
         {/* Header */}
-        <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-gray-200 border-b border-gray-300 shadow">
+        <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-[#41644a] border-b border-[#0d4715] shadow">
           {/* OFS Logo */}
-          <div className="text-4xl font-bold text-sky-950 tracking-wide">
+          <div className="text-4xl text-[#f1f0e9] tracking-wide">
             OFS
           </div>
           {/* Search Bar */}
@@ -113,7 +113,7 @@ export default function HomePage() {
             <input
               type="text"
               placeholder="Search products"
-              className="w-full px-4 py-2 border border-gray-300 rounded-full bg-white-600 hover:bg-gray-300 hover:scale-102 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+              className="w-full px-4 py-2 text-[#f1f0e9] border border-[#f1f0e9] rounded-full hover:bg-[#0d4715] hover:scale-102 shadow transition-colors whitespace-nowrap focus:outline-[#41644a]"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -123,10 +123,10 @@ export default function HomePage() {
           <div className="relative w-37 inline-block text-left">
             <div
               onClick={() => setIsOpen(!isOpen)}
-              className="flex justify-between items-center font-semibold px-4 py-2 border border-gray-300 rounded-full text-black hover:bg-gray-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+              className="flex justify-between items-center font-semibold px-4 py-2 border border-[#f1f0e9] rounded-full text-black hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
             >
-              <span className="text-sky-950">{category}</span>
-              <FaFilter className="text-gray-600 ml-2" />
+              <span className="text-[#f1f0e9]">{category}</span>
+              <FaFilter className="text-[#f1f0e9] ml-2" />
             </div>
 
             {isOpen && (
@@ -154,7 +154,7 @@ export default function HomePage() {
             <div className="flex flex-row gap-4">
               {/* Order History button */}
               <button
-                className="flex gap-2 font-semibold px-4 py-2 border border-gray-300 rounded-full bg-white-600 text-black hover:bg-gray-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                className="flex gap-2 font-semibold px-4 py-2 border border-[#f1f0e9] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={() => setShowHistory(true)}
               >
                 Orders
@@ -162,14 +162,14 @@ export default function HomePage() {
 
               {/* Profile */}
               <button 
-                className="flex gap-2 font-semibold px-4 py-2 border border-gray-300 rounded-full bg-white-600 text-black hover:bg-gray-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                className="flex gap-2 font-semibold px-4 py-2 border border-[#f1f0e9] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={(e) => setShowProfile(true)}>
-                  <FaUser className="mt-1 text-sm text-sky-950"/>
+                  <FaUser className="mt-1 text-sm text-[#f1f0e9]"/>
                   <p>{(profile?.firstName && profile?.lastName) ? `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}` : <span className="animate-pulse">--</span>}</p>
               </button>
 
               <button 
-                className="flex gap-2 font-semibold px-4 py-2 border border-blue-300 rounded-full bg-blue-600 text-white hover:bg-blue-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                className="flex gap-2 font-semibold px-4 py-2 bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={(e) => setShowCart(true)}>
                   <FaShoppingCart className="mt-1 text-sm"/>
                   <p>{cartItems.length}</p>
@@ -178,12 +178,12 @@ export default function HomePage() {
           ) : (
             <div className="flex flex-row gap-4">
               <button 
-                className="font-semibold px-4 py-2 border border-gray-300 rounded-full bg-white-600 text-black hover:bg-gray-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                className="font-semibold px-4 py-2 border border-[#f1f0e9] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={(e) => setShowLogin(true)}>
                   Log in
               </button>
               <button 
-                className="font-semibold px-4 py-2 border border-blue-300 rounded-full bg-blue-600 text-white hover:bg-blue-400 hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                className="font-semibold px-4 py-2 bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={(e) => setShowSignup(true)}>
                   Sign up
               </button>
@@ -193,7 +193,7 @@ export default function HomePage() {
         </header>
       </div>
 
-      <BannerCarousel />
+      {/* <BannerCarousel /> */}
 
       <ProductGrid
         isLoggedIn={isLoggedIn}

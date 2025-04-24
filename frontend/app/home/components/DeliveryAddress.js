@@ -88,33 +88,33 @@ const DeliveryAddress = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 w-100 h-auto m-auto bg-white p-4 rounded-lg shadow-lg">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold text-sky-950">Delivery Address</h2>
+    <div className="flex flex-col gap-4 w-110 h-auto m-auto bg-[#f1f0e9] pb-4 rounded-lg shadow-lg">
+      <div className="relative bg-[#41644a] border-b border-[#90b89b] text-white flex justify-between items-center h-20 px-4 py-4 rounded-t-lg">
+        <h1 className="absolute left-1/2 top-4 transform -translate-x-1/2 font-display text-4xl font-bold text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b]">Your Address</h1>
         <button
-          className="bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow"
+          className="absolute right-4 top-4 bg-[#f1f0e9] border border-[#90b89b] text-[#41644a] px-2 rounded hover:bg-[#73977b] hover:scale-103 shadow transition-colors"
           onClick={onClose}
         >
           &times;
         </button>
       </div>
 
-      <div>
+      <div className="px-4">
         <div
           ref={mapContainer}
-          className="w-full h-64 rounded shadow border text-white"
+          className="w-full h-64 rounded shadow text-[#f1f0e9]"
         />
         <p className="mt-2 text-sm text-gray-400 italic">© Mapbox © OpenStreetMap Improve this map</p>
 
         {address.street ? (
-            <div className="mt-2 text-sky-950">
-              <p className="font-semibold">Selected Address:</p> 
-              <p>{address.street}, {address.city},{" "}{address.state} {address.zip}</p>
+            <div className="mt-2">
+              <p className="font-semibold text-[#0d4715]">Selected Address:</p> 
+              <p className="text-[#41644a]">{address.street}, {address.city},{" "}{address.state} {address.zip}</p>
             </div>
           ) : (
-            <div className="mt-2 text-sky-950">
-              <p className="font-semibold">Selected Address:</p> 
-              <p className="text-sm text-gray-500 italic">Please click on the map to choose address.</p>
+            <div className="mt-2">
+              <p className="font-semibold text-[#0d4715]">Selected Address:</p> 
+              <p className="text-sm text-gray-400 italic">Please click on the map to choose address.</p>
             </div>
           )
         }
@@ -125,9 +125,9 @@ const DeliveryAddress = ({
       </div>
 
 
-      <div className="flex justify-between">
+      <div className="flex justify-between px-4">
         <button
-          className="border border-blue-300 bg-blue-600 text-white hover:bg-blue-400 hover:scale-103 shadow transition-colors cursor-pointer whitespace-nowrap py-2 px-4 rounded-lg shadow-md text-lg"
+          className="bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 text-[#f1f0e9] hover:scale-103 shadow transition-colors cursor-pointer whitespace-nowrap py-2 px-4 rounded-lg shadow-md text-lg"
           onClick={(e) => {
             e.preventDefault();
             onClose();
@@ -137,7 +137,7 @@ const DeliveryAddress = ({
           Go Back
         </button>
         <button
-          className="border border-green-300 bg-green-600 text-white hover:bg-green-400 hover:scale-103 shadow transition-colors cursor-pointer whitespace-nowrap py-2 px-4 rounded-lg shadow-md text-lg"
+          className="border border-green-300 bg-green-600 text-[#f1f0e9] hover:bg-green-400 hover:scale-103 shadow transition-colors cursor-pointer whitespace-nowrap py-2 px-4 rounded-lg shadow-md text-lg"
           disabled={!isAddressComplete}
           onClick={handleNextClick}
         >
