@@ -87,6 +87,23 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
     }
   };
 
+  const handleDelete = async () => {
+    if (!isEditing) return;
+
+    const response = await fetch(`http://127.0.0.1:5000/product/delete/${editingProduct.productID}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      alert("Product deleted successfully!");
+      setRerenderProductGrid((prev) => prev + 1);
+      onClose();
+    } else {
+      const errorData = await response.json();
+      alert(errorData.error || "Failed to delete product.");
+    }
+  };
+
   return (
     <div className="flex flex-col w-150 h-auto m-auto bg-white p-4 rounded-lg">
       {/* Close button */}
@@ -217,6 +234,15 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
         >
           {isEditing ? "Save Changes": "Add Product"}
         </button>
+        {isEditing && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="font-semibold px-4 py-2 border border-red-600 rounded-full bg-red-600 text-white hover:bg-red-400 hover:scale-101 shadow transition-colors cursor-pointer whitespace-nowrap"
+            >
+              Delete Product
+            </button>
+          )}
       </form>
     </div>
   );
