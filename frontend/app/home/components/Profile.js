@@ -7,6 +7,8 @@ const Profile = ({ onClose, profile, apiUrl, setIsLoggedIn, setProfile }) => {
     return <div className="flex items-center justify-center h-screen text-xl">Loading...</div>;
   }
 
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
   const logout = async () => {
     const token = localStorage.getItem("authToken");
     if (!token) {
@@ -22,7 +24,7 @@ const Profile = ({ onClose, profile, apiUrl, setIsLoggedIn, setProfile }) => {
     }
   };
 
-  const deleteAcc = async () => {
+  const handleDelete = async () => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       console.log("No token found.");
@@ -85,11 +87,33 @@ const Profile = ({ onClose, profile, apiUrl, setIsLoggedIn, setProfile }) => {
       <div className="mt-6 flex justify-center">
         <button
           className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 shadow transition-colors"
-          onClick={deleteAcc}
+          onClick={() => setShowDeleteConfirm(true)}
         >
           Delete Account
         </button>
       </div>
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-md shadow-md space-y-4 max-w-sm w-full">
+            <h2 className="text-xl font-semibold text-center">Confirm Deletion</h2>
+            <p className="text-center">Are you sure you want to delete your account?</p>
+            <div className="flex justify-around">
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-400 transition"
+              >
+                Delete Account
+              </button>
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
