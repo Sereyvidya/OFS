@@ -23,10 +23,12 @@ const ProductGrid = ({ searchQuery, category, setEditingProduct, setShowAddProdu
     fetchProducts();
   }, [rerenderProductGrid]);
 
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = category === "All" || product.category === category;
-    return matchesSearch && matchesCategory;
+  const filteredProducts = products
+    .filter(product => product.quantity !== -1) // "Deleted" products have quantity = -1
+    .filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = category === "All" || product.category === category;
+      return matchesSearch && matchesCategory;
   });
 
   if (!products.length) {

@@ -15,6 +15,7 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
   );
   const [image, setImage] = useState(null); // State for the image file
   const [errorMessage, setErrorMessage] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const categories = [
     "Fruits", "Vegetables", "Meat", "Seafood", "Dairy",
@@ -84,6 +85,24 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
     } catch (error) {
       console.error("Error adding product:", error);
       setErrorMessage("An error occurred while adding the product.");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!isEditing) setShowDeleteConfirm(false);
+
+    const response = await fetch(`http://127.0.0.1:5000/product/delete/${editingProduct.productID}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      alert("Product deleted successfully!");
+      setRerenderProductGrid((prev) => prev + 1);
+      setShowDeleteConfirm(false)
+      onClose();
+    } else {
+      const errorData = await response.json();
+      alert(errorData.error || "Failed to delete product.");
     }
   };
 
@@ -217,7 +236,39 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
         >
           {isEditing ? "Save Changes": "Add Product"}
         </button>
+        {isEditing && (
+          <button
+            type="button"
+            onClick={() => setShowDeleteConfirm(true)}
+            className="font-semibold px-4 py-2 border border-red-600 rounded-full bg-red-600 text-white hover:bg-red-400 hover:scale-101 shadow transition-colors cursor-pointer whitespace-nowrap"
+          >
+            Delete Product
+          </button>
+        )}
       </form>
+
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-md shadow-md space-y-4 max-w-sm w-full">
+            <h2 className="text-xl font-semibold text-center">Confirm Deletion</h2>
+            <p className="text-center">Are you sure you want to delete <strong>{product.name}</strong>?</p>
+            <div className="flex justify-around">
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-400 transition"
+              >
+                Delete Product
+              </button>
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

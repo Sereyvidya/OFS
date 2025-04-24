@@ -138,3 +138,20 @@ def edit_product(product_id):
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 400
 
+@product_bp.route('/delete/<int:product_id>', methods=['DELETE'])
+def del_product(product_id):
+    try:
+        product = Product.query.filter_by(productID=product_id).first()
+
+        if not product:
+            return jsonify({"error": "Product not found."}), 404
+
+        product.quantity = -1  # Don't fully delete the product - Keep order history by setting quantity to -1
+        db.session.commit()
+
+        return jsonify({"message": "Product marked as deleted."}), 200
+
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating product quantity: {e}")
+        return jsonify({"error": str(e)}), 500
