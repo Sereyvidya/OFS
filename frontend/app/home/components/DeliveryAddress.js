@@ -88,8 +88,8 @@ const DeliveryAddress = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 w-110 h-auto m-auto bg-[#f1f0e9] pb-4 rounded-lg shadow-lg">
-      <div className="relative bg-[#41644a] border-b border-[#90b89b] text-white flex justify-between items-center h-20 px-4 py-4 rounded-t-lg">
+    <div className="flex flex-col w-110 h-auto m-auto bg-[#f1f0e9] rounded-lg shadow-lg">
+      <div className="relative bg-[#41644a] border border-[#90b89b4d] text-white flex justify-between items-center h-20 px-4 py-4 rounded-t-lg">
         <h1 className="absolute left-1/2 top-4 transform -translate-x-1/2 font-display text-4xl font-bold text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b]">Your Address</h1>
         <button
           className="absolute right-4 top-4 bg-[#f1f0e9] border border-[#90b89b] text-[#41644a] px-2 rounded hover:bg-[#73977b] hover:scale-103 shadow transition-colors"
@@ -99,50 +99,52 @@ const DeliveryAddress = ({
         </button>
       </div>
 
-      <div className="px-4">
-        <div
-          ref={mapContainer}
-          className="w-full h-64 rounded shadow text-[#f1f0e9]"
-        />
-        <p className="mt-2 text-sm text-gray-400 italic">© Mapbox © OpenStreetMap Improve this map</p>
+      <div className="border border-gray-400 rounded-b-lg flex flex-col gap-4 py-4">
+        <div className="px-4">
+          <div
+            ref={mapContainer}
+            className="w-full h-64 rounded shadow text-[#f1f0e9]"
+          />
+          <p className="mt-2 text-sm text-gray-400 italic">© Mapbox © OpenStreetMap Improve this map</p>
 
-        {address.street ? (
-            <div className="mt-2">
-              <p className="font-semibold text-[#0d4715]">Selected Address:</p> 
-              <p className="text-[#41644a]">{address.street}, {address.city},{" "}{address.state} {address.zip}</p>
-            </div>
-          ) : (
-            <div className="mt-2">
-              <p className="font-semibold text-[#0d4715]">Selected Address:</p> 
-              <p className="text-sm text-gray-400 italic">Please click on the map to choose address.</p>
-            </div>
-          )
-        }
+          {address.street ? (
+              <div className="mt-2">
+                <p className="font-semibold text-[#0d4715]">Selected Address:</p> 
+                <p className="text-[#41644a]">{address.street}, {address.city},{" "}{address.state} {address.zip}</p>
+              </div>
+            ) : (
+              <div className="mt-2">
+                <p className="font-semibold text-[#0d4715]">Selected Address:</p> 
+                <p className="text-sm text-gray-400 italic">Please click on the map to choose address.</p>
+              </div>
+            )
+          }
 
-      {errorMessage && (
-        <div className="text-red-600 text-sm">{errorMessage}</div>
-      )}
-      </div>
+        {errorMessage && (
+          <div className="text-red-600 text-sm">{errorMessage}</div>
+        )}
+        </div>
 
 
-      <div className="flex justify-between px-4">
-        <button
-          className="bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 text-[#f1f0e9] hover:scale-103 shadow transition-colors cursor-pointer whitespace-nowrap py-2 px-4 rounded-lg shadow-md text-lg"
-          onClick={(e) => {
-            e.preventDefault();
-            onClose();
-            setShowCart(true);
-          }}
-        >
-          Go Back
-        </button>
-        <button
-          className="border border-green-300 bg-green-600 text-[#f1f0e9] hover:bg-green-400 hover:scale-103 shadow transition-colors cursor-pointer whitespace-nowrap py-2 px-4 rounded-lg shadow-md text-lg"
-          disabled={!isAddressComplete}
-          onClick={handleNextClick}
-        >
-          Next
-        </button>
+        <div className="flex justify-between px-4">
+          <button
+            className="bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 text-[#f1f0e9] hover:scale-103 shadow transition-colors cursor-pointer whitespace-nowrap py-2 px-4 rounded-lg shadow-md text-lg"
+            onClick={(e) => {
+              e.preventDefault();
+              onClose();
+              setShowCart(true);
+            }}
+          >
+            Go Back
+          </button>
+          <button
+            className="border border-green-300 bg-green-600 text-[#f1f0e9] hover:bg-green-400 hover:scale-103 shadow transition-colors cursor-pointer whitespace-nowrap py-2 px-4 rounded-lg shadow-md text-lg"
+            disabled={!isAddressComplete}
+            onClick={handleNextClick}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
