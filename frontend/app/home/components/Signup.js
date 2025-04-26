@@ -69,7 +69,7 @@ const Signup = ({ onClose, onLoginClick, apiUrl }) => {
         <form onSubmit={handleSubmit} className="flex flex-col px-4 py-4 border-2 border-gray-400 rounded-b-lg">
 
           {errorMessage && (
-            <p className="text-red-500 text-center mt-2">{errorMessage}</p>
+            <p className="text-red-500 text-center">{errorMessage}</p>
           )}
           
           {/* Full Name */}

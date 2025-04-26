@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Profile from "./components/Profile";
@@ -28,6 +28,7 @@ export default function HomePage() {
   const [showDeliveryAddress, setShowDeliveryAddress] = useState(false);
   const [showOrderSummary, setShowOrderSummary] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const dropdownRef = useRef(null);
 
   const [profile, setProfile] = useState(null);
   const [orders, setOrders] = useState([]);
@@ -92,7 +93,20 @@ export default function HomePage() {
     if (showHistory && isLoggedIn) fetchHistory();
   }, [showHistory, isLoggedIn]);
     
-  
+  // closes dropdown menu even if user didn't choose an option
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    }
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   const categories = [
     "All", "Fruits", "Vegetables", "Meat", "Seafood", "Dairy",
@@ -103,48 +117,51 @@ export default function HomePage() {
     <div className="min-h-screen min-w-[700px] bg-[#f1f0e9] text-sky-950">
       <div>
         {/* Header */}
-        <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-[#41644a] border-b border-[#0d4715] shadow">
+        <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-[#41644a] border-2 border-[#90b89b4d] shadow">
           {/* OFS Logo */}
           <div className="text-4xl text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b] tracking-wide">
             OFS
           </div>
-          {/* Search Bar */}
-          <div className="flex-1 min-w-40 max-w-150">
-            <input
-              type="text"
-              placeholder="Search products"
-              className="w-full px-4 py-2 text-[#f1f0e9] border-2 border-[#90b89b] rounded-full hover:bg-[#0d4715] hover:scale-102 shadow transition-colors whitespace-nowrap focus:outline-[#41644a]"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
 
-          {/* Categories Dropdown */}
-          <div className="relative w-37 inline-block text-left">
-            <div
-              onClick={() => setIsOpen(!isOpen)}
-              className="flex justify-between items-center font-semibold px-4 py-2 border-2 border-[#90b89b] rounded-full text-black hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
-            >
-              <span className="text-[#f1f0e9]">{category}</span>
-              <FaFilter className="text-[#f1f0e9] ml-2" />
+          <div className="flex flex-row w-200 gap-x-8">
+            {/* Search Bar */}
+            <div className="flex-1 min-w-40 max-w-150">
+              <input
+                type="text"
+                placeholder="Search products"
+                className="w-full px-4 py-2 text-[#f1f0e9] border-2 border-[#90b89b] rounded-full hover:bg-[#0d4715] hover:scale-102 shadow transition-colors whitespace-nowrap focus:outline-[#41644a]"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
 
-            {isOpen && (
-              <div className="absolute z-10 mt-2 w-full max-h-60 overflow-y-auto rounded-md bg-white border border-gray-300 shadow-lg">
-                {categories.map((cat) => (
-                  <div
-                    key={cat}
-                    onClick={() => {
-                      setCategory(cat);
-                      setIsOpen(false);
-                    }}
-                    className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-sky-950"
-                  >
-                    {cat}
-                  </div>
-                ))}
+            {/* Categories Dropdown */}
+            <div ref={dropdownRef} className="relative w-37 inline-block text-left">
+              <div
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex justify-between items-center font-semibold px-4 py-2 border-2 border-[#90b89b] rounded-full text-black hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+              >
+                <span className="text-[#f1f0e9]">{category}</span>
+                <FaFilter className="text-[#f1f0e9] ml-2" />
               </div>
-            )}
+
+              {isOpen && (
+                <div className="absolute z-10 mt-2 w-full max-h-60 overflow-y-auto rounded-md bg-[#f1f0e9] border-2 border-gray-300 shadow-lg">
+                  {categories.map((cat) => (
+                    <div
+                      key={cat}
+                      onClick={() => {
+                        setCategory(cat);
+                        setIsOpen(false);
+                      }}
+                      className="px-4 py-2 text-[#41644a] hover:bg-[#90b89b] cursor-pointer"
+                    >
+                      {cat}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
 

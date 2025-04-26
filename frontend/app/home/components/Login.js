@@ -58,7 +58,7 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess, apiUrl }) => {
       <form onSubmit={handleSubmit} className="flex flex-col border-2 border-gray-400 rounded-b-lg px-4 pt-6 pb-4">
 
         {errorMessage && (
-          <p className="text-red-500 text-center mt-2">{errorMessage}</p>
+          <p className="text-red-500 text-center mb-6">{errorMessage}</p>
           )}
 
         {/* Email */}
