@@ -72,9 +72,9 @@ const Profile = ({ onClose, profile, apiUrl, setIsLoggedIn, setProfile }) => {
             ["Email", profile.email],
             ["Phone", profile.phone],
           ].map(([label, value]) => (
-            <div key={label} className="flex justify-between items-center bg-gray-100 px-4 py-2 rounded-md shadow-sm">
-              <span className="font-medium text-gray-600">{label}:</span>
-              <span className="text-gray-800">{value}</span>
+            <div key={label} className="flex justify-between items-center px-4 py-2 rounded-md shadow-sm">
+              <span className="font-medium text-[#0d4715]">{label}:</span>
+              <span className="text-[#41644a]">{value}</span>
             </div>
           ))}
         </div>
