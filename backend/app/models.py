@@ -57,6 +57,8 @@ class Order(db.Model):
     zip = db.Column(db.String(10), nullable=False)
     total = db.Column(db.Numeric(7, 2), nullable=False)
 
+    status = db.Column(db.String(20), nullable=False, default='awaiting')
+
     order_items = db.relationship('OrderItem', backref='order', lazy=True, cascade="all, delete-orphan")
 
 
