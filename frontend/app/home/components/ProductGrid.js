@@ -110,8 +110,8 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
           const isAdded = isInCart(product.productID);
           return (
             <div key={index} className="rounded-md p-3 bg-[#f1f0e9] shadow flex flex-col items-center text-sm transition-transform duration-300 hover:scale-105 hover:shadow-lg">
-              <div className="w-full flex justify-center bg-[#41644a] py-2 rounded-md">
-                <h3 className="font-semibold text-lg text-[#f1f0e9]">{product.name}</h3>
+              <div className="w-full flex justify-center bg-[#41644a] border-2 border-[#90b89b] py-2 rounded-md">
+                <h3 className="font-semibold text-lg text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b]">{product.name}</h3>
                 {product.quantity > 0 && product.quantity <= 5 && (
                     <span className="ml-2 text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full">
                       Low Stock
@@ -129,9 +129,9 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
               <button
                 className={`mt-3 px-3 py-1.5 text-sm font-medium rounded-full transition shadow whitespace-nowrap
                   ${
-                    product.quantity === 0 ? 'border border-red-200 bg-red-400 text-white cursor-not-allowed'
-                      : isAdded ? 'border border-green-300 bg-green-600 text-white hover:bg-green-400 hover:scale-105'
-                      : 'bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 hover:scale-105'
+                    product.quantity === 0 ? 'border-2 border-red-200 bg-red-400 text-white cursor-not-allowed'
+                      : isAdded ? 'border-2 border-green-300 bg-green-600 text-white hover:bg-green-400 hover:scale-105'
+                      : 'bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 hover:scale-105'
                   }
                 `}
                 onClick={() => {

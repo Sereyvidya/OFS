@@ -20,16 +20,17 @@ import BannerCarousel from './components/BannerCarousel';
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
 export default function HomePage() {
+  // States for showing different components
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [showDeliveryAddress, setShowDeliveryAddress] = useState(false);
-  const [showPaymentInformation, setShowPaymentInformation] = useState(false);
   const [showOrderSummary, setShowOrderSummary] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+
   const [profile, setProfile] = useState(null);
   const [orders, setOrders] = useState([]);
-  const [showHistory, setShowHistory] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("All");
@@ -44,7 +45,6 @@ export default function HomePage() {
   const [paymentInformation, setPaymentInformation] = useState("");
 
   const apiUrl = "http://127.0.0.1:5000";
-  // const apiUrl = "https://888c-76-132-78-134.ngrok-free.app";
 
   const fetchProfile = async () => {
     const token = localStorage.getItem("authToken");
@@ -105,7 +105,7 @@ export default function HomePage() {
         {/* Header */}
         <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-[#41644a] border-b border-[#0d4715] shadow">
           {/* OFS Logo */}
-          <div className="text-4xl text-[#f1f0e9] tracking-wide">
+          <div className="text-4xl text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b] tracking-wide">
             OFS
           </div>
           {/* Search Bar */}
@@ -113,7 +113,7 @@ export default function HomePage() {
             <input
               type="text"
               placeholder="Search products"
-              className="w-full px-4 py-2 text-[#f1f0e9] border border-[#f1f0e9] rounded-full hover:bg-[#0d4715] hover:scale-102 shadow transition-colors whitespace-nowrap focus:outline-[#41644a]"
+              className="w-full px-4 py-2 text-[#f1f0e9] border-2 border-[#90b89b] rounded-full hover:bg-[#0d4715] hover:scale-102 shadow transition-colors whitespace-nowrap focus:outline-[#41644a]"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -123,7 +123,7 @@ export default function HomePage() {
           <div className="relative w-37 inline-block text-left">
             <div
               onClick={() => setIsOpen(!isOpen)}
-              className="flex justify-between items-center font-semibold px-4 py-2 border border-[#f1f0e9] rounded-full text-black hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+              className="flex justify-between items-center font-semibold px-4 py-2 border-2 border-[#90b89b] rounded-full text-black hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
             >
               <span className="text-[#f1f0e9]">{category}</span>
               <FaFilter className="text-[#f1f0e9] ml-2" />
@@ -154,7 +154,7 @@ export default function HomePage() {
             <div className="flex flex-row gap-4">
               {/* Order History button */}
               <button
-                className="flex gap-2 font-semibold px-4 py-2 border border-[#f1f0e9] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                className="flex gap-2 font-semibold px-4 py-2 border-2 border-[#90b89b] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={() => setShowHistory(true)}
               >
                 Orders
@@ -162,14 +162,14 @@ export default function HomePage() {
 
               {/* Profile */}
               <button 
-                className="flex gap-2 font-semibold px-4 py-2 border border-[#f1f0e9] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                className="flex gap-2 font-semibold px-4 py-2 border-2 border-[#90b89b] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={(e) => setShowProfile(true)}>
                   <FaUser className="mt-1 text-sm text-[#f1f0e9]"/>
                   <p>{(profile?.firstName && profile?.lastName) ? `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}` : <span className="animate-pulse">--</span>}</p>
               </button>
 
               <button 
-                className="flex gap-2 font-semibold px-4 py-2 bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                className="flex gap-2 font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={(e) => setShowCart(true)}>
                   <FaShoppingCart className="mt-1 text-sm"/>
                   <p>{cartItems.length}</p>
@@ -178,12 +178,12 @@ export default function HomePage() {
           ) : (
             <div className="flex flex-row gap-4">
               <button 
-                className="font-semibold px-4 py-2 border border-[#f1f0e9] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                className="font-semibold px-4 py-2 border-2 border-[#90b89b] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={(e) => setShowLogin(true)}>
                   Log in
               </button>
               <button 
-                className="font-semibold px-4 py-2 bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                className="font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={(e) => setShowSignup(true)}>
                   Sign up
               </button>

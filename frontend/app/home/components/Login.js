@@ -42,9 +42,9 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess, apiUrl }) => {
   };
 
   return (
-    <div className="flex flex-col w-100 h-auto m-auto bg-[#f1f0e9] pb-4 rounded-lg">
+    <div className="flex flex-col w-100 h-auto m-auto bg-[#f1f0e9] rounded-lg">
       {/* Login and Close button */}
-      <div className="relative bg-[#41644a] border-b border-[#90b89b] text-white flex justify-between items-center h-20 px-4 py-4 rounded-t-lg">
+      <div className="border-2 border-[#90b89b4d] relative bg-[#41644a] text-[#f1f0e9] flex justify-between items-center h-20 px-4 py-4 rounded-t-lg">
         <h1 className="absolute left-1/2 top-4 transform -translate-x-1/2 font-display text-4xl font-bold text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b]">Log in</h1>
         <button
           className="absolute right-4 top-4 bg-[#f1f0e9] border border-[#90b89b] text-[#41644a] px-2 rounded hover:bg-[#73977b] hover:scale-103 shadow transition-colors"
@@ -55,14 +55,14 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess, apiUrl }) => {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="flex flex-col px-4 mt-2">
+      <form onSubmit={handleSubmit} className="flex flex-col border-2 border-gray-400 rounded-b-lg px-4 pt-6 pb-4">
 
         {errorMessage && (
           <p className="text-red-500 text-center mt-2">{errorMessage}</p>
           )}
 
         {/* Email */}
-        <div className="mt-4 relative w-full">
+        <div className="relative w-full">
           <input 
             type="text" 
             placeholder="Email" 
@@ -93,7 +93,7 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess, apiUrl }) => {
         {/* Log in button */}
         <button 
           type="submit" 
-          className="mt-6 font-semibold px-4 py-2 bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full hover:scale-102 shadow transition-colors cursor-pointer whitespace-nowrap">
+          className="mt-6 font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full hover:scale-102 shadow transition-colors cursor-pointer whitespace-nowrap">
           Log in
         </button>
 

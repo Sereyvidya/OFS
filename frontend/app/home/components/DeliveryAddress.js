@@ -89,7 +89,7 @@ const DeliveryAddress = ({
 
   return (
     <div className="flex flex-col w-110 h-auto m-auto bg-[#f1f0e9] rounded-lg shadow-lg">
-      <div className="relative bg-[#41644a] border border-[#90b89b4d] text-white flex justify-between items-center h-20 px-4 py-4 rounded-t-lg">
+      <div className="relative bg-[#41644a] border-2 border-[#90b89b4d] text-white flex justify-between items-center h-20 px-4 py-4 rounded-t-lg">
         <h1 className="absolute left-1/2 top-4 transform -translate-x-1/2 font-display text-4xl font-bold text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b]">Your Address</h1>
         <button
           className="absolute right-4 top-4 bg-[#f1f0e9] border border-[#90b89b] text-[#41644a] px-2 rounded hover:bg-[#73977b] hover:scale-103 shadow transition-colors"
@@ -99,7 +99,7 @@ const DeliveryAddress = ({
         </button>
       </div>
 
-      <div className="border border-gray-400 rounded-b-lg flex flex-col gap-4 py-4">
+      <div className="border-2 border-gray-400 rounded-b-lg flex flex-col gap-4 py-4">
         <div className="px-4">
           <div
             ref={mapContainer}
