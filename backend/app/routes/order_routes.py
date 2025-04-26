@@ -109,35 +109,38 @@ def deploy_orders():
     if not trip_orders:
         return jsonify({"error": "No eligible orders"}), 404
 
-    # Build optimized trip request
-    coord_str = ";".join([f"{lng},{lat}" for _, (lng, lat) in trip_orders])
+    # 📍 Robot start location (SJSU)
+    origin_coords = [-121.8863, 37.3382]
+
+    # Prepend origin to the coordinate string
+    coord_list = [f"{origin_coords[0]},{origin_coords[1]}"] + [f"{lng},{lat}" for _, (lng, lat) in trip_orders]
+    coord_str = ";".join(coord_list)
+
     url = f"https://api.mapbox.com/optimized-trips/v1/mapbox/driving/{coord_str}?geometries=geojson&source=first&access_token={MAPBOX_TOKEN}"
     res = requests.get(url).json()
     if "trips" not in res:
         return jsonify({"error": "Mapbox failed", "details": res}), 500
 
-    # Scale 1 minute travel to 1 second real time
+    # Scale 1 min travel to 1 sec real time
     legs = res['trips'][0]['legs']  # Legs between stops
     cumulative_times = []
     current_time = 0
     for leg in legs:
-        current_time += leg['duration']  # seconds in real life
-        cumulative_times.append(current_time / 60)  # scale: 1 min = 1 sec
+        current_time += leg['duration']  # seconds
+        cumulative_times.append(current_time / 60)  # scale down
 
-    # Update orders to "en route"
+    # Mark orders "en route"
     for o, _ in trip_orders:
         o.status = 'en route'
     db.session.commit()
 
-    # Thread to mark each delivered after scaled cumulative delay
     order_ids = [o.orderID for o, _ in trip_orders]
     app = current_app._get_current_object()
 
     def deliver_stops(app):
         with app.app_context():
             for idx, oid in enumerate(order_ids):
-                delay = cumulative_times[idx]
-                time.sleep(delay)
+                time.sleep(cumulative_times[idx])
                 order = Order.query.get(oid)
                 if order:
                     order.status = 'delivered'
@@ -146,8 +149,6 @@ def deploy_orders():
     threading.Thread(target=deliver_stops, args=(app,)).start()
 
     return jsonify({"message": "Deployment triggered"}), 200
-
-
 # ------------------------- GET ALL STATUSES ------------------------- #
 @order_bp.route('/all-statuses', methods=['GET'])
 def get_all_orders():
