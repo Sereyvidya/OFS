@@ -5,6 +5,7 @@ import AdminLogin from "./components/AdminLogin.js";
 import ProductGrid from "./components/ProductGrid.js";
 import AddProduct from "./components/AddProduct.js";
 import { FaFilter } from "react-icons/fa";
+import RouteMap from "./components/RouteMap.js";
 
 export default function AdminPage() {
   const [showLogin, setShowLogin] = useState(true);
@@ -17,12 +18,11 @@ export default function AdminPage() {
   const [pendingOrders, setPendingOrders] = useState([]);
   const [enRouteOrders, setEnRouteOrders] = useState([]);
   const [deliveredOrders, setDeliveredOrders] = useState([]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("All");
   const [rerenderProductGrid, setRerenderProductGrid] = useState(0);
   const [mapKey, setMapKey] = useState(0);
-
-  const pollingRef = useRef(null);
 
   const categories = [
     "All",
@@ -37,42 +37,6 @@ export default function AdminPage() {
     "Spices",
     "Vegetarian",
   ];
-
-  const fetchOrders = () => {
-    fetch("http://127.0.0.1:5000/order/all-statuses")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.orders) {
-          setPendingOrders(data.orders.filter((o) => o.status === "awaiting"));
-          setEnRouteOrders(data.orders.filter((o) => o.status === "en route"));
-          setDeliveredOrders(
-            data.orders.filter((o) => o.status === "delivered"),
-          );
-        }
-      })
-      .catch((err) => console.error("Error fetching orders:", err));
-  };
-
-  const startPolling = () => {
-    if (pollingRef.current) clearInterval(pollingRef.current);
-    pollingRef.current = setInterval(() => {
-      fetchOrders();
-    }, 3000); // Poll every 3 seconds
-  };
-
-  const stopPolling = () => {
-    if (pollingRef.current) clearInterval(pollingRef.current);
-  };
-
-  useEffect(() => {
-    if (showOrders) {
-      fetchOrders();
-      startPolling();
-    } else {
-      stopPolling();
-    }
-    return () => stopPolling();
-  }, [showOrders]);
 
   // closes dropdown menu even if user didn't choose an option
   useEffect(() => {
@@ -193,74 +157,20 @@ export default function AdminPage() {
 
       {showOrders && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white w-[90%] h-[90%] p-6 overflow-auto rounded-lg shadow-xl relative">
-            <button
-              onClick={() => setShowOrders(false)}
-              className="absolute top-4 right-6 text-gray-600 hover:text-black text-xl"
-            >
-              ✕
-            </button>
-
-            <h2 className="text-2xl font-bold mb-4">
-              Optimized Delivery Route
-            </h2>
-
-            <button
-              onClick={() => {
-                fetch("http://127.0.0.1:5000/order/deploy", { method: "POST" })
-                  .then((res) => res.json())
-                  .then((data) => {
-                    if (data.orders) {
-                      setMapKey((k) => k + 1); // reload map
-                      fetchOrders();
-                    }
-                  });
-              }}
-              className="mb-4 px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700"
-            >
-              Deploy Route
-            </button>
-
-            <iframe
-              key={mapKey}
-              src="http://127.0.0.1:5000/order/optimized-route-map"
-              title="Delivery Route Map"
-              className="w-full h-[400px] border mb-6"
-            />
-
-            <div className="grid grid-cols-3 gap-4">
-              <OrderList title="Pending Orders" orders={pendingOrders} />
-              <OrderList title="En Route Orders" orders={enRouteOrders} />
-              <OrderList title="Delivered Orders" orders={deliveredOrders} />
-            </div>
-          </div>
+          <RouteMap
+            onClose={() => setShowOrders(false)}
+            showOrders={showOrders}
+            pendingOrders={pendingOrders}
+            setPendingOrders={setPendingOrders}
+            enRouteOrders={enRouteOrders}
+            setEnRouteOrders={setEnRouteOrders}
+            deliveredOrders={deliveredOrders}
+            setDeliveredOrders={setDeliveredOrders}
+            mapKey={mapKey}
+            setMapKey={setMapKey}
+          />
         </div>
       )}
-    </div>
-  );
-}
-
-function OrderList({ title, orders }) {
-  return (
-    <div>
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      {orders.length > 0 ? (
-        orders.map((order) => <OrderCard key={order.orderID} order={order} />)
-      ) : (
-        <p className="text-gray-400 italic">No orders</p>
-      )}
-    </div>
-  );
-}
-
-function OrderCard({ order }) {
-  return (
-    <div className="border px-4 py-2 rounded shadow-sm bg-gray-50 mb-2">
-      <p>
-        <strong>#{order.orderID}</strong> — {order.address}
-      </p>
-      <p>Weight: {order.weight.toFixed(2)} lbs</p>
-      <p>Status: {order.status}</p>
     </div>
   );
 }
