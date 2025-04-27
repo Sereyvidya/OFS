@@ -36,7 +36,7 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:5000/product/display`);
+        const response = await fetch(`${apiUrl}/product/display`);
         if (response.ok) {
           const data = await response.json();
           setProducts(data);

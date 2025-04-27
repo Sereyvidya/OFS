@@ -45,6 +45,7 @@ export default function HomePage() {
   });  
   const [paymentInformation, setPaymentInformation] = useState("");
 
+  // Use this if on local machine
   const apiUrl = "http://127.0.0.1:5000";
 
   const fetchProfile = async () => {
