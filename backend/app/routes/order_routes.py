@@ -196,8 +196,12 @@ def get_map():
     if not trip_orders:
         return jsonify({"error": "No eligible orders"}), 404
 
+    # Add robot start manually
     origin = [-121.8863, 37.3382]  # SJSU
-    coord_str = ";".join([f"{lng},{lat}" for _, (lng, lat) in trip_orders])
+
+    coord_list = [f"{origin[0]},{origin[1]}"] + [f"{lng},{lat}" for _, (lng, lat) in trip_orders]
+    coord_str = ";".join(coord_list)
+
     url = f"https://api.mapbox.com/optimized-trips/v1/mapbox/driving/{coord_str}?geometries=geojson&source=first&access_token={MAPBOX_TOKEN}"
     data = requests.get(url).json()
 
