@@ -14,10 +14,12 @@ import { FaShoppingCart } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import BannerCarousel from './components/BannerCarousel';
+import BannerCarousel from "./components/BannerCarousel";
 
-// Stripe publishable key 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+// Stripe publishable key
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+);
 
 export default function HomePage() {
   const [showLogin, setShowLogin] = useState(false);
@@ -39,8 +41,8 @@ export default function HomePage() {
     street: "",
     city: "",
     state: "",
-    zip: ""
-  });  
+    zip: "",
+  });
   const [paymentInformation, setPaymentInformation] = useState("");
 
   const apiUrl = "http://127.0.0.1:5000";
@@ -56,7 +58,7 @@ export default function HomePage() {
       const response = await fetch(`${apiUrl}/user/profile`, {
         method: "GET",
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -79,7 +81,7 @@ export default function HomePage() {
     });
     if (res.ok) setOrders(await res.json());
     else setOrders([]);
-    };
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -91,23 +93,28 @@ export default function HomePage() {
   useEffect(() => {
     if (showHistory && isLoggedIn) fetchHistory();
   }, [showHistory, isLoggedIn]);
-    
-  
 
   const categories = [
-    "All", "Fruits", "Vegetables", "Meat", "Seafood", "Dairy",
-    "Pantry", "Beverages", "Bakery", "Spices", "Vegetarian"
+    "All",
+    "Fruits",
+    "Vegetables",
+    "Meat",
+    "Seafood",
+    "Dairy",
+    "Pantry",
+    "Beverages",
+    "Bakery",
+    "Spices",
+    "Vegetarian",
   ];
-  
+
   return (
     <div className="min-h-screen min-w-[700px] bg-[#f1f0e9] text-sky-950">
       <div>
         {/* Header */}
         <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-[#41644a] border-b border-[#0d4715] shadow">
           {/* OFS Logo */}
-          <div className="text-4xl text-[#f1f0e9] tracking-wide">
-            OFS
-          </div>
+          <div className="text-4xl text-[#f1f0e9] tracking-wide">OFS</div>
           {/* Search Bar */}
           <div className="flex-1 min-w-40 max-w-150">
             <input
@@ -147,48 +154,57 @@ export default function HomePage() {
             )}
           </div>
 
-
           {/* Buttons */}
           <div className="flex justify-center">
-          {isLoggedIn ? (
-            <div className="flex flex-row gap-4">
-              {/* Order History button */}
-              <button
-                className="flex gap-2 font-semibold px-4 py-2 border border-[#f1f0e9] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
-                onClick={() => setShowHistory(true)}
-              >
-                Orders
-              </button>
+            {isLoggedIn ? (
+              <div className="flex flex-row gap-4">
+                {/* Order History button */}
+                <button
+                  className="flex gap-2 font-semibold px-4 py-2 border border-[#f1f0e9] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={() => setShowHistory(true)}
+                >
+                  Orders
+                </button>
 
-              {/* Profile */}
-              <button 
-                className="flex gap-2 font-semibold px-4 py-2 border border-[#f1f0e9] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
-                onClick={(e) => setShowProfile(true)}>
-                  <FaUser className="mt-1 text-sm text-[#f1f0e9]"/>
-                  <p>{(profile?.firstName && profile?.lastName) ? `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}` : <span className="animate-pulse">--</span>}</p>
-              </button>
+                {/* Profile */}
+                <button
+                  className="flex gap-2 font-semibold px-4 py-2 border border-[#f1f0e9] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={(e) => setShowProfile(true)}
+                >
+                  <FaUser className="mt-1 text-sm text-[#f1f0e9]" />
+                  <p>
+                    {profile?.firstName && profile?.lastName ? (
+                      `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}`
+                    ) : (
+                      <span className="animate-pulse">--</span>
+                    )}
+                  </p>
+                </button>
 
-              <button 
-                className="flex gap-2 font-semibold px-4 py-2 bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
-                onClick={(e) => setShowCart(true)}>
-                  <FaShoppingCart className="mt-1 text-sm"/>
+                <button
+                  className="flex gap-2 font-semibold px-4 py-2 bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={(e) => setShowCart(true)}
+                >
+                  <FaShoppingCart className="mt-1 text-sm" />
                   <p>{cartItems.length}</p>
-              </button>
-            </div>
-          ) : (
-            <div className="flex flex-row gap-4">
-              <button 
-                className="font-semibold px-4 py-2 border border-[#f1f0e9] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
-                onClick={(e) => setShowLogin(true)}>
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-row gap-4">
+                <button
+                  className="font-semibold px-4 py-2 border border-[#f1f0e9] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={(e) => setShowLogin(true)}
+                >
                   Log in
-              </button>
-              <button 
-                className="font-semibold px-4 py-2 bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
-                onClick={(e) => setShowSignup(true)}>
+                </button>
+                <button
+                  className="font-semibold px-4 py-2 bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={(e) => setShowSignup(true)}
+                >
                   Sign up
-              </button>
-            </div>
-          )}
+                </button>
+              </div>
+            )}
           </div>
         </header>
       </div>
@@ -209,14 +225,14 @@ export default function HomePage() {
       {/* Login popup */}
       {showLogin && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
-          <Login 
+          <Login
             onClose={() => setShowLogin(false)}
             onSignupClick={() => {
-              setShowLogin(false)
-              setShowSignup(true)
-              }}
+              setShowLogin(false);
+              setShowSignup(true);
+            }}
             onLoginSuccess={(token) => {
-              localStorage.setItem("authToken", token); 
+              localStorage.setItem("authToken", token);
               fetchProfile();
               setIsLoggedIn(true);
               setShowLogin(false);
@@ -232,18 +248,18 @@ export default function HomePage() {
           <Signup
             onClose={() => setShowSignup(false)}
             onLoginClick={() => {
-              setShowLogin(true)
-              setShowSignup(false)
+              setShowLogin(true);
+              setShowSignup(false);
             }}
             apiUrl={apiUrl}
-            />
+          />
         </div>
       )}
 
       {/* Show Profile */}
       {showProfile && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
-          <Profile 
+          <Profile
             onClose={() => setShowProfile(false)}
             profile={profile}
             apiUrl={apiUrl}
@@ -256,7 +272,7 @@ export default function HomePage() {
       {/* Show Cart */}
       {showCart && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
-          <Cart 
+          <Cart
             onClose={() => setShowCart(false)}
             cartItems={cartItems}
             setCartItems={setCartItems}
@@ -317,12 +333,10 @@ export default function HomePage() {
       {/* Order History */}
       {showHistory && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
-          <OrderHistory
-            onClose={() => setShowHistory(false)}
-            orders={orders}
-          />
+          <OrderHistory onClose={() => setShowHistory(false)} orders={orders} />
         </div>
       )}
-    </div>  
+    </div>
   );
 }
+
