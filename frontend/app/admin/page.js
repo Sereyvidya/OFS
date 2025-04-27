@@ -12,6 +12,8 @@ export default function AdminPage() {
   const [isOpen, setIsOpen] = useState(false);
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [showOrders, setShowOrders] = useState(false);
+  const dropdownRef = useRef(null);
+
   const [pendingOrders, setPendingOrders] = useState([]);
   const [enRouteOrders, setEnRouteOrders] = useState([]);
   const [deliveredOrders, setDeliveredOrders] = useState([]);
@@ -26,7 +28,7 @@ export default function AdminPage() {
     "All",
     "Fruits",
     "Vegetables",
-
+    "Meat",
     "Seafood",
     "Dairy",
     "Pantry",
@@ -72,6 +74,22 @@ export default function AdminPage() {
     return () => stopPolling();
   }, [showOrders]);
 
+  // closes dropdown menu even if user didn't choose an option
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    }
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+  
+
   return showLogin ? (
     <div className="min-h-screen min-w-[700px] bg-white text-sky-950">
       <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
@@ -84,58 +102,69 @@ export default function AdminPage() {
       </div>
     </div>
   ) : (
-    <div className="min-h-screen min-w-[700px] bg-white text-sky-950">
+    <div className="min-h-screen min-w-[700px] bg-[#f1f0e9]">
       {/* Header */}
-      <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-gray-200 shadow">
-        <div className="text-4xl font-bold text-sky-950 tracking-wide">OFS</div>
-
-        <div className="flex-1 min-w-40 max-w-150">
-          <input
-            type="text"
-            placeholder="Search products"
-            className="w-full px-4 py-2 border border-gray-300 rounded-full shadow focus:outline-gray-400"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+      <header className="flex items-center justify-between gap-8 px-6 py-4 bg-[#41644a] border-2 border-[#90b89b4d] shadow">
+        {/* OFS Logo */}
+        <div className="flex flex-row mr-8">
+          <img src="../icon.jpg" alt="logo" className="mt-1 mr-1 w-8 h-8"></img>
+          <p className="text-4xl text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b] tracking-wide">
+            OFS
+          </p>
         </div>
 
-        <div className="relative w-37 inline-block text-left">
-          <div
-            onClick={() => setIsOpen(!isOpen)}
-            className="flex justify-between items-center font-semibold px-4 py-2 border border-gray-300 rounded-full shadow cursor-pointer"
-          >
-            <span>{category}</span>
-            <FaFilter className="text-gray-600 ml-2" />
-          </div>
-
-          {isOpen && (
-            <div className="absolute z-10 mt-2 w-full max-h-60 overflow-y-auto rounded-md bg-white border shadow-lg">
-              {categories.map((cat) => (
-                <div
-                  key={cat}
-                  onClick={() => {
-                    setCategory(cat);
-                    setIsOpen(false);
-                  }}
-                  className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                >
-                  {cat}
-                </div>
-              ))}
+        {/* Container for search bar and dropdown */}
+        <div className="flex flex-row w-200 gap-4">
+            {/* Search Bar */}
+            <div className="flex-1 min-w-40 max-w-150">
+              <input
+                type="text"
+                placeholder="Search products"
+                className="w-full px-4 py-2 text-[#f1f0e9] border-2 border-[#90b89b] rounded-full hover:bg-[#0d4715] hover:scale-102 shadow transition-colors whitespace-nowrap focus:outline-[#41644a]"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
-          )}
-        </div>
+
+            {/* Categories Dropdown */}
+            <div ref={dropdownRef} className="relative w-37 inline-block text-left">
+              <div
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex justify-between items-center font-semibold px-4 py-2 border-2 border-[#90b89b] rounded-full text-black hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+              >
+                <span className="text-[#f1f0e9]">{category}</span>
+                <FaFilter className="text-[#f1f0e9] ml-2" />
+              </div>
+
+              {isOpen && (
+                <div className="absolute z-10 mt-2 w-full max-h-60 overflow-y-auto rounded-md bg-[#f1f0e9] border-2 border-gray-300 shadow-lg">
+                  {categories.map((cat) => (
+                    <div
+                      key={cat}
+                      onClick={() => {
+                        setCategory(cat);
+                        setIsOpen(false);
+                      }}
+                      className="px-4 py-2 text-[#41644a] hover:bg-[#90b89b] cursor-pointer"
+                    >
+                      {cat}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
 
         {/* Buttons */}
         <div className="flex gap-4">
           <button
-            className="font-semibold px-4 py-2 border rounded-full bg-white-600 text-black hover:bg-gray-400 shadow"
+            className="font-semibold px-4 py-2 border-2 border-[#90b89b] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
             onClick={() => setShowOrders(true)}
           >
             View Orders
           </button>
           <button
-            className="font-semibold px-4 py-2 border rounded-full bg-blue-600 text-white hover:bg-blue-400 shadow"
+            className="font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
             onClick={() => setShowAddProduct(true)}
           >
             Add Product

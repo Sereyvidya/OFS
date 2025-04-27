@@ -112,10 +112,6 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
             <div key={index} className="rounded-md p-3 bg-[#f1f0e9] shadow flex flex-col items-center text-sm transition-transform duration-300 hover:scale-105 hover:shadow-lg">
               <div className="w-full flex justify-center bg-[#41644a] border-2 border-[#90b89b] py-2 rounded-md">
                 <h3 className="font-semibold text-lg text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b]">{product.name}</h3>
-                {product.quantity > 0 && product.quantity <= 5 && (
-                    <span className="ml-2 text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full">
-                      Low Stock
-                    </span>)}
               </div>
               <img
                 src={`data:image/jpeg;base64,${product.image}`}

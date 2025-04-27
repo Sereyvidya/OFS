@@ -114,16 +114,20 @@ export default function HomePage() {
   ];
   
   return (
-    <div className="min-h-screen min-w-[700px] bg-[#f1f0e9] text-sky-950">
+    <div className="min-h-screen min-w-[700px] bg-[#f1f0e9]">
       <div>
         {/* Header */}
-        <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-[#41644a] border-2 border-[#90b89b4d] shadow">
+        <header className="flex items-center justify-between gap-8 px-6 py-4 bg-[#41644a] border-2 border-[#90b89b4d] shadow">
           {/* OFS Logo */}
-          <div className="text-4xl text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b] tracking-wide">
-            OFS
+          <div className="flex flex-row mr-8">
+            <img src="../icon.jpg" alt="logo" className="mt-1 mr-1 w-8 h-8"></img>
+            <p className="text-4xl text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b] tracking-wide">
+              OFS
+            </p>
           </div>
 
-          <div className="flex flex-row w-200 gap-x-8">
+          {/* Container for search bar and dropdown */}
+          <div className="flex flex-row w-200 gap-4">
             {/* Search Bar */}
             <div className="flex-1 min-w-40 max-w-150">
               <input
@@ -194,11 +198,13 @@ export default function HomePage() {
             </div>
           ) : (
             <div className="flex flex-row gap-4">
+              {/* Log in */}
               <button 
                 className="font-semibold px-4 py-2 border-2 border-[#90b89b] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={(e) => setShowLogin(true)}>
                   Log in
               </button>
+              {/* Sign up */}
               <button 
                 className="font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
                 onClick={(e) => setShowSignup(true)}>
@@ -297,21 +303,6 @@ export default function HomePage() {
           />
         </div>
       )}
-
-      {/* Show Payment Information */}
-      {/* {showPaymentInformation && (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
-          <Elements stripe={stripePromise}>
-            <PaymentInformation 
-              onClose={() => setShowPaymentInformation(false)}
-              setShowDeliveryAddress={setShowDeliveryAddress}
-              setShowOrderSummary={setShowOrderSummary}
-              setShowPaymentInformation={setShowPaymentInformation}
-              setPaymentInformation={setPaymentInformation}
-            />
-          </Elements>
-        </div>
-      )} */}
 
       {/* Show Order Summary */}
       {showOrderSummary && (

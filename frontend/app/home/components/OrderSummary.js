@@ -145,7 +145,7 @@ const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDelive
         {/* Payment Information */}
         <div className="flex flex-col mx-4">
           <p className="font-semibold text-[#0d4715]">Payment Information:</p>
-          <div className="mt-1 border border-gray-300 text-[#0d4715] placeholder-[#73977b] hover:bg-[#90b89b] rounded-md p-4 shadow focus-within:outline">
+          <div className="mt-2 border border-gray-300 text-[#0d4715] placeholder-[#73977b] hover:bg-[#90b89b] rounded-md p-4 shadow focus-within:outline">
             <CardElement
               options={{
                 style: {

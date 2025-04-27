@@ -80,13 +80,13 @@ const Profile = ({ onClose, profile, apiUrl, setIsLoggedIn, setProfile }) => {
         </div>
         <div className="mt-4 px-4 pb-4 flex flex-row justify-between">
           <button
-            className="bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 hover:scale-103 px-6 py-2 rounded-md shadow transition-colors"
+            className="bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 hover:scale-103 px-6 py-2 rounded-lg shadow transition-colors"
             onClick={logout}
           >
             Log Out
           </button>
           <button
-            className="bg-red-600 border-2 border-red-300 text-[#f1f0e9] hover:bg-red-400 hover:scale-103 px-6 py-2 rounded-md shadow transition-colors"
+            className="bg-red-600 border-2 border-red-300 text-[#f1f0e9] hover:bg-red-400 hover:scale-103 px-6 py-2 rounded-lg shadow transition-colors"
             onClick={() => setShowDeleteConfirm(true)}
           >
             Delete Account
