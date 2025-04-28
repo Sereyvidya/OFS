@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@mapbox/search-js-react": "^1.0.0"
+    "@mapbox/search-js-react": "^1.0.0",
+    "react-toastify": "^11.0.5"
   }
 }

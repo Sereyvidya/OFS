@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItems, setCartItems, setShowCart, apiUrl }) => {
+const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItems, setCartItems, setShowCart, API_URL }) => {
   const [products, setProducts] = useState([]);
   const [addedToCart, setAddedToCart] = useState([]);
 
@@ -14,7 +14,7 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
       return;
     }
     try {
-      const response = await fetch(`${apiUrl}/cartItem/get`, {
+      const response = await fetch(`${API_URL}/cartItem/get`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -36,7 +36,7 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:5000/product/display`);
+        const response = await fetch(`${API_URL}/product/display`);
         if (response.ok) {
           const data = await response.json();
           setProducts(data);
@@ -67,7 +67,7 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
 
     console.log("Product object:", product);
 
-    const response = await fetch(`${apiUrl}/cartItem/add`, {
+    const response = await fetch(`${API_URL}/cartItem/add`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -87,10 +87,12 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
     }
   };
 
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = category === "All" || product.category === category;
-    return matchesSearch && matchesCategory;
+  const filteredProducts = products
+    .filter(product => product.quantity !== -1) // "Deleted" products have quantity = -1
+    .filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = category === "All" || product.category === category;
+      return matchesSearch && matchesCategory;
   });
 
   const isInCart = (id) => {
@@ -107,13 +109,9 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
         filteredProducts.map((product, index) => {
           const isAdded = isInCart(product.productID);
           return (
-            <div key={index} className="border border-gray-300 rounded-md p-3 bg-gray-200 shadow flex flex-col items-center text-sm transition-transform duration-300 hover:scale-105 hover:shadow-lg">
-              <div className="w-full flex justify-center bg-sky-950 py-2 rounded-md shadow">
-                <h3 className="font-semibold text-lg text-white">{product.name}</h3>
-                {product.quantity > 0 && product.quantity <= 5 && (
-                    <span className="ml-2 text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full">
-                      Low Stock
-                    </span>)}
+            <div key={index} className="rounded-md p-3 bg-[#f1f0e9] shadow flex flex-col items-center text-sm transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+              <div className="w-full flex justify-center bg-[#41644a] border-2 border-[#90b89b] py-2 rounded-md">
+                <h3 className="font-semibold text-lg text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b]">{product.name}</h3>
               </div>
               <img
                 src={`data:image/jpeg;base64,${product.image}`}
@@ -121,15 +119,15 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
                 className="w-full aspect-1 object-cover rounded-md mt-3"
               />
               <div className="flex flex-col items-center mt-3">
-                <p className="text-gray-500">{product.description}</p>
-                <p className="text-gray-500">${product.price}</p>
+                <p className="text-[#41644a]">{product.description}</p>
+                <p className="text-[#41644a]">${product.price}</p>
               </div>
               <button
                 className={`mt-3 px-3 py-1.5 text-sm font-medium rounded-full transition shadow whitespace-nowrap
                   ${
-                    product.quantity === 0 ? 'bg-red-500 text-white cursor-not-allowed opacity-70'
-                      : isAdded ? 'border border-green-300 bg-green-600 text-white hover:bg-green-400 hover:scale-105'
-                      : 'border border-blue-300 bg-blue-600 text-white hover:bg-blue-400 hover:scale-105'
+                    product.quantity === 0 ? 'border-2 border-red-200 bg-red-400 text-white cursor-not-allowed'
+                      : isAdded ? 'border-2 border-green-300 bg-green-600 text-white hover:bg-green-400 hover:scale-105'
+                      : 'bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 hover:scale-105'
                   }
                 `}
                 onClick={() => {

@@ -23,10 +23,12 @@ const ProductGrid = ({ searchQuery, category, setEditingProduct, setShowAddProdu
     fetchProducts();
   }, [rerenderProductGrid]);
 
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = category === "All" || product.category === category;
-    return matchesSearch && matchesCategory;
+  const filteredProducts = products
+    .filter(product => product.quantity !== -1) // "Deleted" products have quantity = -1
+    .filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = category === "All" || product.category === category;
+      return matchesSearch && matchesCategory;
   });
 
   if (!products.length) {
@@ -39,8 +41,8 @@ const ProductGrid = ({ searchQuery, category, setEditingProduct, setShowAddProdu
       {filteredProducts.length > 0 ? (
         filteredProducts.map((product, index) => {
           return (
-            <div key={index} className="border border-gray-300 rounded-md p-3 bg-gray-200 shadow flex flex-col items-center text-sm relative">
-              <div className="w-full flex justify-center bg-sky-950 py-2 rounded-md shadow">
+            <div key={index} className="rounded-md p-3 bg-[#f1f0e9] shadow flex flex-col items-center text-sm transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+              <div className="w-full flex justify-center bg-[#41644a] border-2 border-[#90b89b] py-2 rounded-md">
                 <h3 className="font-semibold text-lg text-white">{product.name}</h3>
               </div>
               <img
@@ -49,15 +51,15 @@ const ProductGrid = ({ searchQuery, category, setEditingProduct, setShowAddProdu
                 className="w-full aspect-1 object-cover rounded-md mt-3"
               />
               <div className="flex flex-col items-center mt-3">
-                <p className="text-gray-500">{product.description}</p>
-                <p className="text-gray-500">${product.price}</p>
+                <p className="text-[#41644a]">{product.description}</p>
+                <p className="text-[#41644a]">${product.price}</p>
               </div>
 
               {/* Edit, Low on stock and Out of stock buttons */}
               <div className="w-full mt-3 flex justify-center relative items-center">
               {product.quantity > 10 && (
                 <button
-                  className="px-3 py-1.5 text-sm font-medium rounded-full transition shadow border border-blue-300 bg-blue-600 text-white hover:bg-blue-400 hover:scale-105 transition-colors cursor-pointer whitespace-nowrap"
+                  className="px-3 py-1.5 text-sm font-medium rounded-full transition shadow whitespace-nowrap bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 hover:scale-105'"
                   onClick={() => {
                     setEditingProduct(product);
                     setShowAddProduct(true);
@@ -69,7 +71,7 @@ const ProductGrid = ({ searchQuery, category, setEditingProduct, setShowAddProdu
             
               {product.quantity === 0 && (
                 <button
-                  className="px-3 py-1.5 text-sm font-medium rounded-full transition shadow border border-red-300 bg-red-600 text-white hover:bg-red-400 hover:scale-105 transition-colors cursor-pointer whitespace-nowrap"
+                  className="animate-bounce px-3 py-1.5 text-sm font-medium rounded-full transition shadow border-2 border-red-300 bg-red-600 text-white hover:bg-red-400 hover:scale-105 transition-colors cursor-pointer whitespace-nowrap"
                   onClick={() => {
                     setEditingProduct(product);
                     setShowAddProduct(true);
@@ -81,7 +83,7 @@ const ProductGrid = ({ searchQuery, category, setEditingProduct, setShowAddProdu
               
               {product.quantity > 0 && product.quantity <= 10 && (
                 <button
-                  className="px-3 py-1.5 text-sm font-medium rounded-full transition shadow border border-yellow-300 bg-yellow-600 text-white hover:bg-yellow-400 hover:scale-105 transition-colors cursor-pointer whitespace-nowrap"
+                  className="animate-bounce relative px-3 py-1.5 text-sm font-medium rounded-full bg-yellow-600 text-white border-2 border-yellow-300 hover:bg-yellow-400 hover:scale-105 transition transform whitespace-nowrap"
                   onClick={() => {
                     setEditingProduct(product);
                     setShowAddProduct(true);

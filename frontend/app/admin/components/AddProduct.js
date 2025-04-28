@@ -15,6 +15,8 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
   );
   const [image, setImage] = useState(null); // State for the image file
   const [errorMessage, setErrorMessage] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const categories = [
     "Fruits", "Vegetables", "Meat", "Seafood", "Dairy",
@@ -87,12 +89,33 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
     }
   };
 
+  const handleDelete = async () => {
+    if (!isEditing) setShowDeleteConfirm(false);
+
+    const response = await fetch(`http://127.0.0.1:5000/product/delete/${editingProduct.productID}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      alert("Product deleted successfully!");
+      setRerenderProductGrid((prev) => prev + 1);
+      setShowDeleteConfirm(false)
+      onClose();
+    } else {
+      const errorData = await response.json();
+      alert(errorData.error || "Failed to delete product.");
+    }
+  };
+
   return (
-    <div className="flex flex-col w-150 h-auto m-auto bg-white p-4 rounded-lg">
+    <div className="flex flex-col w-150 h-auto m-auto bg-[#f1f0e9] rounded-lg">
       {/* Close button */}
-      <div>
+      <div className="relative bg-[#41644a] border-2 border-[#90b89b4d] text-white flex justify-between items-center h-20 px-4 py-4 rounded-t-lg">
+        <h1 className="absolute left-1/2 top-4 transform -translate-x-1/2 font-display text-4xl font-bold text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b]">
+          {isEditing ? "Edit Product": "Add Product"}
+        </h1>
         <button
-          className="bg-gray-300 px-2 rounded hover:bg-gray-400 hover:scale-103 shadow transition-colors"
+          className="absolute right-4 top-4 bg-[#f1f0e9] border border-[#90b89b] text-[#41644a] px-2 rounded hover:bg-[#73977b] hover:scale-103 shadow transition-colors"
           onClick={() => {
             onClose()
             setEditingProduct(null);
@@ -103,35 +126,33 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-        <div className="flex justify-center">
-          <h1 className="font-display text-4xl font-bold">{isEditing ? "Edit Product": "Add Product"}</h1>
-        </div>
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-4 p-4 border-2 border-gray-400 rounded-b-lg">
 
         {errorMessage && (
           <p className="text-red-500 text-center">{errorMessage}</p>
         )}
 
-
         {/* Product Name & Price */}
         <div className="flex flex-col sm:flex-row justify-between gap-6">
           <div className="flex flex-col w-full">
-            <p>Product Name</p>
+            <p className="text-[#0d4715]">Product Name</p>
             <input 
               type="text"
               placeholder="Apple, Beef, Cheese..."
-              className="mt-2 w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+              className="mt-2 w-full border border-gray-300 text-[#0d4715] placeholder-[#73977b] hover:bg-[#90b89b] rounded-md p-2 shadow transition-colors whitespace-nowrap focus:outline-[#0d4715]"
+              required
               value={product.name}
               onChange={(e) => setProduct({ ...product, name: e.target.value })}/>
           </div>
           <div className="flex flex-col w-full">
-            <p>Price ($)</p>
+            <p className="text-[#0d4715]">Price ($)</p>
             <input 
               type="number"
               step="0.01"
               min="0.10"
               placeholder="$5.99, $10.00, $X.XX ..."
-              className="mt-2 w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+              className="mt-2 w-full border border-gray-300 text-[#0d4715] placeholder-[#73977b] hover:bg-[#90b89b] rounded-md p-2 shadow transition-colors whitespace-nowrap focus:outline-[#0d4715]"
+              required
               value={product.price}
               onChange={(e) => setProduct({ ...product, price: e.target.value.replace(",", ".") })}/>
           </div>
@@ -140,24 +161,26 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
         {/* Weight & Quantity */}
         <div className="flex flex-col sm:flex-row justify-between gap-6">
           <div className="flex flex-col w-full">
-            <p>Weight (lbs)</p>
+            <p className="text-[#0d4715]">Weight (lbs)</p>
             <input 
               type="number"
               step="0.001"
               min="0.125"
               placeholder="1.0, 3.375, X.XXX ..."
-              className="mt-2 w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+              className="mt-2 w-full border border-gray-300 text-[#0d4715] placeholder-[#73977b] hover:bg-[#90b89b] rounded-md p-2 shadow transition-colors whitespace-nowrap focus:outline-[#0d4715]"
+              required
               value={product.weight}
               onChange={(e) => setProduct({ ...product, weight: e.target.value.replace(",", ".") })}/>
           </div>
           <div className="flex flex-col w-full">
-            <p>Quantity (in stock)</p>
+            <p className="text-[#0d4715]">Quantity (in stock)</p>
             <input 
               type="number"
               step="1"
               min="0"
               placeholder="50, 90, 126, XXX ..."
-              className="mt-2 w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+              className="mt-2 w-full border border-gray-300 text-[#0d4715] placeholder-[#73977b] hover:bg-[#90b89b] rounded-md p-2 shadow transition-colors whitespace-nowrap focus:outline-[#0d4715]"
+              required
               value={product.quantity}
               onChange={(e) => setProduct({ ...product, quantity: e.target.value })}/>
           </div>
@@ -166,42 +189,56 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
         {/* Description & Category */}
         <div className="flex flex-col sm:flex-row justify-between gap-6">
           <div className="flex flex-col w-full">
-            <p>Description</p>
+            <p className="text-[#0d4715]">Description</p>
             <input 
               type="text"
               placeholder="1 pack of ..."
-              className="mt-2 w-full flex justify-between border border-gray-300 rounded-md p-2 hover:bg-gray-200 shadow transition-colors whitespace-nowrap focus:outline-gray-400"
+              className="mt-2 w-full border border-gray-300 text-[#0d4715] placeholder-[#73977b] hover:bg-[#90b89b] rounded-md p-2 shadow transition-colors whitespace-nowrap focus:outline-[#0d4715]"
+              required
               value={product.description}
               onChange={(e) => setProduct({ ...product, description: e.target.value})}/>
           </div>
-          <div className="flex flex-col w-full">
-            <p>Category</p>
-            <select
-              name="category"
-              value={product.category}
-              onChange={handleChange}
-              required
-              className="mt-2 w-full h-full p-2 rounded-md bg-white border border-gray-300 shadow transition-colors focus:outline-gray-400"
+          <div className="flex flex-col w-full relative">
+            <div 
+              className="text-[#0d4715] cursor-pointer"
+              onClick={() => setIsOpen(o => !o)}
             >
-              <option value="" disabled>
-                Select a Category
-              </option>
-              {categories.map((category) => (
-                <option 
-                  key={category} 
-                  value={category}
-                  className="p-2 hover:bg-gray-200 cursor-pointer"
+              <p>Category</p>
+              <div
+                className={`
+                  mt-2 w-full border border-gray-300 rounded-md p-2 shadow transition-colors whitespace-nowrap
+                  ${!product.category 
+                    ? "text-gray-400 italic hover:bg-[#90b89b]"   
+                    : "text-[#0d4715] hover:bg-[#90b89b]"
+                  }
+                `}
+              >
+                {product.category || "Select a category"}
+              </div>
+            </div>
+
+            {isOpen && (
+              <div className="absolute z-10 mt-22 w-full max-h-60 overflow-y-auto rounded-md bg-[#f1f0e9] border-2 border-gray-300 shadow-lg">
+                {categories.map(cat => (
+                  <div
+                    key={cat}
+                    onClick={() => {
+                      setProduct(prev => ({ ...prev, category: cat }));
+                      setIsOpen(false);
+                    }}
+                    className="px-4 py-2 text-[#41644a] hover:bg-[#90b89b] cursor-pointer"
                   >
-                  {category}
-                </option>
-              ))}
-            </select>
+                    {cat}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
               
         <div className="flex flex-col sm:flex-row gap-6">
           <div className="flex flex-col w-full">
-            <p>Image</p>
+            <p className="text-[#0d4715]">Image</p>
             <input
               type="file"
               accept="image/*"
@@ -213,11 +250,43 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
 
         <button
           type="submit"
-          className="font-semibold px-4 py-2 border border-blue-300 rounded-full bg-blue-600 text-white hover:bg-blue-400 hover:scale-101 shadow transition-colors cursor-pointer whitespace-nowrap"
+          className="mt-2 font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full hover:scale-102 shadow transition-colors cursor-pointer whitespace-nowrap"
         >
           {isEditing ? "Save Changes": "Add Product"}
         </button>
+        {isEditing && (
+          <button
+            type="button"
+            onClick={() => setShowDeleteConfirm(true)}
+            className="font-semibold px-4 py-2 border border-red-600 rounded-full bg-red-600 text-white hover:bg-red-400 hover:scale-101 shadow transition-colors cursor-pointer whitespace-nowrap"
+          >
+            Delete Product
+          </button>
+        )}
       </form>
+
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-md shadow-md space-y-4 max-w-sm w-full">
+            <h2 className="text-xl font-semibold text-center">Confirm Deletion</h2>
+            <p className="text-center">Are you sure you want to delete <strong>{product.name}</strong>?</p>
+            <div className="flex justify-around">
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-400 transition"
+              >
+                Delete Product
+              </button>
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

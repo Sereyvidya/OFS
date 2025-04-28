@@ -67,15 +67,23 @@ def update_cart_item(cart_item_id):
     new_quantity = data.get('quantity')
 
     if new_quantity is None or new_quantity < 1:
-        return jsonify({'error': 'Quantity must be at least 1'}), 400
+        return jsonify({'error': 'Quantity must be at least 1!'}), 400
 
     cart_item = CartItem.query.get(cart_item_id)
     if not cart_item:
         return jsonify({'error': 'Cart item not found'}), 404
 
+    product = Product.query.get(cart_item.productID)
+    if new_quantity > product.quantity:
+        return jsonify({'error': f'Sorry, we only have {product.quantity} left in stock!'}), 400
+
+    MAX_PER_ITEM = 10
+    if new_quantity > MAX_PER_ITEM:
+        return jsonify({'error': f'You can only add up to {MAX_PER_ITEM} of this item to your cart!'}), 400
+
     cart_item.quantity = new_quantity
     db.session.commit()
-    return jsonify({'message': 'Quantity updated successfully'}), 200
+    return jsonify({'message': 'Quantity updated successfully!'}), 200
 
 
 # Delete cart item route

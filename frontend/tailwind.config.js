@@ -4,12 +4,13 @@ module.exports = {
       "./app/**/*.{js,ts,jsx,tsx}",
       "./pages/**/*.{js,ts,jsx,tsx}",
       "./components/**/*.{js,ts,jsx,tsx}",
-      "./src/**/*.{js,ts,jsx,tsx}",  // Include src if using it
+      "./src/**/*.{js,ts,jsx,tsx}",
     ],
     theme: {
       extend: {
         fontFamily: {
-          poppins: ["Poppins", "sans-serif"], // Make sure it's a proper array
+          poppins: ["Poppins", "sans-serif"], 
+          bevan: ['var(--font-bevan)', 'serif']
         },
       },
     },

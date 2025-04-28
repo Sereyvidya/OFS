@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: ./frontend  # Path to your frontend folder
+    ports:
+      - "3000:3000"        # Expose port 3000 of frontend to the host machine
+    environment:
+      - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+      - NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=${NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN} 
+    networks:
+      - app-network        # Connect to the app-network
+
+  backend:
+    build:
+      context: ./backend  # Path to your backend folder
+    ports:
+      - "5000:5000"        # Expose port 5000 of backend to the host machine
+    environment:
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - MAPBOX_TOKEN=${MAPBOX_TOKEN}
+    networks:
+      - app-network        # Connect to the app-network
+
+networks:
+  app-network:
+    driver: bridge          # Use the bridge network driver
