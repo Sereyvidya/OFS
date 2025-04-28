@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 const Signup = ({ onClose, onLoginClick, API_URL }) => {
   const [formData, setFormData] = useState({
@@ -39,9 +40,12 @@ const Signup = ({ onClose, onLoginClick, API_URL }) => {
       console.log("Response received:", data);
 
       if (res.ok) {
-        alert("Registration successful!");
-        onClose();
-        onLoginClick();
+        toast.success("Sign up successful!", {
+          onClose: () => {
+            onClose();
+            onLoginClick();
+          }
+        });
       } else {
         setErrorMessage(data.error || "Registration failed. Please try again.");
       }

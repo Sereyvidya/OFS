@@ -17,7 +17,7 @@ const OrderHistory = ({ orders, onClose }) => {
 
       <div className="overflow-y-auto max-h-80 border-2 border-gray-400 rounded-b-lg">
         {orders.length === 0 ? (
-          <p className="text-center text-gray-500 italic">You haven’t placed any orders yet.</p>
+          <p className="text-center text-gray-500 italic py-4">You haven’t placed any orders yet.</p>
         ) : (
           orders.map((order) => (
             <div key={order.orderID} className="text-[#0d4715] border-b border-[#73977b] mx-4 py-4">

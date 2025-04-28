@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Profile from "./components/Profile";
@@ -15,6 +17,7 @@ import { FaUser } from "react-icons/fa";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import BannerCarousel from './components/BannerCarousel';
+
 
 export default function HomePage() {
   // States for showing different components
@@ -110,6 +113,16 @@ export default function HomePage() {
   return (
     <div className="min-h-screen min-w-[700px] bg-[#f1f0e9]">
       <div>
+        <ToastContainer
+          position="top-center"
+          autoClose={1500}
+          hideProgressBar={false}
+          closeOnClick
+          pauseOnHover={false}
+          draggable={false}
+          toastClassName="rounded-lg shadow p-4"
+        />
+
         {/* Header */}
         <header className="flex items-center justify-between gap-8 px-6 py-4 bg-[#41644a] border-2 border-[#90b89b4d] shadow">
           {/* OFS Logo */}
@@ -165,47 +178,47 @@ export default function HomePage() {
 
           {/* Buttons */}
           <div className="flex justify-center">
-          {isLoggedIn ? (
-            <div className="flex flex-row gap-4">
-              {/* Order History button */}
-              <button
-                className="flex gap-2 font-semibold px-4 py-2 border-2 border-[#90b89b] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
-                onClick={() => setShowHistory(true)}
-              >
-                Orders
-              </button>
+            {isLoggedIn ? (
+              <div className="flex flex-row gap-4">
+                {/* Order History button */}
+                <button
+                  className="flex gap-2 font-semibold px-4 py-2 border-2 border-[#90b89b] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={() => setShowHistory(true)}
+                >
+                  Orders
+                </button>
 
-              {/* Profile */}
-              <button 
-                className="flex gap-2 font-semibold px-4 py-2 border-2 border-[#90b89b] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
-                onClick={(e) => setShowProfile(true)}>
-                  <FaUser className="mt-1 text-sm text-[#f1f0e9]"/>
-                  <p>{(profile?.firstName && profile?.lastName) ? `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}` : <span className="animate-pulse">--</span>}</p>
-              </button>
+                {/* Profile */}
+                <button 
+                  className="flex gap-2 font-semibold px-4 py-2 border-2 border-[#90b89b] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={(e) => setShowProfile(true)}>
+                    <FaUser className="mt-1 text-sm text-[#f1f0e9]"/>
+                    <p>{(profile?.firstName && profile?.lastName) ? `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}` : <span className="animate-pulse">--</span>}</p>
+                </button>
 
-              <button 
-                className="flex gap-2 font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
-                onClick={(e) => setShowCart(true)}>
-                  <FaShoppingCart className="mt-1 text-sm"/>
-                  <p>{cartItems.length}</p>
-              </button>
-            </div>
-          ) : (
-            <div className="flex flex-row gap-4">
-              {/* Log in */}
-              <button 
-                className="font-semibold px-4 py-2 border-2 border-[#90b89b] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
-                onClick={(e) => setShowLogin(true)}>
-                  Log in
-              </button>
-              {/* Sign up */}
-              <button 
-                className="font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
-                onClick={(e) => setShowSignup(true)}>
-                  Sign up
-              </button>
-            </div>
-          )}
+                <button 
+                  className="flex gap-2 font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={(e) => setShowCart(true)}>
+                    <FaShoppingCart className="mt-1 text-sm"/>
+                    <p>{cartItems.length}</p>
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-row gap-4">
+                {/* Log in */}
+                <button 
+                  className="font-semibold px-4 py-2 border-2 border-[#90b89b] rounded-full text-[#f1f0e9] hover:bg-[#0d4715] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={(e) => setShowLogin(true)}>
+                    Log in
+                </button>
+                {/* Sign up */}
+                <button 
+                  className="font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full text-[#f1f0e9] hover:scale-105 shadow transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={(e) => setShowSignup(true)}>
+                    Sign up
+                </button>
+              </div>
+            )}
           </div>
         </header>
       </div>

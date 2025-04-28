@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import { toast } from "react-toastify";
 
 const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDeliveryAddress, API_URL, paymentInformation, setPaymentInformation }) => {
 
@@ -25,16 +26,13 @@ const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDelive
       type: "card",
       card: cardElement,
     });
+    const paymentMethodId = paymentMethod.id;
 
     if (error) {
       console.error(error.message);
-      alert("Payment info error: " + error.message);
+      toast.error("Payment info error: " + error.message);
       return;
     }
-    setPaymentInformation(paymentMethod);
-
-    //Place order
-    const token = localStorage.getItem("authToken");
 
     const orderItems = cartItems.map((item) => ({
       productID: item.product.productID,
@@ -42,11 +40,12 @@ const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDelive
       priceAtPurchase: parseFloat(item.product.price),
     }));
 
-    if (!paymentInformation?.id) {
-      alert("Payment method not found. Please go back and add payment info.");
+    if (!paymentMethodId) {
+      toast.error("Payment method not found!");
       return;
     }
 
+    const token = localStorage.getItem("authToken");
     try {
       const response = await fetch(`${API_URL}/order/add`, {
         method: "POST",
@@ -61,21 +60,24 @@ const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDelive
           zip: address.zip,
           total: totalCost,
           cartItems: orderItems,
-          paymentMethodId: paymentInformation.id,
+          paymentMethodId: paymentMethodId
         }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        alert("Order placed successfully!");
-        setCartItems([]);
-        onClose();
+        toast.success("Order placed successfully!", {
+          onClose: () => {
+            setCartItems([]);
+            onClose();
+          }
+        });
       } else {
-        alert("Payment error: " + data.error);
+        toast.error("Payment error: " + data.error);
       }
     } catch (error) {
-      alert("There was an error placing your order.");
+      toast.error("There was an error placing your order.");
     }
   };
 
