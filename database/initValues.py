@@ -2,7 +2,8 @@ import mysql.connector
 from werkzeug.security import generate_password_hash
 
 connection = mysql.connector.connect(
-    host = "localhost",
+    # host = "localhost", use this if testing on localhost, below is for docker
+    host = "database",
     port = 3306,
     user = "root",
     password = "password",
@@ -75,12 +76,6 @@ cursor = connection.cursor()
 
 for i in range(0, len(products)):
     # Read the image file as binary so SQL can store it
-
-    # If you're using WindowOS, uncomment this line and run it
-    # with open("images\\" + products[i]['name'] + ".jpg", 'rb') as file:
-    #     image_data = file.read()
-
-    # Uncomment this if you're using MacOS
 
     try: 
         with open("images/" + products[i]['name'] + ".jpg", 'rb') as file:

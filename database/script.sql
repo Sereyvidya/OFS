@@ -40,6 +40,7 @@ CREATE TABLE `order` (
     state varchar(50) not null,
     zip varchar(10) not null,
     total decimal(7, 2) not null,
+    status varchar(20) not null default 'awaiting',
     foreign key (userID) references user(userID) on delete cascade
 );
 

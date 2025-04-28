@@ -49,6 +49,29 @@ const RouteMap = ({ onClose, showOrders, pendingOrders, setPendingOrders,
       .catch((err) => console.error("Error fetching orders:", err));
   };
 
+  const deployRoute = async () => {
+    const token = localStorage.getItem("authToken");
+    try {
+      const res = await fetch("http://127.0.0.1:5000/order/deploy", { 
+        method: "POST",
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        //   "Content-Type": "application/json",
+        // },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+
+      // Only reload map if the response includes orders
+      if (data.orders) {
+        setMapKey(k => k + 1);
+        fetchOrders();
+      }
+    } catch (err) {
+      console.error("Deploy failed:", err);
+    }
+  };
+
   const startPolling = () => {
     if (pollingRef.current) clearInterval(pollingRef.current);
     pollingRef.current = setInterval(() => {
