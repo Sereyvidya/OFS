@@ -1,5 +1,6 @@
 CS 160 Group 3 Spring 2025
-OFS delivery service 
+
+# OFS delivery service 
 
 ## USER GUIDE
 
@@ -21,20 +22,37 @@ You will need to create an account for both Stripe and MapBox and paste your key
 ### Stripe account:
 https://dashboard.stripe.com/login
 
-sign up with google and skip until you get to this screen
+Sign up with Google and skip until you get to this screen
 ![image](https://github.com/user-attachments/assets/d48fae41-7b14-412b-acc2-6002e32a0c09)
-click on the developers tab and click on API keys
+Click on the developers tab and click on API keys
 ![image](https://github.com/user-attachments/assets/b425d5e9-351e-49a5-9031-95f15888e692)
 
 ### MapBox account:
 https://account.mapbox.com/auth/signup/
 
-create an individual account for MapBox and verify your email address
+Create an individual account for MapBox and verify your email address
 it will then ask for a mailing address and continue
 
 The key for MapBox will be at the top of the account overview page under Tokens
 Use this key for both MapBox Token fields in .env
 
+### Locally Host the website
+
+The next step is to build the Docker by running the following command:
+```
+docker-compose up -d --build
+```
+it will take a few seconds
 
 
+One error I ran into was that I already had a MySQL server running on port 3306
 
+
+After that, then you will seed the database by running:
+```
+docker-compose run --rm seed_database
+```
+if everything goes well you can proceed to the next step
+
+### Access OFS website
+from your preferred internet browser go to http://localhost:3000/
