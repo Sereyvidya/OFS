@@ -16,9 +16,6 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import BannerCarousel from './components/BannerCarousel';
 
-// Stripe publishable key 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
-
 export default function HomePage() {
   // States for showing different components
   const [showLogin, setShowLogin] = useState(false);
@@ -37,16 +34,12 @@ export default function HomePage() {
   const [category, setCategory] = useState("All");
   const [cartItems, setCartItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [address, setAddress] = useState({
-    street: "",
-    city: "",
-    state: "",
-    zip: ""
-  });  
+  const [address, setAddress] = useState({street: "", city: "", state: "", zip: ""});  
   const [paymentInformation, setPaymentInformation] = useState("");
 
-  // Use this if on local machine
-  const apiUrl = "http://127.0.0.1:5000";
+  // Constants
+  const STRIPE_PROMISE = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+  const API_URL = "http://127.0.0.1:5000";
 
   const fetchProfile = async () => {
     const token = localStorage.getItem("authToken");
@@ -55,7 +48,7 @@ export default function HomePage() {
       return;
     }
     try {
-      const response = await fetch(`${apiUrl}/user/profile`, {
+      const response = await fetch(`${API_URL}/user/profile`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -76,19 +69,19 @@ export default function HomePage() {
   const fetchHistory = async () => {
     const token = localStorage.getItem("authToken");
     if (!token) return setOrders([]);
-    const res = await fetch(`${apiUrl}/order/history`, {
+    const res = await fetch(`${API_URL}/order/history`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (res.ok) setOrders(await res.json());
     else setOrders([]);
     };
 
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (isLoggedIn && token) {
-      fetchProfile();
-    }
-  }, [isLoggedIn]);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("authToken");
+  //   if (isLoggedIn && token) {
+  //     fetchProfile();
+  //   }
+  // }, [isLoggedIn]);
 
   useEffect(() => {
     if (showHistory && isLoggedIn) fetchHistory();
@@ -227,7 +220,7 @@ export default function HomePage() {
         cartItems={cartItems}
         setCartItems={setCartItems}
         setShowCart={setShowCart}
-        apiUrl={apiUrl}
+        API_URL={API_URL}
       />
 
       {/* Login popup */}
@@ -245,7 +238,7 @@ export default function HomePage() {
               setIsLoggedIn(true);
               setShowLogin(false);
             }}
-            apiUrl={apiUrl}
+            API_URL={API_URL}
           />
         </div>
       )}
@@ -259,7 +252,7 @@ export default function HomePage() {
               setShowLogin(true)
               setShowSignup(false)
             }}
-            apiUrl={apiUrl}
+            API_URL={API_URL}
             />
         </div>
       )}
@@ -270,7 +263,7 @@ export default function HomePage() {
           <Profile 
             onClose={() => setShowProfile(false)}
             profile={profile}
-            apiUrl={apiUrl}
+            API_URL={API_URL}
             setIsLoggedIn={setIsLoggedIn}
             setProfile={setProfile}
           />
@@ -286,7 +279,7 @@ export default function HomePage() {
             setCartItems={setCartItems}
             setShowCart={setShowCart}
             setShowDeliveryAddress={setShowDeliveryAddress}
-            apiUrl={apiUrl}
+            API_URL={API_URL}
           />
         </div>
       )}
@@ -300,7 +293,6 @@ export default function HomePage() {
             address={address}
             setAddress={setAddress}
             setShowOrderSummary={setShowOrderSummary}
-            // setShowPaymentInformation={setShowPaymentInformation}
           />
         </div>
       )}
@@ -308,14 +300,14 @@ export default function HomePage() {
       {/* Show Order Summary */}
       {showOrderSummary && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
-          <Elements stripe={stripePromise}>
+          <Elements stripe={STRIPE_PROMISE}>
             <OrderSummary
               onClose={() => setShowOrderSummary(false)}
               cartItems={cartItems}
               setCartItems={setCartItems}
               address={address}
               setShowDeliveryAddress={setShowDeliveryAddress}
-              apiUrl={apiUrl}
+              API_URL={API_URL}
               paymentInformation={paymentInformation}
               setPaymentInformation={setPaymentInformation}
             />

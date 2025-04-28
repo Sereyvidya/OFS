@@ -152,8 +152,11 @@ def deploy_orders():
     if not trip_orders:
         return jsonify({"error": "No eligible orders"}), 404
 
-    # Build optimized trip request
-    coord_str = ";".join([f"{lng},{lat}" for _, (lng, lat) in trip_orders])
+    # Robot starts at sjsu
+    origin_coords = [-121.8863, 37.3382]
+    coord_list = [f"{origin[0]},{origin[1]}"] + [f"{lng},{lat}" for _, (lng, lat) in trip_orders]
+    coord_str = ";".join(coord_list)
+
     url = f"https://api.mapbox.com/optimized-trips/v1/mapbox/driving/{coord_str}?geometries=geojson&source=first&access_token={MAPBOX_TOKEN}"
     res = requests.get(url).json()
     if "trips" not in res:
@@ -179,8 +182,7 @@ def deploy_orders():
     def deliver_stops(app):
         with app.app_context():
             for idx, oid in enumerate(order_ids):
-                delay = cumulative_times[idx]
-                time.sleep(delay)
+                time.sleep(cumulative_times[idx])
                 order = Order.query.get(oid)
                 if order:
                     order.status = 'delivered'

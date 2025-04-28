@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 
-const Profile = ({ onClose, profile, apiUrl, setIsLoggedIn, setProfile }) => {
+const Profile = ({ onClose, profile, API_URL, setIsLoggedIn, setProfile }) => {
   if (!profile) {
     return <div className="flex items-center justify-center h-screen text-xl">Loading...</div>;
   }
@@ -31,7 +31,7 @@ const Profile = ({ onClose, profile, apiUrl, setIsLoggedIn, setProfile }) => {
       return;
     }
     try {
-      const response = await fetch(`${apiUrl}/user/delete`, {
+      const response = await fetch(`${API_URL}/user/delete`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItems, setCartItems, setShowCart, apiUrl }) => {
+const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItems, setCartItems, setShowCart, API_URL }) => {
   const [products, setProducts] = useState([]);
   const [addedToCart, setAddedToCart] = useState([]);
 
@@ -14,7 +14,7 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
       return;
     }
     try {
-      const response = await fetch(`${apiUrl}/cartItem/get`, {
+      const response = await fetch(`${API_URL}/cartItem/get`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -36,7 +36,7 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${apiUrl}/product/display`);
+        const response = await fetch(`${API_URL}/product/display`);
         if (response.ok) {
           const data = await response.json();
           setProducts(data);
@@ -67,7 +67,7 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
 
     console.log("Product object:", product);
 
-    const response = await fetch(`${apiUrl}/cartItem/add`, {
+    const response = await fetch(`${API_URL}/cartItem/add`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

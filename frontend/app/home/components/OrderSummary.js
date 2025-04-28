@@ -3,7 +3,7 @@
 import React from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 
-const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDeliveryAddress, apiUrl, paymentInformation, setPaymentInformation }) => {
+const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDeliveryAddress, API_URL, paymentInformation, setPaymentInformation }) => {
 
   const subTotal = cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
   const cartWeight = cartItems.reduce((total, item) => total + item.product.weight * item.quantity, 0);
@@ -48,7 +48,7 @@ const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDelive
     }
 
     try {
-      const response = await fetch(`${apiUrl}/order/add`, {
+      const response = await fetch(`${API_URL}/order/add`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
