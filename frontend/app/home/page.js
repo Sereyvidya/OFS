@@ -193,7 +193,11 @@ export default function HomePage() {
         </header>
       </div>
 
-      <BannerCarousel />
+      {!showLogin && !showSignup && !showProfile && !showCart && !showDeliveryAddress && !showOrderSummary && !showHistory && (
+        <BannerCarousel />
+      )}
+
+      {/*<BannerCarousel />*/}
 
       <ProductGrid
         isLoggedIn={isLoggedIn}
