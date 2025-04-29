@@ -79,13 +79,6 @@ export default function HomePage() {
     else setOrders([]);
     };
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("authToken");
-  //   if (isLoggedIn && token) {
-  //     fetchProfile();
-  //   }
-  // }, [isLoggedIn]);
-
   useEffect(() => {
     if (showHistory && isLoggedIn) fetchHistory();
   }, [showHistory, isLoggedIn]);
@@ -223,7 +216,15 @@ export default function HomePage() {
         </header>
       </div>
 
-      {/* <BannerCarousel /> */}
+      <BannerCarousel 
+        showLogin={showLogin}
+        showSignup={showSignup}
+        showProfile={showProfile}
+        showCart={showCart}
+        showDeliveryAddress={showDeliveryAddress}
+        showOrderSummary={showOrderSummary}
+        showHistory={showHistory}
+      />
 
       <ProductGrid
         isLoggedIn={isLoggedIn}
