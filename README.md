@@ -1,8 +1,6 @@
 CS 160 Group 3 Spring 2025
 
-# OFS delivery service 
-
-## USER GUIDE
+# OFS delivery service USER GUIDE
 
 First step is to download the files project files
 
@@ -19,7 +17,7 @@ NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=
 
 You will need to create an account for both Stripe and MapBox and paste your keys in the appropriate places in the .env file
 
-### Stripe account:
+## Stripe account:
 https://dashboard.stripe.com/login
 
 Sign up with Google and skip until you get to this screen
@@ -27,7 +25,7 @@ Sign up with Google and skip until you get to this screen
 Click on the developers tab and click on API keys
 ![image](https://github.com/user-attachments/assets/b425d5e9-351e-49a5-9031-95f15888e692)
 
-### MapBox account:
+## MapBox account:
 https://account.mapbox.com/auth/signup/
 
 Create an individual account for MapBox and verify your email address
@@ -36,7 +34,7 @@ it will then ask for a mailing address and continue
 The key for MapBox will be at the top of the account overview page under Tokens
 Use this key for both MapBox Token fields in .env
 
-### Locally Host the website
+## Locally Host the website
 
 The next step is to download the Docker Desktop app from https://www.docker.com/products/docker-desktop/ 
 
@@ -50,7 +48,13 @@ docker-compose up -d --build
 ```
 It may take a few seconds.
 
-#### potential errors
+After that, then you will seed the database by running:
+```
+docker-compose run --rm seed_database
+```
+This step will require you to have your .env file set up as previously specified
+
+### Potential Errors:
 
 One error you may run into is that you may already have a MySQL server running on port 3306
 
@@ -61,13 +65,8 @@ net stop MySQL80
 You may have to stop a different program if it is something else using port 3306.
 
 
-After that, then you will seed the database by running:
-```
-docker-compose run --rm seed_database
-```
-if everything goes well you can proceed to the next step
 
-### Access OFS website
+## Access OFS website
 from your preferred internet browser go to http://localhost:3000/home for the main site
 
 to access the admin page go to http://localhost:3000/admin and log in with the following credentials:
