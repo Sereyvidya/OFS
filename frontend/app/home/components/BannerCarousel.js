@@ -11,7 +11,7 @@ function NextArrow(props) {
   return (
     <div
       onClick={onClick}
-      className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer bg-white/80 rounded-full p-2 shadow"
+      className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer bg-black rounded-full p-2 shadow"
     >
       <FaArrowRight />
     </div>
@@ -23,7 +23,7 @@ function PrevArrow(props) {
   return (
     <div
       onClick={onClick}
-      className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer bg-white/80 rounded-full p-2 shadow"
+      className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer bg-black rounded-full p-2 shadow"
     >
       <FaArrowLeft />
     </div>
@@ -40,7 +40,26 @@ const banners = [
   "/banners/banner7.png",
 ];
 
-const BannerCarousel = () => {
+const BannerCarousel = ({
+  showLogin,
+  showSignup,
+  showProfile,
+  showCart,
+  showDeliveryAddress,
+  showOrderSummary,
+  showHistory
+}) => {
+
+  const anyOpen = [
+    showLogin,
+    showSignup,
+    showProfile,
+    showCart,
+    showDeliveryAddress,
+    showOrderSummary,
+    showHistory
+  ].some(Boolean);
+
   const settings = {
     dots: true,
     infinite: true,
@@ -49,7 +68,7 @@ const BannerCarousel = () => {
     autoplaySpeed: 4000,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: true,
+    arrows: !anyOpen,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
   };

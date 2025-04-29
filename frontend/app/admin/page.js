@@ -52,7 +52,6 @@ export default function AdminPage() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
-  
 
   return showLogin ? (
     <div className="min-h-screen min-w-[700px] bg-white text-sky-950">

@@ -1,28 +1,67 @@
-version: '3'
-
 services:
+  database:
+    image: mysql:8.0
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: OFS
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./database/script.sql:/docker-entrypoint-initdb.d/script.sql:ro
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--host=localhost", "--user=root", "--password=password"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
   frontend:
     build:
-      context: ./frontend  # Path to your frontend folder
+      context: ./frontend
     ports:
-      - "3000:3000"        # Expose port 3000 of frontend to the host machine
+      - "3000:3000"
     environment:
       - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
-      - NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=${NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN} 
+      - NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=${NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
     networks:
-      - app-network        # Connect to the app-network
+      - app-network
 
   backend:
     build:
-      context: ./backend  # Path to your backend folder
+      context: ./backend
     ports:
-      - "5000:5000"        # Expose port 5000 of backend to the host machine
+      - "5000:5000"
+    volumes:
+      - ./database:/database
+      - ./database/images:/images
     environment:
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
       - MAPBOX_TOKEN=${MAPBOX_TOKEN}
+    depends_on:
+      database:
+        condition: service_healthy
     networks:
-      - app-network        # Connect to the app-network
+      - app-network
+
+  seed_database:
+    build:
+      context: ./database
+      dockerfile: Dockerfile.seed
+    volumes:
+      - ./database/images:/app/images:ro
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - app-network
+
+volumes:
+  db-data:
 
 networks:
   app-network:
-    driver: bridge          # Use the bridge network driver
+    driver: bridge

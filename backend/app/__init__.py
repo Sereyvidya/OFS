@@ -19,7 +19,12 @@ def create_app():
     
     # Initialize the database, enable CORS, and set up JWT management
     db.init_app(app)
-    CORS(app)
+    CORS(
+        app,
+        resources={ r"/*": { "origins": "http://localhost:3000" } },
+        allow_headers=["Content-Type", "Authorization"],
+        supports_credentials=True
+    )
     JWTManager(app)
 
     # Register the application's blueprints (including product blueprint)
