@@ -5,6 +5,6 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY initValues.py images/ /app/
+COPY initValues.py Images/ /app/
 
 CMD ["python", "initValues.py"]
