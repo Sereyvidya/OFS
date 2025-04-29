@@ -38,14 +38,27 @@ Use this key for both MapBox Token fields in .env
 
 ### Locally Host the website
 
-The next step is to build the Docker by running the following command:
+The next step is to download the Docker Desktop app from https://www.docker.com/products/docker-desktop/ 
+
+Make sure to select the download that matches your system.
+
+
+Once Docker is downloaded and installed, it will ask you to restart your computer. 
+Build the Docker image by running the following command:
 ```
 docker-compose up -d --build
 ```
-it will take a few seconds
+It may take a few seconds.
 
+#### potential errors
 
-One error I ran into was that I already had a MySQL server running on port 3306
+One error you may run into is that you may already have a MySQL server running on port 3306
+
+This issue is resolved on Windows by right-clicking Windows PowerShell and selecting "Run as administrator" then running:
+```
+net stop MySQL80
+```
+You may have to stop a different program if it is something else using port 3306.
 
 
 After that, then you will seed the database by running:
@@ -55,4 +68,10 @@ docker-compose run --rm seed_database
 if everything goes well you can proceed to the next step
 
 ### Access OFS website
-from your preferred internet browser go to http://localhost:3000/
+from your preferred internet browser go to http://localhost:3000/home for the main site
+
+to access the admin page go to http://localhost:3000/admin and log in with the following credentials:
+Username: alice.smith@ofs.com
+Password: Password123$
+
+
