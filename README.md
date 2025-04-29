@@ -70,7 +70,10 @@ You may have to stop a different program if it is something else using port 3306
 from your preferred internet browser go to http://localhost:3000/home for the main site
 
 to access the admin page go to http://localhost:3000/admin and log in with the following credentials:
+
 Username: alice.smith@ofs.com
+
 Password: Password123$
+
 
 
