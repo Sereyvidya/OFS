@@ -1,6 +1,6 @@
 CS 160 Group 3 Spring 2025
 
-# OFS delivery service USER GUIDE
+# OFS delivery service Installation Guide
 
 First step is to download the files project files
 
