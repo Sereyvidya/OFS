@@ -24,6 +24,9 @@ services:
       context: ./frontend
     ports:
       - "3000:3000"
+    volumes:
+      - ./frontend:/app         
+      - /app/node_modules
     environment:
       - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
       - NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=${NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
@@ -38,6 +41,8 @@ services:
     volumes:
       - ./database:/database
       - ./database/images:/images
+      - ./backend:/app         
+      - /app/.venv 
     environment:
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
       - MAPBOX_TOKEN=${MAPBOX_TOKEN}

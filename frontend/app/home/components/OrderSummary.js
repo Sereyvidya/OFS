@@ -4,7 +4,9 @@ import React from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { toast } from "react-toastify";
 
-const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDeliveryAddress, API_URL, paymentInformation, setPaymentInformation }) => {
+const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDeliveryAddress, API_URL }) => {
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const subTotal = cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
   const cartWeight = cartItems.reduce((total, item) => total + item.product.weight * item.quantity, 0);
@@ -18,6 +20,10 @@ const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDelive
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
 
+    // prevent re-submissions
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     // Stripe
     if (!stripe || !elements) return;
   
@@ -26,11 +32,18 @@ const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDelive
       type: "card",
       card: cardElement,
     });
+
+    if (error || !paymentMethod) {
+      const msg = error?.message || "Unable to create payment method. Please check your card info.";
+      toast.error(msg);
+      setIsSubmitting(false);
+      return;
+    }
+
     const paymentMethodId = paymentMethod.id;
 
     if (error) {
-      console.error(error.message);
-      toast.error("Payment info error: " + error.message);
+      toast.error(error.message);
       return;
     }
 
@@ -74,10 +87,13 @@ const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDelive
           }
         });
       } else {
-        toast.error("Payment error: " + data.error);
+        toast.error(data.error);
       }
     } catch (error) {
       toast.error("There was an error placing your order.");
+    } finally {
+      await wait(3000);
+      setIsSubmitting(false);
     }
   };
 
@@ -176,10 +192,15 @@ const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDelive
             Go Back
           </button>
           <button
-            className="border border-green-300 bg-green-600 text-[#f1f0e9] hover:bg-green-400 hover:scale-103 transition-colors cursor-pointer whitespace-nowrap py-2 px-4 rounded-lg shadow-md text-lg"
+            disabled={isSubmitting}
+            className={`border border-green-300 text-[#f1f0e9] whitespace-nowrap py-2 px-4 rounded-lg shadow-md text-lg transition-colors cursor-pointer ${
+              isSubmitting
+                ? "bg-green-300 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-400 hover:scale-103"
+            }`}
             onClick={handlePlaceOrder}
           >
-            Confirm Order
+            {isSubmitting ? "Processing..." : "Confirm Order"}
           </button>
         </div>
       </div>
