@@ -1,64 +1,63 @@
-drop database if exists OFS;                   -- These first lines select a database in mySQL and should only be run one time by mySQL
-create database OFS;
-use OFS;
+CREATE DATABASE IF NOT EXISTS OFS;
+USE OFS;
 
-CREATE TABLE user (
-	userID int auto_increment primary key,     -- userID will automatically increment by 1 every time a user is added
-    firstName varchar(50) not null,
-    lastName varchar(50) not null,
-    email varchar(320) not null,
-    phone varchar(10) not null,
-    password varchar(256) not null
+CREATE TABLE IF NOT EXISTS user (
+  userID     INT AUTO_INCREMENT PRIMARY KEY,
+  firstName  VARCHAR(50)  NOT NULL,
+  lastName   VARCHAR(50)  NOT NULL,
+  email      VARCHAR(320) NOT NULL,
+  phone      VARCHAR(10)  NOT NULL,
+  password   VARCHAR(256) NOT NULL
 );
 
-CREATE TABLE product (
-	productID int auto_increment primary key,
-    name varchar(50) not null,                 -- productName and productDesc and things users will see
-    description varchar(255) not null,
-    price decimal(5, 2) not null,
-    quantity int not null,                     -- How much of the product is available?
-    category varchar(50) not null,                     -- Product's category (For filter option)
-    weight decimal(5, 3) not null,
-    image longblob not null                          -- Blobs store binary data for images (We can change to image url (varchar) if it helps)
+CREATE TABLE IF NOT EXISTS product (
+  productID   INT AUTO_INCREMENT PRIMARY KEY,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  price       DECIMAL(5,2) NOT NULL,
+  quantity    INT          NOT NULL,
+  category    VARCHAR(50)  NOT NULL,
+  weight      DECIMAL(5,3) NOT NULL,
+  image       LONGBLOB     NOT NULL
 );
 
-CREATE TABLE cart_item (
-	cartItemID int auto_increment primary key,
-	userID int not null,
-    productID int not null, 
-    quantity int default 1,                    -- How much of the item is the user adding to the cart?
-    foreign key (userID) references user(userID) on delete cascade,       -- Cascade deletion: If user/product is deleted, delete the cart item
-    foreign key (productID) references product(productID) on delete cascade
+CREATE TABLE IF NOT EXISTS cart_item (
+  cartItemID INT AUTO_INCREMENT PRIMARY KEY,
+  userID     INT NOT NULL,
+  productID  INT NOT NULL,
+  quantity   INT DEFAULT 1,
+  FOREIGN KEY (userID)    REFERENCES user(userID)    ON DELETE CASCADE,
+  FOREIGN KEY (productID) REFERENCES product(productID) ON DELETE CASCADE
 );
 
-CREATE TABLE `order` (
-    orderID int auto_increment primary key,
-    userID int not null,
-    orderDate datetime default current_timestamp,
-    street varchar(100) not null,
-    city varchar(50) not null,
-    state varchar(50) not null,
-    zip varchar(10) not null,
-    total decimal(7, 2) not null,
-    status varchar(20) not null default 'awaiting',
-    foreign key (userID) references user(userID) on delete cascade
+CREATE TABLE IF NOT EXISTS `order` (
+  orderID   INT AUTO_INCREMENT PRIMARY KEY,
+  userID    INT NOT NULL,
+  orderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+  street    VARCHAR(100) NOT NULL,
+  city      VARCHAR(50)  NOT NULL,
+  state     VARCHAR(50)  NOT NULL,
+  zip       VARCHAR(10)  NOT NULL,
+  total     DECIMAL(7,2) NOT NULL,
+  status    VARCHAR(20)  NOT NULL DEFAULT 'awaiting',
+  FOREIGN KEY (userID) REFERENCES user(userID) ON DELETE CASCADE
 );
 
-CREATE TABLE order_item (
-    orderItemID int auto_increment primary key,
-    orderID int not null,
-    productID int not null,
-    quantity int not null,
-    priceAtPurchase decimal(5,2) not null,  -- Store the price at time of purchase
-    foreign key (orderID) references `order`(orderID) on delete cascade,
-    foreign key (productID) references product(productID) on delete cascade
+CREATE TABLE IF NOT EXISTS order_item (
+  orderItemID      INT AUTO_INCREMENT PRIMARY KEY,
+  orderID          INT NOT NULL,
+  productID        INT NOT NULL,
+  quantity         INT NOT NULL,
+  priceAtPurchase  DECIMAL(5,2) NOT NULL,
+  FOREIGN KEY (orderID)   REFERENCES `order`(orderID)    ON DELETE CASCADE,
+  FOREIGN KEY (productID) REFERENCES product(productID) ON DELETE CASCADE
 );
 
-CREATE TABLE employee (
-	employeeID int auto_increment primary key,     -- employeeID will automatically increment by 1 every time a user is added
-    firstName varchar(50) not null,
-    lastName varchar(50) not null,
-    email varchar(320) not null,
-    phone varchar(10) not null,
-    password varchar(256) not null
+CREATE TABLE IF NOT EXISTS employee (
+  employeeID INT AUTO_INCREMENT PRIMARY KEY,
+  firstName  VARCHAR(50)  NOT NULL,
+  lastName   VARCHAR(50)  NOT NULL,
+  email      VARCHAR(320) NOT NULL,
+  phone      VARCHAR(10)  NOT NULL,
+  password   VARCHAR(256) NOT NULL
 );

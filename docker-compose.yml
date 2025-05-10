@@ -58,6 +58,8 @@ services:
         condition: service_healthy
     networks:
       - app-network
+    profiles:
+      - seed
 
 volumes:
   db-data:

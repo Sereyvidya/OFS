@@ -167,7 +167,7 @@ const Cart = ({ onClose, cartItems, setCartItems, setShowCart, setShowDeliveryAd
                         </div>
                         <button
                           onClick={() => handleRemoveFromCart(item.cartItemID)}
-                          className="border border-red-300 bg-red-600 text-white hover:bg-red-400 px-3 py-1 rounded-lg text-sm hover:scale-103 shadow transition-colors cursor-pointer whitespace-nowrap"
+                          className="border border-red-600 bg-red-600 text-white hover:bg-red-400 px-3 py-1 rounded-lg text-sm hover:scale-103 shadow transition-colors cursor-pointer whitespace-nowrap"
                         >
                           Remove
                         </button>

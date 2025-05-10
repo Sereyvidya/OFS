@@ -258,7 +258,7 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
           <button
             type="button"
             onClick={() => setShowDeleteConfirm(true)}
-            className="font-semibold px-4 py-2 border border-red-600 rounded-full bg-red-600 text-white hover:bg-red-400 hover:scale-101 shadow transition-colors cursor-pointer whitespace-nowrap"
+            className="mt-2 font-semibold px-4 py-2 bg-red-600 border-2 border-red-300 text-[#f1f0e9] hover:bg-red-400 rounded-full hover:scale-102 shadow transition-colors cursor-pointer whitespace-nowrap"
           >
             Delete Product
           </button>
@@ -268,8 +268,8 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-md shadow-md space-y-4 max-w-sm w-full">
-            <h2 className="text-xl font-semibold text-center">Confirm Deletion</h2>
-            <p className="text-center">Are you sure you want to delete <strong>{product.name}</strong>?</p>
+            <h2 className="text-xl font-semibold text-black text-center">Confirm Deletion</h2>
+            <p className="text-center text-black">Are you sure you want to delete <strong>{product.name}</strong>?</p>
             <div className="flex justify-around">
               <button
                 onClick={handleDelete}

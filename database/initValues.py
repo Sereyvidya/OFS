@@ -1,14 +1,27 @@
-import mysql.connector
+import mysql.connector, time
 from werkzeug.security import generate_password_hash
 
-connection = mysql.connector.connect(
-    # host = "localhost", use this if testing on localhost, below is for docker
-    host = "database",
-    port = 3306,
-    user = "root",
-    password = "password",
-    database="OFS"
-)
+# connection = mysql.connector.connect(
+#     # host = "localhost", use this if testing on localhost, below is for docker
+#     host = "database",
+#     port = 3306,
+#     user = "root",
+#     password = "password",
+#     database="OFS"
+# )
+
+for _ in range(20):
+    try:
+        connection = mysql.connector.connect(
+          host="database", port=3306,
+          user="root", password="password",
+          database="OFS"
+        )
+        break
+    except mysql.connector.errors.DatabaseError:
+        time.sleep(2)
+else:
+    raise RuntimeError("Could not connect to MySQL after 20 attempts")
 
 # Initial products: Additional information about each product stored in additional arrays
 # If you ever want to add a new example product, just add it to the end of each array (And name the image product_name.jpg)
