@@ -44,7 +44,7 @@ Make sure to select the download that matches your system.
 Once Docker is downloaded and installed, it will ask you to restart your computer. 
 Build the Docker image by running the following command:
 ```
-docker-compose up -d --build
+docker-compose up -d database backend frontend
 ```
 It may take a few seconds.
 
@@ -53,6 +53,17 @@ After that, then you will seed the database by running:
 docker-compose run --rm seed_database
 ```
 This step will require you to have your .env file set up as previously specified
+
+
+To reset the app (including database), use:
+```
+docker-compose down -v
+```
+
+To shut down the app while keeping the databse intact:
+```
+docker-compose down
+```
 
 ### Potential Errors:
 
