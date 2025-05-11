@@ -14,12 +14,17 @@ const Signup = ({ onClose, onLoginClick, API_URL }) => {
   });
 
   const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false); // Prevent multiple submits
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (isSubmitting) return; // Prevent resubmission
+    setIsSubmitting(true);
+
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage("Passwords do not match. Please try again.");
+      setIsSubmitting(false);
       return;
     } else {
       setErrorMessage("");
@@ -52,6 +57,8 @@ const Signup = ({ onClose, onLoginClick, API_URL }) => {
     } catch (error) {
       console.error("Registration error:", error);
       setErrorMessage("An error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -152,8 +159,12 @@ const Signup = ({ onClose, onLoginClick, API_URL }) => {
           {/* Sign Up Button */}
           <button 
             type="submit" 
-            className="mt-6 font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full hover:scale-102 shadow transition-colors cursor-pointer whitespace-nowrap">
-            Sign up
+            className={`mt-6 font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full hover:scale-102 shadow transition-colors cursor-pointer whitespace-nowrap ${
+              isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Signing up..." : "Sign up"}
           </button>
 
           {/* Login Link */}
