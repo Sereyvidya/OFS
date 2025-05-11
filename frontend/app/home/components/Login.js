@@ -29,7 +29,7 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess, API_URL }) => {
       if (res.ok) {
         toast.success("Log in successful!", {
           onClose: () => {
-            localStorage.setItem("authToken", data.token);
+            sessionStorage.setItem("authToken", data.token);
             onClose();
             onLoginSuccess(data.token);
           }

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderProductGrid }) => {
   const [product, setProduct] = useState(
@@ -69,9 +70,9 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
 
       if (response.ok) {
         if (isEditing) {
-          alert("Product edited successfully!");
+          toast.success("Product edited successfully!");
         } else {
-          alert("Product added successfully!");
+          toast.success("Product added successfully!");
         }
         setProduct({ name: "", price: "", description: "", category: "", weight: "", quantity: "" });
         setImage(null); // Reset the image state
@@ -79,7 +80,6 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
         onClose();
       } else {
         const errorData = await response.json();
-        //console.error("Error adding product:", errorData);
         setErrorMessage(errorData.error || "Failed to add product.");
         return;
       }
@@ -97,13 +97,13 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
     });
 
     if (response.ok) {
-      alert("Product deleted successfully!");
+      toast.success("Product deleted successfully!");
       setRerenderProductGrid((prev) => prev + 1);
       setShowDeleteConfirm(false)
       onClose();
     } else {
       const errorData = await response.json();
-      alert(errorData.error || "Failed to delete product.");
+      toast.error(errorData.error || "Failed to delete product.");
     }
   };
 
@@ -266,24 +266,30 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
       </form>
 
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-md shadow-md space-y-4 max-w-sm w-full">
-            <h2 className="text-xl font-semibold text-black text-center">Confirm Deletion</h2>
-            <p className="text-center text-black">Are you sure you want to delete <strong>{product.name}</strong>?</p>
-            <div className="flex justify-around">
-              <button
-                onClick={handleDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-400 transition"
-              >
-                Delete Product
-              </button>
-              <button
-                onClick={() => setShowDeleteConfirm(false)}
-                className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 transition"
-              >
-                Cancel
-              </button>
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-80">
+          <div className="flex flex-col w-100 h-auto m-auto bg-[#f1f0e9] rounded-lg shadow">
+            <div className="relative bg-[#41644a] border-2 border-[#90b89b4d] text-white flex justify-between items-center h-20 px-4 py-4 rounded-t-lg">
+              <h1 className="absolute left-1/2 top-4 transform -translate-x-1/2 font-display text-3xl font-bold text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b] whitespace-nowrap">Confirm Deletion</h1>
             </div>
+
+            <div className="flex flex-col border-2 border-gray-400 rounded-b-lg pt-4 pb-6 gap-4">
+              <p className="text-center text-[#0d4715]">Are you sure you want to delete <strong>{product.name}</strong>?</p>
+              <div className="flex justify-around">
+                <button
+                  onClick={handleDelete}
+                  className="bg-red-600 border-2 border-red-300 text-[#f1f0e9] hover:bg-red-400 hover:scale-103 px-6 py-2 rounded-lg shadow transition-colors"
+                >
+                  Delete Product
+                </button>
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="bg-gray-600 border-2 border-gray-300 text-[#f1f0e9] hover:bg-gray-400 hover:scale-103 px-6 py-2 rounded-lg shadow transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+            
           </div>
         </div>
       )}

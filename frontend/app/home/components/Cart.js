@@ -7,7 +7,7 @@ const Cart = ({ onClose, cartItems, setCartItems, setShowCart, setShowDeliveryAd
   const [errors, setErrors] = useState({});
 
   const fetchCartItems = async () => {
-    const token = localStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken");
 
     if (!token) {
       console.log("No token found.");
@@ -43,7 +43,7 @@ const Cart = ({ onClose, cartItems, setCartItems, setShowCart, setShowDeliveryAd
 
   const updateQuantity = async (cartItemID, newQuantity) => {
     setErrors(prev => ({ ...prev, [cartItemID]: "" }));
-    const token = localStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken");
   
     try {
       const res = await fetch(`${API_URL}/cartItem/update/${cartItemID}`,{
@@ -74,15 +74,13 @@ const Cart = ({ onClose, cartItems, setCartItems, setShowCart, setShowDeliveryAd
   };
   
   const handleRemoveFromCart = async (cartItemID) => {
-    const token = localStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken");
 
     if (!token) {
       console.log("No token found.");
       return;
     }
-
-    console.log(token)
-
+    
     try {
       const response = await fetch(`${API_URL}/cartItem/remove/${cartItemID}`, {
         method: "DELETE",

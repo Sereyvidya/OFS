@@ -4,7 +4,7 @@ import React from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { toast } from "react-toastify";
 
-const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDeliveryAddress, API_URL }) => {
+const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDeliveryAddress, setFetchProducts, API_URL }) => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -58,7 +58,7 @@ const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDelive
       return;
     }
 
-    const token = localStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken");
     try {
       const response = await fetch(`${API_URL}/order/add`, {
         method: "POST",
@@ -80,18 +80,16 @@ const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDelive
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Order placed successfully!", {
-          onClose: () => {
-            setCartItems([]);
-            onClose();
-          }
-        });
+        setCartItems([]);
+        onClose()
+        toast.success("Order placed successfully!");
       } else {
         toast.error(data.error);
       }
     } catch (error) {
       toast.error("There was an error placing your order.");
     } finally {
+      setFetchProducts(prev => prev + 1)
       await wait(3000);
       setIsSubmitting(false);
     }

@@ -6,6 +6,8 @@ import ProductGrid from "./components/ProductGrid.js";
 import AddProduct from "./components/AddProduct.js";
 import { FaFilter } from "react-icons/fa";
 import RouteMap from "./components/RouteMap.js";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function AdminPage() {
   const [showLogin, setShowLogin] = useState(true);
@@ -54,11 +56,21 @@ export default function AdminPage() {
   }, [isOpen]);
 
   return showLogin ? (
-    <div className="min-h-screen min-w-[700px] bg-white text-sky-950">
+    <div className="min-h-screen min-w-[700px] bg-[#f1f0e9]">
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover={false}
+        draggable={false}
+        toastClassName="rounded-lg shadow p-4"
+      />
+      
       <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
         <AdminLogin
           onLoginSuccess={(token) => {
-            localStorage.setItem("authToken", token);
+            sessionStorage.setItem("authToken", token);
             setShowLogin(false);
           }}
         />
@@ -66,6 +78,16 @@ export default function AdminPage() {
     </div>
   ) : (
     <div className="min-h-screen min-w-[700px] bg-[#f1f0e9]">
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover={false}
+        draggable={false}
+        toastClassName="rounded-lg shadow p-4"
+      />
+
       {/* Header */}
       <header className="flex items-center justify-between gap-8 px-6 py-4 bg-[#41644a] border-2 border-[#90b89b4d] shadow">
         {/* OFS Logo */}

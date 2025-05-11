@@ -10,13 +10,13 @@ const Profile = ({ onClose, profile, API_URL, setIsLoggedIn, setProfile }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const logout = async () => {
-    const token = localStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken");
     if (!token) {
       console.log("No token found.");
       return;
     }
     else{
-      localStorage.removeItem("authToken");
+      sessionStorage.removeItem("authToken");
       setProfile(null);
       setIsLoggedIn(false);
       onClose();
@@ -25,7 +25,7 @@ const Profile = ({ onClose, profile, API_URL, setIsLoggedIn, setProfile }) => {
   };
 
   const handleDelete = async () => {
-    const token = localStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken");
     if (!token) {
       console.log("No token found.");
       return;
@@ -40,7 +40,7 @@ const Profile = ({ onClose, profile, API_URL, setIsLoggedIn, setProfile }) => {
       });
       if (response.ok) {
         console.log("Account deleted.");
-        localStorage.removeItem("authToken");
+        sessionStorage.removeItem("authToken");
         setProfile(null);
         setIsLoggedIn(false);
         onClose();
@@ -94,26 +94,30 @@ const Profile = ({ onClose, profile, API_URL, setIsLoggedIn, setProfile }) => {
         </div>
 
         {showDeleteConfirm && (
-          <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-[#f1f0e9] p-6 rounded-md shadow-md space-y-4 max-w-sm w-full">
-              <h2 className="text-xl text-[#41644a] font-semibold text-center">Confirm Deletion</h2>
-              <p className="text-center text-[#41644a]">Are you sure you want to delete your account?</p>
-              <div className="flex justify-around">
-                <button
-                  onClick={handleDelete}
-                  className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-400 transition"
-                >
-                  Delete Account
-                </button>
-                <button
-                  onClick={() => setShowDeleteConfirm(false)}
-                  className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 transition"
-                >
-                  Cancel
-                </button>
+          <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-80">
+            <div className="flex flex-col w-100 h-auto m-auto bg-[#f1f0e9] rounded-lg shadow">
+              <div className="relative bg-[#41644a] border-2 border-[#90b89b4d] text-white flex justify-between items-center h-20 px-4 py-4 rounded-t-lg">
+                <h1 className="absolute left-1/2 top-4 transform -translate-x-1/2 font-display text-3xl font-bold text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b] whitespace-nowrap">Confirm Deletion</h1>
+              </div>
+
+              <div className="flex flex-col border-2 border-gray-400 rounded-b-lg pt-4 pb-6 gap-4">
+                <p className="text-center text-[#41644a]">Are you sure you want to delete your account?</p>
+                <div className="flex justify-around">
+                  <button
+                    onClick={handleDelete}
+                    className="bg-red-600 border-2 border-red-300 text-[#f1f0e9] hover:bg-red-400 hover:scale-103 px-6 py-2 rounded-lg shadow transition-colors"
+                  >
+                    Delete Account
+                  </button>
+                  <button
+                    onClick={() => setShowDeleteConfirm(false)}
+                    className="bg-gray-600 border-2 border-gray-300 text-[#f1f0e9] hover:bg-gray-400 hover:scale-103 px-6 py-2 rounded-lg shadow transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
-            
           </div>
         )}
       </div>

@@ -50,7 +50,7 @@ const RouteMap = ({ onClose, showOrders, pendingOrders, setPendingOrders,
   };
 
   const deployRoute = async () => {
-    const token = localStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken");
     try {
       const res = await fetch("http://127.0.0.1:5000/order/deploy", { 
         method: "POST",

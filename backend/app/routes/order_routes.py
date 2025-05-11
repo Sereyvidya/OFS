@@ -53,7 +53,7 @@ def place_order():
                 product = Product.query.get(item['productID'])
                 if not product or product.quantity < item['quantity']:
                     db.session.rollback()
-                    return jsonify({'error': f'Insufficient stock for product {item["productID"]}'}), 400
+                    return jsonify({'error': f'Sorry, we have {product.quantity} {product.name.lower()}s left! Please reduce item\'s quantity or remove it from cart.'}), 400
 
                 product.quantity -= item['quantity']
                 db.session.add(OrderItem(
@@ -64,10 +64,21 @@ def place_order():
                 ))
                 CartItem.query.filter_by(userID=user_id, productID=item['productID']).delete()
 
-            db.session.commit()
-            return jsonify({'message': 'Order placed and payment successful'}), 201
+                # q = CartItem.query.filter_by(
+                # userID=user_id,
+                # productID=item['productID'],
+                # )
+                # print(
+                #     f"[DEBUG] Before delete → userID={user_id}, productID={item['productID']}, matching rows={q.count()}",
+                #     flush=True
+                # )
+                # deleted = q.delete()
+                # print(f"[DEBUG] Rows deleted: {deleted}", flush=True)
 
-        return jsonify({'error': 'Payment not successful'}), 402
+            db.session.commit()
+            return jsonify({'message': 'Order placed and payment successful.'}), 201
+
+        return jsonify({'error': 'Payment not successful.'}), 402
 
     except stripe.error.CardError as e:
         return jsonify({'error': e.user_message}), 402

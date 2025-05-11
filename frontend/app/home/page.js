@@ -37,15 +37,15 @@ export default function HomePage() {
   const [category, setCategory] = useState("All");
   const [cartItems, setCartItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [fetchProducts, setFetchProducts] = useState(0);
   const [address, setAddress] = useState({street: "", city: "", state: "", zip: ""});  
-  const [paymentInformation, setPaymentInformation] = useState("");
 
   // Constants
   const STRIPE_PROMISE = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
   const API_URL = "http://127.0.0.1:5000";
 
   const fetchProfile = async () => {
-    const token = localStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken");
     if (!token) {
       console.log("No token found.");
       return;
@@ -70,7 +70,7 @@ export default function HomePage() {
   };
 
   const fetchHistory = async () => {
-    const token = localStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken");
     if (!token) return setOrders([]);
     const res = await fetch(`${API_URL}/order/history`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -234,6 +234,7 @@ export default function HomePage() {
         cartItems={cartItems}
         setCartItems={setCartItems}
         setShowCart={setShowCart}
+        fetchProducts={fetchProducts}
         API_URL={API_URL}
       />
 
@@ -247,7 +248,7 @@ export default function HomePage() {
               setShowSignup(true)
               }}
             onLoginSuccess={(token) => {
-              localStorage.setItem("authToken", token); 
+              sessionStorage.setItem("authToken", token); 
               fetchProfile();
               setIsLoggedIn(true);
               setShowLogin(false);
@@ -321,9 +322,8 @@ export default function HomePage() {
               setCartItems={setCartItems}
               address={address}
               setShowDeliveryAddress={setShowDeliveryAddress}
+              setFetchProducts={setFetchProducts}
               API_URL={API_URL}
-              paymentInformation={paymentInformation}
-              setPaymentInformation={setPaymentInformation}
             />
           </Elements>
         </div>

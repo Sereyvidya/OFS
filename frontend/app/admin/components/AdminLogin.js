@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { toast } from "react-toastify";
 
 const AdminLogin = ({ onLoginSuccess }) => {
   const [formData, setFormData] = useState({
@@ -26,9 +27,12 @@ const AdminLogin = ({ onLoginSuccess }) => {
       console.log("Login response:", data);
 
       if (res.ok) {
-        alert("Login successful!");
-        localStorage.setItem("authToken", data.token);
-        onLoginSuccess(data.token);
+        toast.success("Log in successful!", {
+          onClose: () => {
+            sessionStorage.setItem("authToken", data.token);
+            onLoginSuccess(data.token);
+          }
+        });
       } else {
         setErrorMessage(data.error || "Password doesn't match. Please try again.");
       }

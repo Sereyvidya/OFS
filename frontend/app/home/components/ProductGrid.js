@@ -2,15 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 
-const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItems, setCartItems, setShowCart, API_URL }) => {
+const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItems, setCartItems, setShowCart, fetchProducts, API_URL }) => {
   const [products, setProducts] = useState([]);
-  const [addedToCart, setAddedToCart] = useState([]);
 
   const fetchCartItems = async () => {
-    const token = localStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken");
     if (!token) {
       console.log("No token found.");
-      setLoading(false);
       return;
     }
     try {
@@ -49,7 +47,7 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
     };
     fetchProducts();
     if (isLoggedIn) {fetchCartItems()}; 
-  }, [isLoggedIn]);
+  }, [isLoggedIn, fetchProducts]);
 
   const handleAddToCart = async (product) => {
     if (!isLoggedIn) {
@@ -58,7 +56,7 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
       return
     }
 
-    const token = localStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken");
     if (!token) {
       console.log("No token found.");
       setShowLogin(true);
