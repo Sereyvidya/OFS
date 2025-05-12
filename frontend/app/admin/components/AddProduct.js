@@ -18,6 +18,7 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
   const [errorMessage, setErrorMessage] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Prevent multiple submits
 
   const categories = [
     "Fruits", "Vegetables", "Meat", "Seafood", "Dairy",
@@ -44,9 +45,26 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
     e.preventDefault();
     setErrorMessage("");
 
+    if (isSubmitting) return; // Prevent resubmission
+    setIsSubmitting(true);
+
     if (!product.price) {
       setErrorMessage("Please enter the product price.");
+      setIsSubmitting(false);
       return;
+    }
+
+    // Validate image type
+    if (image) {
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png"
+      ];
+      if (!allowedTypes.includes(image.type)) {
+        setErrorMessage("Only image files (jpg, png, gif, webp, bmp, svg, tiff, heic, heif) are allowed.");
+        setIsSubmitting(false);
+        return;
+      }
     }
 
     try {
@@ -81,11 +99,15 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.error || "Failed to add product.");
+        setIsSubmitting(false);
         return;
       }
     } catch (error) {
       console.error("Error adding product:", error);
       setErrorMessage("An error occurred while adding the product.");
+      setIsSubmitting(false);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -250,9 +272,12 @@ const AddProduct = ({ onClose, editingProduct, setEditingProduct, setRerenderPro
 
         <button
           type="submit"
-          className="mt-2 font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full hover:scale-102 shadow transition-colors cursor-pointer whitespace-nowrap"
+          className={`mt-2 font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full hover:scale-102 shadow transition-colors cursor-pointer whitespace-nowrap ${
+            isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={isSubmitting}
         >
-          {isEditing ? "Save Changes": "Add Product"}
+          {isEditing ? "Save Changes": isSubmitting ? "Submitting..." : "Add Product"}
         </button>
         {isEditing && (
           <button
