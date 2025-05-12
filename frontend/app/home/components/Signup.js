@@ -155,9 +155,16 @@ const Signup = ({ onClose, onLoginClick, apiUrl }) => {
           {/* Login Link */}
           <div className="flex justify-center mt-4">
             <p className="mr-1 text-[#0d4715]">Already have an account?</p>
-            <p 
-              className="font-semibold text-[#73977b] hover:underline cursor-pointer"
-              onClick={onLoginClick}>
+            <p
+              className={`font-semibold text-[#73977b] hover:underline ${
+                isLogging ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+              }`}
+              onClick={() => {
+                if (!isSubmitting) {
+                  onLoginClick();
+                }
+              }}
+            >
               Log in
             </p>
           </div>

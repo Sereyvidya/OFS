@@ -11,12 +11,14 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess, apiUrl }) => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLogging, setIsLogging] = useState(false); // Prevent multiple logins
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
 
-    console.log(apiUrl)
+    if (isLogging) return;
+      setIsLogging(true);
     
     try {
       const res = await fetch(`${apiUrl}/auth/login`, {
@@ -38,6 +40,8 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess, apiUrl }) => {
     } catch (error) {
       console.error("Login error:", error);
       setErrorMessage("An error occurred while logging in. Please try again.");
+    } finally {
+      setIsLogging(false);
     }
   };
 
@@ -91,22 +95,32 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess, apiUrl }) => {
         </div>
 
         {/* Log in button */}
-        <button 
-          type="submit" 
-          className="mt-6 font-semibold px-4 py-2 bg-[#e9762b] border border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full hover:scale-102 shadow transition-colors cursor-pointer whitespace-nowrap">
-          Log in
-        </button>
+          <button
+            type="submit" 
+            className={`mt-6 font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full hover:scale-102 shadow transition-colors cursor-pointer whitespace-nowrap ${
+              isLogging ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            disabled={isLogging}
+          >
+            {isLogging ? "Logging in..." : "Log in"}
+          </button>
 
         {/* Sign up prompt */}
         <div className="flex justify-center mt-2">
           <p className="mr-1 text-[#0d4715]">Don't have an account?</p>
-          <p 
-            className="font-semibold text-[#73977b] hover:underline cursor-pointer"
-            onClick={onSignupClick}>
+          <p
+            className={`font-semibold text-[#73977b] hover:underline ${
+              isLogging ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+            }`}
+            onClick={() => {
+              if (!isLogging) {
+                onSignupClick();
+              }
+            }}
+          >
             Sign up
           </p>
         </div>
-
       </form>
     </div>
   );
