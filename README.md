@@ -65,17 +65,15 @@ To shut down the app while keeping the databse intact:
 docker-compose down
 ```
 
-### Potential Errors:
+### Port Numbers:
 
-One error you may run into is that you may already have a MySQL server running on port 3306
+One error you may run into is that you may already have a program running on port one of the ports required by this application
 
-This issue is resolved on Windows by right-clicking Windows PowerShell and selecting "Run as administrator" then running:
-```
-net stop MySQL80
-```
-You may have to stop a different program if it is something else using port 3306.
+This issue is resolved by stopping a different program if it is using any of the following ports.
 
-
+Frontend: 3000
+Backend: 5000
+Database: 3307
 
 ## Access OFS website
 from your preferred internet browser go to http://localhost:3000/home for the main site
