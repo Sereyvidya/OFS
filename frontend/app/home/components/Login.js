@@ -117,7 +117,7 @@ const Login = ({ onClose, onSignupClick, onLoginSuccess, apiUrl }) => {
                 onSignupClick();
               }
             }}
-          >
+            >
             Sign up
           </p>
         </div>

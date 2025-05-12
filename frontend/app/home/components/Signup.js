@@ -172,7 +172,12 @@ const Signup = ({ onClose, onLoginClick, API_URL }) => {
             <p className="mr-1 text-[#0d4715]">Already have an account?</p>
             <p 
               className="font-semibold text-[#73977b] hover:underline cursor-pointer"
-              onClick={onLoginClick}>
+              onClick={() => {
+              if (!isSubmitting) {
+                onLoginClick();
+              }
+            }}
+            >
               Log in
             </p>
           </div>
