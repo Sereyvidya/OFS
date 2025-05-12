@@ -82,6 +82,10 @@ def deploy_orders():
     if not MAPBOX_TOKEN:
         return jsonify({"error": "Mapbox token not set"}), 500
 
+    # Prevent multiple deployments if delivery is already in progress
+    if Order.query.filter_by(status='en route').first():
+        return jsonify({"error": "There is already a delivery in progress."}), 400
+
     def get_weight(o):
         return sum(item.quantity * float(Product.query.get(item.productID).weight) for item in o.order_items)
 
@@ -109,10 +113,7 @@ def deploy_orders():
     if not trip_orders:
         return jsonify({"error": "No eligible orders"}), 404
 
-    # 📍 Robot start location (SJSU)
-    origin_coords = [-121.8863, 37.3382]
-
-    # Prepend origin to the coordinate string
+    origin_coords = [-121.8863, 37.3382]  # SJSU
     coord_list = [f"{origin_coords[0]},{origin_coords[1]}"] + [f"{lng},{lat}" for _, (lng, lat) in trip_orders]
     coord_str = ";".join(coord_list)
 
@@ -121,15 +122,13 @@ def deploy_orders():
     if "trips" not in res:
         return jsonify({"error": "Mapbox failed", "details": res}), 500
 
-    # Scale 1 min travel to 1 sec real time
-    legs = res['trips'][0]['legs']  # Legs between stops
+    legs = res['trips'][0]['legs']
     cumulative_times = []
     current_time = 0
     for leg in legs:
-        current_time += leg['duration']  # seconds
-        cumulative_times.append(current_time / 60)  # scale down
+        current_time += leg['duration']
+        cumulative_times.append(current_time / 60)  # 1 min = 1 sec
 
-    # Mark orders "en route"
     for o, _ in trip_orders:
         o.status = 'en route'
     db.session.commit()
@@ -148,7 +147,9 @@ def deploy_orders():
 
     threading.Thread(target=deliver_stops, args=(app,)).start()
 
-    return jsonify({"message": "Deployment triggered"}), 200
+    return jsonify({"message": "Deployment triggered."}), 200
+
+
 # ------------------------- GET ALL STATUSES ------------------------- #
 @order_bp.route('/all-statuses', methods=['GET'])
 def get_all_orders():

@@ -26,7 +26,7 @@ export default function AdminPage() {
     "All",
     "Fruits",
     "Vegetables",
-
+    "Meat",
     "Seafood",
     "Dairy",
     "Pantry",
@@ -55,7 +55,7 @@ export default function AdminPage() {
     if (pollingRef.current) clearInterval(pollingRef.current);
     pollingRef.current = setInterval(() => {
       fetchOrders();
-    }, 3000); // Poll every 3 seconds
+    }, 3000);
   };
 
   const stopPolling = () => {
@@ -85,7 +85,6 @@ export default function AdminPage() {
     </div>
   ) : (
     <div className="min-h-screen min-w-[700px] bg-white text-sky-950">
-      {/* Header */}
       <header className="flex items-center justify-between gap-x-8 px-6 py-4 bg-gray-200 shadow">
         <div className="text-4xl font-bold text-sky-950 tracking-wide">OFS</div>
 
@@ -126,7 +125,6 @@ export default function AdminPage() {
           )}
         </div>
 
-        {/* Buttons */}
         <div className="flex gap-4">
           <button
             className="font-semibold px-4 py-2 border rounded-full bg-white-600 text-black hover:bg-gray-400 shadow"
@@ -180,11 +178,9 @@ export default function AdminPage() {
               onClick={() => {
                 fetch("http://127.0.0.1:5000/order/deploy", { method: "POST" })
                   .then((res) => res.json())
-                  .then((data) => {
-                    if (data.orders) {
-                      setMapKey((k) => k + 1); // reload map
-                      fetchOrders();
-                    }
+                  .then(() => {
+                    fetchOrders();
+                    setMapKey((k) => k + 1); // Trigger re-render of iframe
                   });
               }}
               className="mb-4 px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700"
