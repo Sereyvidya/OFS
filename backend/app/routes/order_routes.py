@@ -53,7 +53,7 @@ def place_order():
                 product = Product.query.get(item['productID'])
                 if not product or product.quantity < item['quantity']:
                     db.session.rollback()
-                    return jsonify({'error': f'Sorry, we have {product.quantity} {product.name.lower()}s left! Please reduce item\'s quantity or remove it from cart.'}), 400
+                    return jsonify({'error': f'Insufficient stock for product {item["productID"]}'}), 400
 
                 product.quantity -= item['quantity']
                 db.session.add(OrderItem(
@@ -64,21 +64,10 @@ def place_order():
                 ))
                 CartItem.query.filter_by(userID=user_id, productID=item['productID']).delete()
 
-                # q = CartItem.query.filter_by(
-                # userID=user_id,
-                # productID=item['productID'],
-                # )
-                # print(
-                #     f"[DEBUG] Before delete → userID={user_id}, productID={item['productID']}, matching rows={q.count()}",
-                #     flush=True
-                # )
-                # deleted = q.delete()
-                # print(f"[DEBUG] Rows deleted: {deleted}", flush=True)
-
             db.session.commit()
-            return jsonify({'message': 'Order placed and payment successful.'}), 201
+            return jsonify({'message': 'Order placed and payment successful'}), 201
 
-        return jsonify({'error': 'Payment not successful.'}), 402
+        return jsonify({'error': 'Payment not successful'}), 402
 
     except stripe.error.CardError as e:
         return jsonify({'error': e.user_message}), 402
@@ -86,55 +75,16 @@ def place_order():
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
-# ------------------------- GET ORDER HISTORY ------------------------- #
-
-@order_bp.route('/history', methods=['GET'])
-@jwt_required()
-def order_history():
-    user_id = get_jwt_identity()
- 
-    orders = (
-        Order.query
-        .filter_by(userID=user_id)
-        .order_by(Order.orderDate.desc())
-        .all()
-    )
- 
-    result = []
-    for order in orders:
-        items = OrderItem.query.filter_by(orderID=order.orderID).all()
-        result.append({
-            "orderID": order.orderID,
-            "orderDate": order.orderDate.isoformat(),
-            "total": float(order.total),
-            "shippingAddress": {
-                "street": order.street,
-                "city": order.city,
-                "state": order.state,
-                "zip": order.zip
-            },
-            "items": [
-                {
-                    "productID": i.productID,
-                    "productName": (
-                        Product.query.get(i.productID).name
-                        if Product.query.get(i.productID) else "Unknown"
-                    ),
-                    "quantity": i.quantity,
-                    "priceAtPurchase": float(i.priceAtPurchase)
-                }
-                for i in items
-            ]
-        })
-
-    return jsonify(result), 200
-
 # ------------------------- DEPLOY ROUTE ------------------------- #
 @order_bp.route('/deploy', methods=['POST'])
 def deploy_orders():
     MAPBOX_TOKEN = os.getenv("MAPBOX_TOKEN")
     if not MAPBOX_TOKEN:
         return jsonify({"error": "Mapbox token not set"}), 500
+
+    # Prevent multiple deployments if delivery is already in progress
+    if Order.query.filter_by(status='en route').first():
+        return jsonify({"error": "There is already a delivery in progress."}), 400
 
     def get_weight(o):
         return sum(item.quantity * float(Product.query.get(item.productID).weight) for item in o.order_items)
@@ -163,10 +113,7 @@ def deploy_orders():
     if not trip_orders:
         return jsonify({"error": "No eligible orders"}), 404
 
-    # 📍 Robot start location (SJSU)
-    origin_coords = [-121.8863, 37.3382]
-
-    # Prepend origin to the coordinate string
+    origin_coords = [-121.8863, 37.3382]  # SJSU
     coord_list = [f"{origin_coords[0]},{origin_coords[1]}"] + [f"{lng},{lat}" for _, (lng, lat) in trip_orders]
     coord_str = ";".join(coord_list)
 
@@ -175,15 +122,13 @@ def deploy_orders():
     if "trips" not in res:
         return jsonify({"error": "Mapbox failed", "details": res}), 500
 
-    # Scale 1 min travel to 1 sec real time
-    legs = res['trips'][0]['legs']  # Legs between stops
+    legs = res['trips'][0]['legs']
     cumulative_times = []
     current_time = 0
     for leg in legs:
-        current_time += leg['duration']  # seconds
-        cumulative_times.append(current_time / 60)  # scale down
+        current_time += leg['duration']
+        cumulative_times.append(current_time / 60)  # 1 min = 1 sec
 
-    # Mark orders "en route"
     for o, _ in trip_orders:
         o.status = 'en route'
     db.session.commit()
@@ -202,7 +147,9 @@ def deploy_orders():
 
     threading.Thread(target=deliver_stops, args=(app,)).start()
 
-    return jsonify({"message": "Deployment triggered"}), 200
+    return jsonify({"message": "Deployment triggered."}), 200
+
+
 # ------------------------- GET ALL STATUSES ------------------------- #
 @order_bp.route('/all-statuses', methods=['GET'])
 def get_all_orders():
