@@ -105,18 +105,17 @@ export default function HomePage() {
   ];
   
   return (
-    <AuthProvider>
-      <div className="min-h-screen min-w-[700px] bg-[#f1f0e9]">
-        <div>
-          <ToastContainer
-            position="top-center"
-            autoClose={1500}
-            hideProgressBar={false}
-            closeOnClick
-            pauseOnHover={false}
-            draggable={false}
-            toastClassName="rounded-lg shadow p-4"
-          />
+    <div className="min-h-screen min-w-[700px] bg-[#f1f0e9]">
+      <div>
+        <ToastContainer
+          position="top-center"
+          autoClose={1500}
+          hideProgressBar={false}
+          closeOnClick
+          pauseOnHover={false}
+          draggable={false}
+          toastClassName="rounded-lg shadow p-4"
+        />
 
           {/* Header */}
           <header className="flex items-center justify-between gap-8 px-6 py-4 bg-[#41644a] border-2 border-[#90b89b4d] shadow">
@@ -338,6 +337,5 @@ export default function HomePage() {
           </div>
         )}
       </div>
-    </AuthProvider>
   );
 }
