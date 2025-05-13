@@ -1,8 +1,7 @@
-"use client";
-
 import React from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { toast } from "react-toastify";
+import { useAuth } from "./AuthContext";
 
 const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDeliveryAddress, setFetchProducts, API_URL }) => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -16,6 +15,8 @@ const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDelive
 
   const stripe = useStripe();
   const elements = useElements();
+
+  const { authToken } = useAuth();
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
@@ -58,12 +59,16 @@ const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDelive
       return;
     }
 
-    const token = sessionStorage.getItem("authToken");
+    if (!authToken) {
+      toast.error("No authentication token found. Please log in.");
+      return;
+    }
+
     try {
       const response = await fetch(`${API_URL}/order/add`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${authToken}`, 
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -81,7 +86,7 @@ const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDelive
 
       if (response.ok) {
         setCartItems([]);
-        onClose()
+        onClose();
         toast.success("Order placed successfully!");
       } else {
         toast.error(data.error);
@@ -89,7 +94,7 @@ const OrderSummary = ({ onClose, cartItems, setCartItems, address, setShowDelive
     } catch (error) {
       toast.error("There was an error placing your order.");
     } finally {
-      setFetchProducts(prev => prev + 1)
+      setFetchProducts(prev => prev + 1);
       await wait(3000);
       setIsSubmitting(false);
     }

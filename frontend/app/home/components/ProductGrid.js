@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useAuth } from "./AuthContext";
 
-const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItems, setCartItems, setShowCart, fetchProducts, API_URL }) => {
+const ProductGrid = ({ setShowLogin, searchQuery, category, cartItems, setCartItems, setShowCart, fetchProducts, API_URL }) => {
+  const { authToken, login } = useAuth();
   const [products, setProducts] = useState([]);
 
   const fetchCartItems = async () => {
-    const token = sessionStorage.getItem("authToken");
-    if (!token) {
+    if (!authToken) {
       console.log("No token found.");
       return;
     }
@@ -15,7 +16,7 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
       const response = await fetch(`${API_URL}/cartItem/get`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${authToken}`,
           "Content-Type": "application/json",
         },
       });
@@ -46,52 +47,48 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
       }
     };
     fetchProducts();
-    if (isLoggedIn) {fetchCartItems()}; 
-  }, [isLoggedIn, fetchProducts]);
+
+    if (authToken) {
+      fetchCartItems();
+    }
+  }, [authToken, setCartItems, API_URL]);
 
   const handleAddToCart = async (product) => {
-    if (!isLoggedIn) {
+    if (!authToken) {
       console.log("Not logged in.");
       setShowLogin(true);
-      return
-    }
-
-    const token = sessionStorage.getItem("authToken");
-    if (!token) {
-      console.log("No token found.");
-      setShowLogin(true);
-      return
+      return;
     }
 
     console.log("Product object:", product);
 
     const response = await fetch(`${API_URL}/cartItem/add`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-            productID: product.productID,
-            quantity: 1
-        })
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${authToken}`,
+      },
+      body: JSON.stringify({
+        productID: product.productID,
+        quantity: 1,
+      }),
     });
 
     if (response.ok) {
-        console.log("Product added to cart!");
-        fetchCartItems();
+      console.log("Product added to cart!");
+      fetchCartItems();
     } else {
-        console.error("Failed to add product to cart");
+      console.error("Failed to add product to cart");
     }
   };
 
   const filteredProducts = products
-    .filter(product => product.quantity !== -1) // "Deleted" products have quantity = -1
-    .filter(product => {
+    .filter((product) => product.quantity !== -1) // "Deleted" products have quantity = -1
+    .filter((product) => {
       const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = category === "All" || product.category === category;
       return matchesSearch && matchesCategory;
-  });
+    });
 
   const isInCart = (id) => {
     return cartItems.some((item) => item.product.productID === id);
@@ -148,7 +145,6 @@ const ProductGrid = ({ isLoggedIn, setShowLogin, searchQuery, category, cartItem
       )}
     </div>
   );
-  
 };
 
 export default ProductGrid;

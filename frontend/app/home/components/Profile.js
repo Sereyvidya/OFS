@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useAuth } from "./AuthContext"
 
 const Profile = ({ onClose, profile, API_URL, setIsLoggedIn, setProfile }) => {
   if (!profile) {
@@ -8,9 +9,9 @@ const Profile = ({ onClose, profile, API_URL, setIsLoggedIn, setProfile }) => {
   }
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const { token } = useAuth();
 
   const logout = async () => {
-    const token = sessionStorage.getItem("authToken");
     if (!token) {
       console.log("No token found.");
       return;
@@ -25,7 +26,6 @@ const Profile = ({ onClose, profile, API_URL, setIsLoggedIn, setProfile }) => {
   };
 
   const handleDelete = async () => {
-    const token = sessionStorage.getItem("authToken");
     if (!token) {
       console.log("No token found.");
       return;

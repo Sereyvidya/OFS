@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useAuth } from "./AuthContext"
 
 const Cart = ({ onClose, cartItems, setCartItems, setShowCart, setShowDeliveryAddress, API_URL }) => {
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
+  const { token } = useAuth();
 
   const fetchCartItems = async () => {
-    const token = sessionStorage.getItem("authToken");
-
     if (!token) {
       console.log("No token found.");
       setLoading(false);
@@ -43,7 +43,6 @@ const Cart = ({ onClose, cartItems, setCartItems, setShowCart, setShowDeliveryAd
 
   const updateQuantity = async (cartItemID, newQuantity) => {
     setErrors(prev => ({ ...prev, [cartItemID]: "" }));
-    const token = sessionStorage.getItem("authToken");
   
     try {
       const res = await fetch(`${API_URL}/cartItem/update/${cartItemID}`,{
@@ -74,8 +73,6 @@ const Cart = ({ onClose, cartItems, setCartItems, setShowCart, setShowDeliveryAd
   };
   
   const handleRemoveFromCart = async (cartItemID) => {
-    const token = sessionStorage.getItem("authToken");
-
     if (!token) {
       console.log("No token found.");
       return;
