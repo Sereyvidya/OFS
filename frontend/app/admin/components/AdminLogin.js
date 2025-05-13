@@ -12,10 +12,14 @@ const AdminLogin = ({ onLoginSuccess }) => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false); // Prevent multiple submits
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
+
+    if (isSubmitting) return; // Prevent resubmission
+    setIsSubmitting(true);
 
     try {
       const res = await fetch("http://127.0.0.1:5000/employee/login", {
@@ -39,6 +43,8 @@ const AdminLogin = ({ onLoginSuccess }) => {
     } catch (error) {
       console.error("Login error:", error);
       setErrorMessage("An error occurred while logging in. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -87,8 +93,12 @@ const AdminLogin = ({ onLoginSuccess }) => {
         {/* Log in button */}
         <button 
           type="submit" 
-          className="mt-6 font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full hover:scale-102 shadow transition-colors cursor-pointer whitespace-nowrap">
-          Log in
+          className={`mt-6 font-semibold px-4 py-2 bg-[#e9762b] border-2 border-orange-300 text-[#f1f0e9] hover:bg-orange-400 rounded-full hover:scale-102 shadow transition-colors cursor-pointer whitespace-nowrap ${
+            isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Logging in..." : "Log in"}
         </button>
       </form>
     </div>
