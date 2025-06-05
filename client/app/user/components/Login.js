@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useUserContext } from "../context/UserContext";
 import { FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
-import { loginUser } from "../api/AuthRoutes";
+import { login } from "../api/AuthRoutes";
 
 /**
  * Renders a login form with email, password, and "Log in" button.
@@ -24,18 +24,17 @@ const Login = () => {
   // For disabling log in button while waiting for a response
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Set a cool down on the log in button when response is successful
+  // Set a cooldown on the log in button when response is successful
   const [cooldown, setCooldown] = useState(false);
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage("");
 
     if (isSubmitting || cooldown) return;
 
     setIsSubmitting(true);
 
-    const { ok, data, error } = await loginUser(API_URL, formData);
+    const { ok, data, error } = await login(API_URL, formData);
 
     if (ok) {
       toast.success("Log in successful!", {
@@ -64,7 +63,7 @@ const Login = () => {
           Log in
         </h1>
         <button
-          className="absolute top-4 right-4 rounded border border-[#90b89b] bg-[#f1f0e9] px-2 text-[#41644a] shadow transition-colors hover:scale-103 hover:bg-[#73977b]"
+          className="absolute top-4 right-4 rounded border border-[#90b89b] bg-[#f1f0e9] px-2 text-[#41644a] shadow transition-colors hover:scale-103 hover:bg-[#73977b] focus:ring-2 focus:ring-[#73977b] focus:outline-none"
           onClick={() => setShowLogin(false)}
         >
           &times;
@@ -85,7 +84,7 @@ const Login = () => {
           <input
             type="text"
             placeholder="Email"
-            className="w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#0d4715]"
+            className="w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#41644a]"
             value={formData.email}
             onChange={(e) => {
               setFormData({ ...formData, email: e.target.value });
@@ -100,7 +99,7 @@ const Login = () => {
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Password"
-            className="w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#0d4715]"
+            className="w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#41644a]"
             value={formData.password}
             onChange={(e) => {
               setFormData({ ...formData, password: e.target.value });
@@ -118,7 +117,7 @@ const Login = () => {
         {/* Log in button */}
         <button
           type="submit"
-          className={`mt-6 cursor-pointer rounded-full border-2 border-orange-300 bg-[#e9762b] px-4 py-2 font-semibold whitespace-nowrap text-[#f1f0e9] shadow transition-colors hover:scale-102 hover:bg-orange-400 focus:ring-1 focus:ring-orange-500 focus:outline-none ${
+          className={`mt-6 cursor-pointer rounded-full border-2 border-orange-300 bg-[#e9762b] px-4 py-2 font-semibold whitespace-nowrap text-[#f1f0e9] shadow transition-colors hover:scale-102 hover:bg-orange-400 focus:ring-2 focus:ring-orange-500 focus:outline-none ${
             isSubmitting ? "cursor-not-allowed opacity-50" : ""
           }`}
           disabled={isSubmitting || cooldown}

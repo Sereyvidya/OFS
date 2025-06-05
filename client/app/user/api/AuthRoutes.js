@@ -1,8 +1,8 @@
-// APIs related to the auth_routes.py in the server
+// APIs related to auth_routes.py in the server
 
-export const signupUser = async (API_URL, formData) => {
+export const signup = async (API_URL, formData) => {
   try {
-    const res = await fetch(`${API_URL}/auth/signup`, {
+    const res = await fetch(`${API_URL}/auth/post/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -18,9 +18,9 @@ export const signupUser = async (API_URL, formData) => {
   }
 };
 
-export const loginUser = async (API_URL, formData) => {
+export const login = async (API_URL, formData) => {
   try {
-    const res = await fetch(`${API_URL}/auth/login`, {
+    const res = await fetch(`${API_URL}/auth/post/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

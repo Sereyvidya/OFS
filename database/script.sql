@@ -29,3 +29,26 @@ CREATE TABLE IF NOT EXISTS cart_item (
   FOREIGN KEY (userID)    REFERENCES user(userID)    ON DELETE CASCADE,
   FOREIGN KEY (productID) REFERENCES product(productID) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS `order` (
+  orderID   INT AUTO_INCREMENT PRIMARY KEY,
+  userID    INT NOT NULL,
+  orderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+  street    VARCHAR(100) NOT NULL,
+  city      VARCHAR(50)  NOT NULL,
+  state     VARCHAR(50)  NOT NULL,
+  zip       VARCHAR(10)  NOT NULL,
+  total     DECIMAL(7,2) NOT NULL,
+  status    VARCHAR(20)  NOT NULL DEFAULT 'awaiting',
+  FOREIGN KEY (userID) REFERENCES user(userID) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS order_item (
+  orderItemID      INT AUTO_INCREMENT PRIMARY KEY,
+  orderID          INT NOT NULL,
+  productID        INT NOT NULL,
+  quantity         INT NOT NULL,
+  priceAtPurchase  DECIMAL(5,2) NOT NULL,
+  FOREIGN KEY (orderID)   REFERENCES `order`(orderID)    ON DELETE CASCADE,
+  FOREIGN KEY (productID) REFERENCES product(productID) ON DELETE CASCADE
+);

@@ -24,3 +24,38 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Hides scrollbars on all elements with class `.hide-scrollbar` */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.card-fit {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .card-fit {
+    width: calc(100% / 2);
+  }
+}
+@media (min-width: 768px) {
+  .card-fit {
+    width: calc(100% / 3);
+  }
+}
+@media (min-width: 1024px) {
+  .card-fit {
+    width: calc(100% / 4);
+  }
+}
+@media (min-width: 1280px) {
+  .card-fit {
+    width: calc(100% / 5);
+  }
+}

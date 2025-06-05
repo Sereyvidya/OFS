@@ -98,7 +98,7 @@ def put_item_in_cart(cart_item_id):
     return jsonify({'message': 'Quantity updated successfully!'}), 200
 
 
-# Delete cart item route
+# Remove cart item route
 @cart_item_bp.route('/delete/<int:cart_item_id>', methods=['DELETE'])
 @jwt_required()
 def delete_item_from_cart(cart_item_id):

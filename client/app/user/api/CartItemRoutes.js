@@ -1,4 +1,4 @@
-// APIs related to the cart_item_routes.py in the server
+// APIs related to cart_item_routes.py in the server
 
 export const getAllItemsFromCart = async (API_URL) => {
   try {
@@ -14,7 +14,7 @@ export const getAllItemsFromCart = async (API_URL) => {
     const data = await res.json();
     return { ok: res.ok, data };
   } catch (error) {
-    console.error("Error with getting items from cart:", error);
+    console.error("Error getting all items from cart:", error);
     return { ok: false };
   }
 };
@@ -37,7 +37,7 @@ export const postItemToCart = async (API_URL, product) => {
     const data = await res.json();
     return { ok: res.ok, data };
   } catch (error) {
-    console.error("Error adding item to cart:", error);
+    console.error("Error adding an item to cart:", error);
     return { ok: false };
   }
 };
@@ -57,7 +57,7 @@ export const putItemInCart = async (API_URL, cartItemID, newQuantity) => {
     const data = await res.json();
     return { ok: res.ok, data };
   } catch (error) {
-    console.error("Error update item in cart:", error);
+    console.error("Error updating an item in cart:", error);
     return { ok: false };
   }
 };
@@ -75,7 +75,7 @@ export const deleteItemFromCart = async (API_URL, cartItemID) => {
     const data = await res.json();
     return { ok: res.ok, data };
   } catch (error) {
-    console.error("Error deleting item from cart:", error);
+    console.error("Error deleting an item from cart:", error);
     return { ok: false };
   }
 };

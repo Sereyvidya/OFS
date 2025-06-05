@@ -9,7 +9,7 @@ import re
 auth_bp = Blueprint('auth', __name__)
 
 # Signup route
-@auth_bp.route('/signup', methods=['POST'])
+@auth_bp.route('/post/signup', methods=['POST'])
 def signup():
     # Get user-entered data and hash the password
     data = request.get_json()
@@ -105,7 +105,7 @@ def signup():
         return jsonify({"error": "An error occurred while registering. Please try again."}), 500
 
 # Login route
-@auth_bp.route('/login', methods=['POST'])
+@auth_bp.route('/post/login', methods=['POST'])
 def login():
     # Get user entered-data and look for user in the database using their email
     data = request.get_json()

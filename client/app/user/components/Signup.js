@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useUserContext } from "../context/UserContext";
-import { signupUser } from "../api/AuthRoutes";
+import { signup } from "../api/AuthRoutes";
 
 /**
  * Renders a signup form with first name, last name, email,
@@ -26,7 +26,7 @@ const Signup = () => {
   // For disabling the sign up button while waiting for a response
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Set a cool down on the sign up button when response is successful
+  // Set a cooldown on the sign up button when response is successful
   const [cooldown, setCooldown] = useState(false);
 
   const handleSignupSubmit = async (e) => {
@@ -36,7 +36,7 @@ const Signup = () => {
 
     setIsSubmitting(true);
 
-    const { ok, data, error } = await signupUser(API_URL, formData);
+    const { ok, data, error } = await signup(API_URL, formData);
 
     if (ok) {
       toast.success("Sign up successful!", {
@@ -65,7 +65,7 @@ const Signup = () => {
             Sign up
           </h1>
           <button
-            className="absolute top-4 right-4 rounded border border-[#90b89b] bg-[#f1f0e9] px-2 text-[#41644a] shadow transition-colors hover:scale-103 hover:bg-[#73977b]"
+            className="absolute top-4 right-4 rounded border border-[#90b89b] bg-[#f1f0e9] px-2 text-[#41644a] shadow transition-colors hover:scale-103 hover:bg-[#73977b] focus:ring-2 focus:ring-[#73977b] focus:outline-none"
             onClick={() => setShowSignup(false)}
           >
             &times;
@@ -88,7 +88,7 @@ const Signup = () => {
               <input
                 type="text"
                 placeholder="First"
-                className="w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#0d4715]"
+                className="w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#41644a]"
                 value={formData.firstName}
                 onChange={(e) => {
                   const formattedName = e.target.value
@@ -101,7 +101,7 @@ const Signup = () => {
               <input
                 type="text"
                 placeholder="Last"
-                className="w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#0d4715]"
+                className="w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#41644a]"
                 value={formData.lastName}
                 onChange={(e) => {
                   const formattedName = e.target.value
@@ -121,7 +121,7 @@ const Signup = () => {
               <input
                 type="email"
                 placeholder="example@gmail.com"
-                className="mt-2 w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#0d4715]"
+                className="mt-2 w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#41644a]"
                 value={formData.email}
                 onChange={(e) => {
                   setFormData({ ...formData, email: e.target.value });
@@ -134,7 +134,7 @@ const Signup = () => {
               <input
                 type="tel"
                 placeholder="XXXXXXXXXX"
-                className="mt-2 w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#0d4715]"
+                className="mt-2 w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#41644a]"
                 value={formData.phone}
                 onChange={(e) => {
                   setFormData({ ...formData, phone: e.target.value });
@@ -151,7 +151,7 @@ const Signup = () => {
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#0d4715]"
+                className="w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#41644a]"
                 onChange={(e) => {
                   setFormData({ ...formData, password: e.target.value });
                   setErrorMessage("");
@@ -160,7 +160,7 @@ const Signup = () => {
               <input
                 type="password"
                 placeholder="Confirm Password"
-                className="w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#0d4715]"
+                className="w-full rounded-md border border-gray-300 p-2 whitespace-nowrap text-[#0d4715] placeholder-[#73977b] shadow transition-colors hover:bg-[#90b89b] focus:outline-[#41644a]"
                 value={formData.confirmPassword}
                 onChange={(e) => {
                   setFormData({ ...formData, confirmPassword: e.target.value });
@@ -178,7 +178,7 @@ const Signup = () => {
           {/* Sign Up Button */}
           <button
             type="submit"
-            className={`mt-6 cursor-pointer rounded-full border-2 border-orange-300 bg-[#e9762b] px-4 py-2 font-semibold whitespace-nowrap text-[#f1f0e9] shadow transition-colors hover:scale-102 hover:bg-orange-400 focus:ring-1 focus:ring-orange-500 focus:outline-none ${
+            className={`mt-6 cursor-pointer rounded-full border-2 border-orange-300 bg-[#e9762b] px-4 py-2 font-semibold whitespace-nowrap text-[#f1f0e9] shadow transition-colors hover:scale-102 hover:bg-orange-400 focus:ring-2 focus:ring-orange-500 focus:outline-none ${
               isSubmitting ? "cursor-not-allowed opacity-50" : ""
             }`}
             disabled={isSubmitting || cooldown}

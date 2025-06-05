@@ -10,7 +10,7 @@ product_bp = Blueprint('product', __name__)
 
 # Get products route
 @product_bp.route('/get', methods=['GET'])
-def get_products():
+def get_all_products():
     products = Product.query.all()
     
     productList = [{
@@ -24,4 +24,4 @@ def get_products():
         "image": base64.b64encode(product.image).decode('utf-8')
     } for product in products]
     
-    return jsonify(productList)
+    return jsonify(productList), 200

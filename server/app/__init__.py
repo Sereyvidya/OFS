@@ -25,16 +25,18 @@ def create_app():
 
     # Register the application's blueprints (including product blueprint)
     from .routes import (
-        auth_bp, 
+        auth_bp,
+        user_bp, 
         product_bp,
-        cart_item_bp
+        cart_item_bp,
+        order_bp
         # employee_bp, 
-        # order_bp, 
-        # user_bp
     )
     app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(product_bp, url_prefix='/product')
     app.register_blueprint(cart_item_bp, url_prefix='/cart-item')
+    app.register_blueprint(order_bp, url_prefix='/order')
 
     # Create database tables using the models defined in the application 
     with app.app_context():

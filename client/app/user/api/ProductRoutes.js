@@ -1,15 +1,15 @@
-// APIs related to the product_routes.py in the server
+// APIs related to product_routes.py in the server
 
-export const fetchProducts = async (API_URL, setProducts) => {
+export const getAllProducts = async (API_URL) => {
   try {
-    const res = await fetch(`${API_URL}/product/get`);
-    if (res.ok) {
-      const data = await res.json();
-      setProducts(data);
-    } else {
-      console.error("Failed to fetch products.");
-    }
+    const res = await fetch(`${API_URL}/product/get`, {
+      method: "GET",
+    });
+
+    const data = await res.json();
+    return { ok: res.ok, data };
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error("Error getting all products:", error);
+    return { ok: false };
   }
 };

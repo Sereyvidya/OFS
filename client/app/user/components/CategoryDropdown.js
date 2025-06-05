@@ -8,23 +8,9 @@ import { FaFilter } from "react-icons/fa";
  * Renders a dropdown menu for filtering products by their category.
  */
 const CategoryDropdown = () => {
-  const { dropdownRef, selectedCategory, setSelectedCategory } =
+  const { dropdownRef, categories, selectedCategory, setSelectedCategory } =
     useUserContext();
   const [openDropdown, setOpenDropdown] = useState(false);
-
-  const categories = [
-    "All",
-    "Fruits",
-    "Vegetables",
-    "Meat",
-    "Seafood",
-    "Dairy",
-    "Pantry",
-    "Beverages",
-    "Bakery",
-    "Spices",
-    "Vegetarian",
-  ];
 
   // Removes dropdown menu if mouse clicks outside of the menu
   useEffect(() => {

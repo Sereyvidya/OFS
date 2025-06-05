@@ -39,3 +39,29 @@ class CartItem(db.Model):
 
     def __repr__(self):
         return f"<CartItem belonging to userID {userID} and productID {productID}>"
+
+# Order
+class Order(db.Model):
+    __tablename__ = 'order'
+    orderID = db.Column(db.Integer, primary_key=True)
+    userID = db.Column(db.Integer, db.ForeignKey('user.userID', ondelete="CASCADE"), nullable=False)
+    orderDate = db.Column(db.DateTime, server_default=db.func.current_timestamp())
+    street = db.Column(db.String(100), nullable=False)
+    city = db.Column(db.String(50), nullable=False)
+    state = db.Column(db.String(50), nullable=False)
+    zip = db.Column(db.String(10), nullable=False)
+    total = db.Column(db.Numeric(7, 2), nullable=False)
+
+    status = db.Column(db.String(20), nullable=False, default='awaiting')
+
+    order_items = db.relationship('OrderItem', backref='order', lazy=True, cascade="all, delete-orphan")
+
+
+# OrderItem
+class OrderItem(db.Model):
+    __tablename__ = 'order_item'
+    orderItemID = db.Column(db.Integer, primary_key=True)
+    orderID = db.Column(db.Integer, db.ForeignKey('order.orderID'), nullable=False)
+    productID = db.Column(db.Integer, db.ForeignKey('product.productID'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    priceAtPurchase = db.Column(db.Numeric(5, 2), nullable=False)
