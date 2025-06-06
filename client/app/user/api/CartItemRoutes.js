@@ -1,12 +1,13 @@
 // APIs related to cart_item_routes.py in the server
 
+import { fetchWithRefresh } from "./AuthRoutes";
+
 export const getAllItemsFromCart = async (API_URL) => {
   try {
-    const token = sessionStorage.getItem("authToken");
-    const res = await fetch(`${API_URL}/cart-item/get`, {
+    const res = await fetchWithRefresh(`${API_URL}/cart-item/get`, API_URL, {
       method: "GET",
+      credentials: "include",
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -21,12 +22,13 @@ export const getAllItemsFromCart = async (API_URL) => {
 
 export const postItemToCart = async (API_URL, product) => {
   try {
-    const token = sessionStorage.getItem("authToken");
-    const res = await fetch(`${API_URL}/cart-item/post`, {
+    // const token = sessionStorage.getItem("authToken");
+    const res = await fetchWithRefresh(`${API_URL}/cart-item/post`, API_URL, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        // Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         productID: product.productID,
@@ -44,15 +46,20 @@ export const postItemToCart = async (API_URL, product) => {
 
 export const putItemInCart = async (API_URL, cartItemID, newQuantity) => {
   try {
-    const token = sessionStorage.getItem("authToken");
-    const res = await fetch(`${API_URL}/cart-item/put/${cartItemID}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+    // const token = sessionStorage.getItem("authToken");
+    const res = await fetchWithRefresh(
+      `${API_URL}/cart-item/put/${cartItemID}`,
+      API_URL,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          // Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ quantity: newQuantity }),
       },
-      body: JSON.stringify({ quantity: newQuantity }),
-    });
+    );
 
     const data = await res.json();
     return { ok: res.ok, data };
@@ -64,14 +71,19 @@ export const putItemInCart = async (API_URL, cartItemID, newQuantity) => {
 
 export const deleteItemFromCart = async (API_URL, cartItemID) => {
   try {
-    const token = sessionStorage.getItem("authToken");
-    const res = await fetch(`${API_URL}/cart-item/delete/${cartItemID}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+    // const token = sessionStorage.getItem("authToken");
+    const res = await fetchWithRefresh(
+      `${API_URL}/cart-item/delete/${cartItemID}`,
+      API_URL,
+      {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          // Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       },
-    });
+    );
     const data = await res.json();
     return { ok: res.ok, data };
   } catch (error) {

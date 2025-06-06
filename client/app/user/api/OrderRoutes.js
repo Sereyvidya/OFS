@@ -1,5 +1,7 @@
 // APIs related to order_routes.py in the server
 
+import { fetchWithRefresh } from "./AuthRoutes";
+
 export const postOrder = async (
   API_URL,
   address,
@@ -8,11 +10,10 @@ export const postOrder = async (
   paymentMethodId,
 ) => {
   try {
-    const token = sessionStorage.getItem("authToken");
-    const res = await fetch(`${API_URL}/order/post`, {
+    const res = await fetchWithRefresh(`${API_URL}/order/post`, API_URL, {
       method: "POST",
+      credentials: "include",
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

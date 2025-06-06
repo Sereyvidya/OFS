@@ -1,12 +1,14 @@
 // APIs related to user_routes.py in the server
 
+import { fetchWithRefresh } from "./AuthRoutes";
+
 export const getUser = async (API_URL) => {
   try {
-    const token = sessionStorage.getItem("authToken");
-    const res = await fetch(`${API_URL}/user/get`, {
+    const res = await fetchWithRefresh(`${API_URL}/user/get`, API_URL, {
       method: "GET",
+      credentials: "include",
       headers: {
-        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
     const data = await res.json();
@@ -19,11 +21,10 @@ export const getUser = async (API_URL) => {
 
 export const deleteUser = async (API_URL) => {
   try {
-    const token = sessionStorage.getItem("authToken");
-    const res = await fetch(`${API_URL}/user/delete`, {
+    const res = await fetchWithRefresh(`${API_URL}/user/delete`, API_URL, {
       method: "DELETE",
+      credentials: "include",
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });

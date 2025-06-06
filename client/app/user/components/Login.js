@@ -39,7 +39,7 @@ const Login = () => {
     if (ok) {
       toast.success("Log in successful!", {
         onClose: () => {
-          sessionStorage.setItem("authToken", data.token);
+          // sessionStorage.setItem("authToken", data.token);
           setIsLoggedIn(true);
           setShowLogin(false);
         },

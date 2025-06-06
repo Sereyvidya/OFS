@@ -45,7 +45,7 @@ export function UserProvider({ children }) {
   const [profile, setProfile] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const dropdownRef = useRef(null);
-  const API_URL = "http://127.0.0.1:5000";
+  const API_URL = "http://localhost:5000";
   const MAPBOX_ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
   const STRIPE_PROMISE = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
@@ -67,7 +67,7 @@ export function UserProvider({ children }) {
       if (ok) {
         setCartItems(data);
       } else {
-        toast.error("Failed to get items from cart.");
+        console.error("Failed to get items from cart.");
       }
     }
   };
@@ -102,8 +102,10 @@ export function UserProvider({ children }) {
   useEffect(() => {
     fetchAllProducts();
     if (isLoggedIn) {
-      fetchProfile();
-      fetchCart();
+      setTimeout(() => {
+        fetchProfile();
+        fetchCart();
+      }, 100); // Allow time for JWT token to be set
     }
   }, [isLoggedIn]);
 

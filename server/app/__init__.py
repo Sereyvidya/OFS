@@ -3,12 +3,10 @@
 import os
 from config import Config
 from dotenv import load_dotenv
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_sqlalchemy import SQLAlchemy
-
-# load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'stripe.env'))
 
 # Create SQLAlchemy object to interact with the database
 db = SQLAlchemy()
@@ -20,8 +18,24 @@ def create_app():
     
     # Initialize the database, enable CORS, and set up JWT management
     db.init_app(app)
-    CORS(app)
-    JWTManager(app)
+    CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
+    jwt = JWTManager(app)
+
+    # Error checks for tokens
+    @jwt.invalid_token_loader
+    def invalid_token_callback(err):
+        print("Invalid token error:", err)
+        return jsonify({"error": "Invalid token"}), 401
+
+    @jwt.expired_token_loader
+    def expired_token_callback(jwt_header, jwt_payload):
+        print("Expired token for:", jwt_payload)
+        return jsonify({"error": "Token expired"}), 401
+
+    @jwt.unauthorized_loader
+    def missing_token_callback(err):
+        print("Missing token:", err)
+        return jsonify({"error": "Missing token"}), 401
 
     # Register the application's blueprints (including product blueprint)
     from .routes import (
