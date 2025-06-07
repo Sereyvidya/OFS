@@ -21,7 +21,7 @@ const ProductCard = ({ product, isAdded, handleClick }) => {
       </div>
       <div className="relative mt-3 w-full overflow-hidden rounded-md pt-[100%]">
         <img
-          src={`data:image/jpeg;base64,${product.image}`}
+          src={product.image}
           alt={product.name}
           className="absolute inset-0 h-full w-full object-cover object-center"
         />

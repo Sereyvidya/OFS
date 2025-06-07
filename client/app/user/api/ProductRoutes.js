@@ -6,7 +6,12 @@ export const getAllProducts = async (API_URL) => {
       method: "GET",
     });
 
-    const data = await res.json();
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (err) {
+      console.warn("Could not parse response JSON:", err);
+    }
     return { ok: res.ok, data };
   } catch (error) {
     console.error("Error getting all products:", error);

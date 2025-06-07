@@ -33,7 +33,7 @@ def get_all_items_from_cart():
                 "quantity": product.quantity,
                 "category": product.category,
                 "weight": product.weight,
-                "image": base64.b64encode(product.image).decode('utf-8')
+                "image": f"data:image/jpeg;base64,{base64.b64encode(product.image).decode('utf-8')}"
             },
             'quantity': cart_item.quantity
         })
@@ -49,7 +49,7 @@ def post_item_to_cart():
     quantity = data.get('quantity', 1)
 
     if not user_id or not product_id:
-        return jsonify({'error': 'userID and productID are required'}), 400
+        return jsonify({'error': 'userID and productID are required.'}), 400
 
     # Check if the item is already in the cart
     cart_item = CartItem.query.filter_by(userID=user_id, productID=product_id).first()
@@ -61,7 +61,7 @@ def post_item_to_cart():
         db.session.add(cart_item)
 
     db.session.commit()
-    return jsonify({'message': 'Item added to cart successfully'}), 200
+    return jsonify({'message': 'Item added to cart successfully.'}), 200
 
 # Update quantity route
 @cart_item_bp.route('/put/<int:cart_item_id>', methods=['PUT'])

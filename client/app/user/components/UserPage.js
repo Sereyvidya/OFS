@@ -38,49 +38,49 @@ export default function UserPage() {
 
       {/* Log in form */}
       {showLogin && (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
           <Login />
         </div>
       )}
 
       {/* Sign up form */}
       {showSignup && (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
           <Signup />
         </div>
       )}
 
       {/* Profile */}
       {showProfile && (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
           <Profile />
         </div>
       )}
 
       {/* Confirm account deletion */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
           <DeleteConfirmation />
         </div>
       )}
 
       {/* Cart */}
       {showCart && (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
           <Cart />
         </div>
       )}
 
       {/* Deliver address */}
       {showDeliveryAddress && (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
           <DeliveryAddress />
         </div>
       )}
 
       {/* Show Order Summary */}
       {showOrderSummary && (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
           <Elements stripe={STRIPE_PROMISE}>
             <OrderSummary />
           </Elements>

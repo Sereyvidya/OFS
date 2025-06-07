@@ -10,7 +10,12 @@ export const signup = async (API_URL, formData) => {
       body: JSON.stringify(formData),
     });
 
-    const data = await res.json();
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (err) {
+      console.warn("Could not parse response JSON:", err);
+    }
     return { ok: res.ok, data };
   } catch (error) {
     console.error("Error with signing up:", error);
@@ -29,7 +34,12 @@ export const login = async (API_URL, formData) => {
       body: JSON.stringify(formData),
     });
 
-    const data = await res.json();
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (err) {
+      console.warn("Could not parse response JSON:", err);
+    }
     return { ok: res.ok, data };
   } catch (error) {
     console.error("Error with loging in:", error);
@@ -37,30 +47,51 @@ export const login = async (API_URL, formData) => {
   }
 };
 
-export const fetchWithRefresh = async (url, API_URL, options = {}) => {
-  console.log(url);
-  const res = await fetch(url, {
-    ...options,
-    credentials: "include",
-  });
-
-  // If access token is expired, try refreshing
-  if (res.status === 401) {
-    const refreshResponse = await fetch(`${API_URL}/auth/refresh`, {
+export const logout = async (API_URL) => {
+  try {
+    const res = await fetch(`${API_URL}/auth/logout`, {
       method: "POST",
       credentials: "include",
     });
 
-    if (refreshResponse.ok) {
-      // Retry original request after successful refresh
-      return await fetch(url, {
-        ...options,
-        credentials: "include",
-      });
-    } else {
-      throw new Error("Session expired. Please log in again.");
-    }
+    return { ok: res.ok };
+  } catch (error) {
+    console.error("Logout error:", error);
+    return { ok: false, error: "An error occurred during logout." };
+  }
+};
+
+export const fetchWithRefresh = async (url, API_URL, options = {}) => {
+  const tryFetch = async () => {
+    return await fetch(url, {
+      ...options,
+      credentials: "include",
+    });
+  };
+
+  let res = await tryFetch();
+
+  if (res.status !== 401) return res;
+
+  // Attempt refresh
+  const refreshResponse = await fetch(`${API_URL}/auth/refresh`, {
+    method: "POST",
+    credentials: "include",
+  });
+
+  if (refreshResponse.ok) {
+    // Retry original request after successful refresh
+    res = await tryFetch();
+    return res;
   }
 
-  return res;
+  // Handle refresh failure
+  console.warn("Refresh failed. User is likely logged out.");
+  // You could also clear session data or redirect to login here
+
+  // Return a synthetic response that won't break res.json()
+  return new Response(JSON.stringify({ error: "Unauthorized" }), {
+    status: 401,
+    headers: { "Content-Type": "application/json" },
+  });
 };

@@ -57,7 +57,6 @@ export function UserProvider({ children }) {
       setProfile(data);
     } else {
       console.error("Failed to fetch profile.");
-      // toast?
     }
   };
 
@@ -82,14 +81,12 @@ export function UserProvider({ children }) {
   };
 
   const restoreSession = async () => {
-    const token = sessionStorage.getItem("authToken");
-    if (token) {
-      const { ok, data } = await getUser(API_URL);
-      if (ok) {
-        setIsLoggedIn(true);
-      } else {
-        sessionStorage.removeItem("authToken");
-      }
+    try {
+      const { ok } = await getUser(API_URL);
+      setIsLoggedIn(ok);
+    } catch (error) {
+      console.error("Failed to restore session:", error);
+      setIsLoggedIn(false);
     }
   };
 
@@ -102,10 +99,8 @@ export function UserProvider({ children }) {
   useEffect(() => {
     fetchAllProducts();
     if (isLoggedIn) {
-      setTimeout(() => {
-        fetchProfile();
-        fetchCart();
-      }, 100); // Allow time for JWT token to be set
+      fetchProfile();
+      fetchCart();
     }
   }, [isLoggedIn]);
 

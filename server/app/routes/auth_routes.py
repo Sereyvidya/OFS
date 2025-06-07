@@ -7,7 +7,8 @@ from flask_jwt_extended import (
     jwt_required,
     create_access_token, create_refresh_token,
     set_access_cookies, set_refresh_cookies,
-    verify_jwt_in_request
+    verify_jwt_in_request,
+    unset_jwt_cookies
 )
 
 
@@ -133,6 +134,14 @@ def login():
     else:
         return jsonify({"error": "Invalid email or password."}), 401
 
+# Logout route
+@auth_bp.route('/logout', methods=['POST'])
+def logout():
+    response = jsonify({"message": "Logged out successfully."})
+    unset_jwt_cookies(response)
+    return response, 200
+
+# Refresh JWT token route
 @auth_bp.route('/refresh', methods=['POST'])
 @jwt_required(refresh=True)
 def refresh():

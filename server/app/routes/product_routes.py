@@ -21,7 +21,7 @@ def get_all_products():
         "quantity": product.quantity,
         "category": product.category,
         "weight": product.weight,
-        "image": base64.b64encode(product.image).decode('utf-8')
+        "image": f"data:image/jpeg;base64,{base64.b64encode(product.image).decode('utf-8')}"
     } for product in products]
     
     return jsonify(productList), 200

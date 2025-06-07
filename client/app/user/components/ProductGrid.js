@@ -48,7 +48,7 @@ const ProductGrid = () => {
 
   if (!products.length) {
     return (
-      <div className="flex h-screen items-center justify-center text-xl">
+      <div className="flex h-screen items-center justify-center text-xl text-gray-500">
         Loading...
       </div>
     );

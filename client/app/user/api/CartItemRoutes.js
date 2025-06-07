@@ -12,7 +12,12 @@ export const getAllItemsFromCart = async (API_URL) => {
       },
     });
 
-    const data = await res.json();
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (err) {
+      console.warn("Could not parse response JSON:", err);
+    }
     return { ok: res.ok, data };
   } catch (error) {
     console.error("Error getting all items from cart:", error);
@@ -22,13 +27,11 @@ export const getAllItemsFromCart = async (API_URL) => {
 
 export const postItemToCart = async (API_URL, product) => {
   try {
-    // const token = sessionStorage.getItem("authToken");
     const res = await fetchWithRefresh(`${API_URL}/cart-item/post`, API_URL, {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        // Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         productID: product.productID,
@@ -36,7 +39,12 @@ export const postItemToCart = async (API_URL, product) => {
       }),
     });
 
-    const data = await res.json();
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (err) {
+      console.warn("Failed to parse JSON:", err);
+    }
     return { ok: res.ok, data };
   } catch (error) {
     console.error("Error adding an item to cart:", error);
@@ -61,7 +69,12 @@ export const putItemInCart = async (API_URL, cartItemID, newQuantity) => {
       },
     );
 
-    const data = await res.json();
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (err) {
+      console.warn("Could not parse response JSON:", err);
+    }
     return { ok: res.ok, data };
   } catch (error) {
     console.error("Error updating an item in cart:", error);
@@ -71,7 +84,6 @@ export const putItemInCart = async (API_URL, cartItemID, newQuantity) => {
 
 export const deleteItemFromCart = async (API_URL, cartItemID) => {
   try {
-    // const token = sessionStorage.getItem("authToken");
     const res = await fetchWithRefresh(
       `${API_URL}/cart-item/delete/${cartItemID}`,
       API_URL,
@@ -79,12 +91,16 @@ export const deleteItemFromCart = async (API_URL, cartItemID) => {
         method: "DELETE",
         credentials: "include",
         headers: {
-          // Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       },
     );
-    const data = await res.json();
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (err) {
+      console.warn("Could not parse response JSON:", err);
+    }
     return { ok: res.ok, data };
   } catch (error) {
     console.error("Error deleting an item from cart:", error);

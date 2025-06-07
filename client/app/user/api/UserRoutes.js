@@ -11,8 +11,17 @@ export const getUser = async (API_URL) => {
         "Content-Type": "application/json",
       },
     });
-    const data = await res.json();
-    return { ok: res.ok, data };
+
+    if (res.ok) {
+      let data = null;
+      try {
+        data = await res.json();
+      } catch (err) {
+        console.warn("Could not parse response JSON:", err);
+      }
+      return { ok: res.ok, data };
+    }
+    return { ok: res.ok };
   } catch (error) {
     console.error("Error getting user:", error);
     return { ok: false };

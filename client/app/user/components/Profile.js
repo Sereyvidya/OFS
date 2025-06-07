@@ -2,25 +2,37 @@
 
 import React from "react";
 import { useUserContext } from "../context/UserContext";
+import { logout } from "../api/AuthRoutes";
 
 const Profile = () => {
   const {
     API_URL,
     setShowProfile,
     setShowDeleteConfirm,
-    isLoggedIn,
     setIsLoggedIn,
     profile,
     setProfile,
   } = useUserContext();
 
-  const logout = async () => {
-    sessionStorage.removeItem("authToken");
-    setProfile(null);
-    setIsLoggedIn(false);
-    setShowProfile(false);
-    window.location.reload();
+  const handleLogout = async () => {
+    const { ok } = await logout(API_URL);
+    if (ok) {
+      setProfile(null);
+      setIsLoggedIn(false);
+      setShowProfile(false);
+      window.location.reload();
+    } else {
+      console.error("Logout failed.");
+    }
   };
+
+  // const logout = async () => {
+  //   sessionStorage.removeItem("authToken");
+  //   setProfile(null);
+  //   setIsLoggedIn(false);
+  //   setShowProfile(false);
+  //   window.location.reload();
+  // };
 
   return (
     <div className="m-auto flex h-auto w-100 flex-col rounded-lg bg-[#f1f0e9] shadow">
@@ -63,7 +75,7 @@ const Profile = () => {
         <div className="mt-4 flex flex-row justify-between px-4 pb-4">
           <button
             className="rounded-lg border-2 border-orange-300 bg-[#e9762b] px-6 py-2 text-[#f1f0e9] shadow transition-colors hover:scale-103 hover:bg-orange-400 focus:ring-2 focus:ring-orange-500 focus:outline-none"
-            onClick={logout}
+            onClick={handleLogout}
           >
             Log Out
           </button>

@@ -28,7 +28,7 @@ const CartItemCard = ({
       <div className="flex items-center gap-4">
         <div className="aspect-square w-16 overflow-hidden rounded shadow">
           <img
-            src={`data:image/jpeg;base64,${item.product.image}`}
+            src={item.product.image}
             alt={item.product.name}
             className="h-full w-full object-cover object-center"
           />
