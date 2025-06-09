@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useUserContext } from "../context/UserContext";
-import { logout } from "../api/AuthRoutes";
+import { logout } from "../../api/AuthRoutes";
 
 const Profile = () => {
   const {

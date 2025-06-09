@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS user (
   lastName   VARCHAR(50)  NOT NULL,
   email      VARCHAR(320) NOT NULL,
   phone      VARCHAR(10)  NOT NULL,
-  password   VARCHAR(256) NOT NULL
+  password   VARCHAR(256) NOT NULL,
+  isAdmin    BOOLEAN       NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS product (

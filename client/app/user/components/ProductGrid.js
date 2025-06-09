@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import { toast } from "react-toastify";
 import { useUserContext } from "../context/UserContext";
-import { postItemToCart } from "../api/CartItemRoutes";
+import { postItemToCart } from "../../api/CartItemRoutes";
 import ProductCard from "./ProductCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 

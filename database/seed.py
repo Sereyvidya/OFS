@@ -56,26 +56,26 @@ for product in products:
 
 print("Products added successfully.")
 
-# Manager info
-# first_name = "Alice"
-# last_name = "Smith"
-# email = "alice.smith@ofs.com"
-# phone = "1234567890"
-# plain_password = "Password123$"
+# Admin info
+first_name = "Alice"
+last_name = "Smith"
+email = "alice.smith@ofs.com"
+phone = "1234567890"
+plain_password = "Password123$"
 
-# hashed_password = generate_password_hash(plain_password)
+hashed_password = generate_password_hash(plain_password)
 
-# try:
-#     insert_query = """
-#         INSERT INTO employee (
-#             firstName, lastName, email, phone, password
-#         )
-#         VALUES (%s, %s, %s, %s, %s);
-#     """
-#     cursor.execute(insert_query, (first_name, last_name, email, phone, hashed_password))
-#     print("Manager inserted successfully.")
-# except Exception as e:
-#     print(f"Error inserting manager: {e}")
+try:
+    insert_query = """
+        INSERT INTO user (
+            firstName, lastName, email, phone, password, isAdmin
+        )
+        VALUES (%s, %s, %s, %s, %s, %s);
+    """
+    cursor.execute(insert_query, (first_name, last_name, email, phone, hashed_password, True))
+    print("Admin inserted successfully.")
+except Exception as e:
+    print(f"Error inserting manager: {e}")
 
 connection.commit()
 cursor.close()

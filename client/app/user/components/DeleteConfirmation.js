@@ -3,7 +3,7 @@
 import React from "react";
 import { toast } from "react-toastify";
 import { useUserContext } from "../context/UserContext";
-import { deleteUser } from "../api/UserRoutes";
+import { deleteUser } from "../../api/UserRoutes";
 
 /**
  * Renders a form asking the user to confirm deleting their account.

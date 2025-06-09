@@ -54,7 +54,6 @@ export const postItemToCart = async (API_URL, product) => {
 
 export const putItemInCart = async (API_URL, cartItemID, newQuantity) => {
   try {
-    // const token = sessionStorage.getItem("authToken");
     const res = await fetchWithRefresh(
       `${API_URL}/cart-item/put/${cartItemID}`,
       API_URL,
@@ -62,7 +61,6 @@ export const putItemInCart = async (API_URL, cartItemID, newQuantity) => {
         method: "PUT",
         credentials: "include",
         headers: {
-          // Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ quantity: newQuantity }),

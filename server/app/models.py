@@ -10,6 +10,7 @@ class User(db.Model):
     email = db.Column(db.String(320), unique=True, nullable=False)
     phone = db.Column(db.String(10), nullable=False)
     password = db.Column(db.String(256), nullable=False)
+    isAdmin = db.Column(db.Boolean, nullable=False, default=False)
 
     def __repr__(self):
         return f"<User {self.email}>"

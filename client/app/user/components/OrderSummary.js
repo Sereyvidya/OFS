@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { toast } from "react-toastify";
 import { useUserContext } from "../context/UserContext";
-import { postOrder } from "../api/OrderRoutes";
+import { postOrder } from "../../api/OrderRoutes";
 
 /**
  * Renders a summary of the user's order including the cart's content

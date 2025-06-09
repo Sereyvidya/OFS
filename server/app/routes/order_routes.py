@@ -14,7 +14,7 @@ if not stripe.api_key:
 # Create a Blueprint for order-related routes
 order_bp = Blueprint('order', __name__)
 
-# Add order route
+# Add an order
 @order_bp.route('/post', methods=['POST'])
 @jwt_required()
 def post_order():
@@ -68,3 +68,9 @@ def post_order():
     except Exception as e:
         print(f"[Order Error] {str(e)}")
         return jsonify({'error': 'Something went wrong while placing your order. Please try again.'}), 500
+
+# Get all orders
+# @order_bp.route('/get', methods=['GET'])
+# @jwt_required()
+# def get_all_orders():
+#     user_id = get_jwt_identity()

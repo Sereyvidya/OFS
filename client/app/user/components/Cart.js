@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useUserContext } from "../context/UserContext";
-import { putItemInCart, deleteItemFromCart } from "../api/CartItemRoutes";
+import { putItemInCart, deleteItemFromCart } from "../../api/CartItemRoutes";
 import CartItemCard from "./CartItemCard";
 
 /**

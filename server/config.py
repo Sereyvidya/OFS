@@ -15,3 +15,6 @@ class Config:
     JWT_COOKIE_CSRF_PROTECT = False  # Optional unless you want CSRF protection
     JWT_ACCESS_COOKIE_NAME = 'access_token_cookie'
     JWT_REFRESH_COOKIE_NAME = 'refresh_token_cookie'
+
+    JWT_ACCESS_COOKIE_PATH = '/'
+    JWT_REFRESH_COOKIE_PATH = '/auth/refresh'

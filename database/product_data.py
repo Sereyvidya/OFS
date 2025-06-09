@@ -1,16 +1,19 @@
 
 products = [
+    # New: Potatoes, Onions, Steak
+
     # Fruits
-    {"name": "Bananas", "description": "per 1 bunch", "price": 1.29, "quantity": 40, "category": "Fruits", "weight": 2.5},
+    {"name": "Blueberries","description": "per 1 lb pack", "price": 3.99, "quantity": 24, "category": "Fruits", "weight": 0.75},
     {"name": "Apples", "description": "per 2 lb bag", "price": 3.29, "quantity": 35, "category": "Fruits", "weight": 3.0},
     {"name": "Grapes", "description": "per 2 lb pack", "price": 5.99, "quantity": 25, "category": "Fruits", "weight": 2.0},
     {"name": "Strawberries", "description": "per 1 lb pack", "price": 3.99, "quantity": 20, "category": "Fruits", "weight": 1.0},
     {"name": "Oranges", "description": "per 4 count bag", "price": 3.79, "quantity": 30, "category": "Fruits", "weight": 3.5},
 
     # Vegetables
-    {"name": "Carrots", "description": "per 2 lb bag", "price": 2.49, "quantity": 25, "category": "Vegetables", "weight": 2.0},
-    {"name": "Broccoli", "description": "per 1 head", "price": 1.89, "quantity": 30, "category": "Vegetables", "weight": 1.0},
+    {"name": "Carrots", "description": "per 1 lb bag", "price": 2.49, "quantity": 25, "category": "Vegetables", "weight": 1.0},
+    {"name": "Potatoes", "description": "per 2 lb bag", "price": 3.89, "quantity": 30, "category": "Vegetables", "weight": 2.0},
     {"name": "Spinach", "description": "per 16 oz bag", "price": 4.99, "quantity": 20, "category": "Vegetables", "weight": 1.0},
+    {"name": "Onions", "description": "per 2 lb bag", "price": 1.89, "quantity": 24, "category": "Vegetables", "weight": 2.0},
     {"name": "Red Bell Pepper", "description": "per 1 pepper", "price": 1.29, "quantity": 40, "category": "Vegetables", "weight": 0.5},
     {"name": "Sweet Potatoes", "description": "per 3 lb bag", "price": 3.99, "quantity": 15, "category": "Vegetables", "weight": 3.0},
 
@@ -19,7 +22,7 @@ products = [
     {"name": "Chicken Breast", "description": "per 1.5 lb pack", "price": 7.99, "quantity": 25, "category": "Meat", "weight": 1.5},
     {"name": "Pork Chops", "description": "per 1 lb pack", "price": 5.99, "quantity": 20, "category": "Meat", "weight": 1.0},
     {"name": "Bacon", "description": "per 12 oz pack", "price": 5.49, "quantity": 18, "category": "Meat", "weight": 0.75},
-    {"name": "Beef Stew Meat", "description": "per 1 lb pack", "price": 6.99, "quantity": 12, "category": "Meat", "weight": 1.0},
+    {"name": "Steak", "description": "per 1 lb pack", "price": 8.99, "quantity": 12, "category": "Meat", "weight": 1.0},
 
     # Seafood
     {"name": "Salmon Fillet", "description": "per 1 lb", "price": 9.99, "quantity": 15, "category": "Seafood", "weight": 1.0},

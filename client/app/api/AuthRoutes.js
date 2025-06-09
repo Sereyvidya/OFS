@@ -61,6 +61,15 @@ export const logout = async (API_URL) => {
   }
 };
 
+export const refresh = async (API_URL) => {
+  const res = await fetch(`${API_URL}/auth/refresh`, {
+    method: "POST",
+    credentials: "include",
+  });
+
+  return { ok: res.ok };
+};
+
 export const fetchWithRefresh = async (url, API_URL, options = {}) => {
   const tryFetch = async () => {
     return await fetch(url, {
@@ -74,12 +83,9 @@ export const fetchWithRefresh = async (url, API_URL, options = {}) => {
   if (res.status !== 401) return res;
 
   // Attempt refresh
-  const refreshResponse = await fetch(`${API_URL}/auth/refresh`, {
-    method: "POST",
-    credentials: "include",
-  });
+  const { ok } = await refresh(API_URL);
 
-  if (refreshResponse.ok) {
+  if (ok) {
     // Retry original request after successful refresh
     res = await tryFetch();
     return res;

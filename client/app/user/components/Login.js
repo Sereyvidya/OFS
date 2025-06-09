@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useUserContext } from "../context/UserContext";
 import { FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
-import { login } from "../api/AuthRoutes";
+import { login } from "../../api/AuthRoutes";
 
 /**
  * Renders a login form with email, password, and "Log in" button.

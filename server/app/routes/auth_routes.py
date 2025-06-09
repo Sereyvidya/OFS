@@ -7,7 +7,7 @@ from flask_jwt_extended import (
     jwt_required,
     create_access_token, create_refresh_token,
     set_access_cookies, set_refresh_cookies,
-    verify_jwt_in_request,
+    verify_jwt_in_request, get_jwt_identity,
     unset_jwt_cookies
 )
 
@@ -91,7 +91,6 @@ def signup():
 
     # Hash the password before storing
     hashed_password = generate_password_hash(data.get('password'))
-    print(len(hashed_password), hashed_password)
 
     # Create a new user
     new_user = User(
@@ -126,7 +125,10 @@ def login():
 
         # return jsonify({"message": "Login successful", "token": access_token}), 200
         
-        response = jsonify({"message": "Login successful"})
+        response = jsonify({
+            "message": "Login successful.",
+            "isAdmin": user.isAdmin
+        })
         set_access_cookies(response, access_token)
         set_refresh_cookies(response, refresh_token)
         print("🍪 Setting refresh_token_cookie")
@@ -146,7 +148,6 @@ def logout():
 @jwt_required(refresh=True)
 def refresh():
     try:
-        verify_jwt_in_request(refresh=True)
         user_id = get_jwt_identity()
         access_token = create_access_token(identity=user_id)
         response = jsonify({"message": "Token refreshed."})

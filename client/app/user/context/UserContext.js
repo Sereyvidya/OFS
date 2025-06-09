@@ -1,7 +1,8 @@
 import { createContext, useContext, useState, useRef, useEffect } from "react";
-import { getAllItemsFromCart } from "../api/CartItemRoutes";
-import { getAllProducts } from "../api/ProductRoutes";
-import { getUser } from "../api/UserRoutes";
+import { refresh } from "../../api/AuthRoutes";
+import { getAllItemsFromCart } from "../../api/CartItemRoutes";
+import { getAllProducts } from "../../api/ProductRoutes";
+import { getUser } from "../../api/UserRoutes";
 import { loadStripe } from "@stripe/stripe-js";
 
 const UserContext = createContext();
@@ -76,7 +77,7 @@ export function UserProvider({ children }) {
     if (ok) {
       setProducts(data);
     } else {
-      toast.error("Failed to fetch products.");
+      console.error("Failed to fetch products.");
     }
   };
 
@@ -103,6 +104,29 @@ export function UserProvider({ children }) {
       fetchCart();
     }
   }, [isLoggedIn]);
+
+  // Runs every 5 minutes to refresh the tokens
+  useEffect(() => {
+    const interval = setInterval(
+      async () => {
+        try {
+          const { ok } = await refresh(API_URL);
+          if (!ok) {
+            console.warn("Refresh token failed or expired.");
+            setIsLoggedIn(false);
+            setProfile(null);
+            setCartItems([]);
+          }
+        } catch (err) {
+          console.error("Error refreshing token:", err);
+        }
+      },
+
+      5 * 60 * 1000,
+    ); // every 5 minutes
+
+    return () => clearInterval(interval);
+  }, []);
 
   const contextValue = {
     API_URL,
