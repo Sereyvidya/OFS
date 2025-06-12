@@ -52,8 +52,10 @@ class Order(db.Model):
     state = db.Column(db.String(50), nullable=False)
     zip = db.Column(db.String(10), nullable=False)
     total = db.Column(db.Numeric(7, 2), nullable=False)
-
+    weight = db.Column(db.Numeric(6, 3), nullable=False) 
     status = db.Column(db.String(20), nullable=False, default='awaiting')
+    lat = db.Column(db.Float, nullable=True)
+    lng = db.Column(db.Float, nullable=True)
 
     order_items = db.relationship('OrderItem', backref='order', lazy=True, cascade="all, delete-orphan")
 

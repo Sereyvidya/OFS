@@ -6,7 +6,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SearchBar from "./SearchBar";
 import CategoryDropdown from "./CategoryDropdown";
-import { FaShoppingCart, FaUser } from "react-icons/fa";
+import { FaCarrot } from "react-icons/fa";
+import { GiPaperBagFolded } from "react-icons/gi";
 
 const NavBar = () => {
   const { setShowAddForm, setShowDeliveryDashboard } = useAdminContext();
@@ -50,7 +51,8 @@ const NavBar = () => {
               className="flex w-full cursor-pointer justify-between gap-2 rounded-full border-2 border-[#90b89b] px-4 py-2 font-semibold whitespace-nowrap text-[#f1f0e9] shadow transition-colors hover:scale-105 hover:bg-[#0d4715] focus:ring-2 focus:ring-[#0d4715] focus:outline-none"
               onClick={() => setShowDeliveryDashboard(true)}
             >
-              <p>Delivery</p>
+              <GiPaperBagFolded className="h-5 w-5 text-sm" />
+              <p className="">Delivery</p>
             </button>
           </div>
           <div className="w-full">
@@ -58,7 +60,7 @@ const NavBar = () => {
               className="flex w-full cursor-pointer justify-between gap-2 rounded-full border-2 border-orange-300 bg-[#e9762b] px-4 py-2 font-semibold whitespace-nowrap text-[#f1f0e9] shadow transition-colors hover:scale-105 hover:bg-orange-400 focus:ring-1 focus:ring-orange-500 focus:outline-none"
               onClick={() => setShowAddForm(true)}
             >
-              <FaShoppingCart className="mt-1 text-sm" />
+              <FaCarrot className="mt-1 text-sm" />
               <p>Add</p>
             </button>
           </div>

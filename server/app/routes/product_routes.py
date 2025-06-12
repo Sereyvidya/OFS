@@ -55,7 +55,7 @@ def post_product():
             return jsonify({"error": "Description must be provided and 255 characters or less."}), 400
         if not category:
             return jsonify({"error": "Category must be provided."}), 400
-        if not quantity or quantity < 0 or quantity > 999:
+        if quantity is None or quantity < 0 or quantity > 999:
             return jsonify({"error": "Quantity must be between 0 and 999 lbs."}), 400
 
         if image:
@@ -102,7 +102,7 @@ def put_product(product_id):
         price = float(data.get("price"))
         description = data.get("description")
         category = data.get("category")
-        quantity = float(data.get("quantity"))
+        quantity = (data.get("quantity"))
         weight = float(data.get("weight"))
         image = data.get("image")
 
@@ -117,8 +117,8 @@ def put_product(product_id):
             return jsonify({"error": "Description must be provided and 255 characters or less."}), 400
         if not category:
             return jsonify({"error": "Category must be provided."}), 400
-        if not quantity or quantity < 0 or quantity > 999:
-            return jsonify({"error": "Quantity must be between 0 and 999 lbs."}), 400
+        if quantity is None or quantity < 0 or quantity > 999:
+            return jsonify({"error": "Quantity must be between 0 and 999."}), 400
 
         # Update fields
         product.name = name

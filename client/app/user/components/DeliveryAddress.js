@@ -26,6 +26,7 @@ const DeliveryAddress = () => {
 
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
+  const markerRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -40,6 +41,18 @@ const DeliveryAddress = () => {
 
     mapRef.current.on("click", async (e) => {
       const { lng, lat } = e.lngLat;
+
+      // Create and store new marker
+      if (markerRef.current) {
+        markerRef.current.remove();
+      }
+
+      const newMarker = new mapboxgl.Marker({ color: "red" })
+        .setLngLat([lng, lat])
+        .addTo(mapRef.current);
+
+      markerRef.current = newMarker;
+
       try {
         const response = await geocodingClient
           .reverseGeocode({
@@ -63,6 +76,8 @@ const DeliveryAddress = () => {
             city: getContext("place") || "San Jose",
             state: getContext("region") || "",
             zip: getContext("postcode") || "",
+            lat: lat,
+            lng: lng,
           });
 
           setErrorMessage("");

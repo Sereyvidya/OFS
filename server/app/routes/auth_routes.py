@@ -131,7 +131,6 @@ def login():
         })
         set_access_cookies(response, access_token)
         set_refresh_cookies(response, refresh_token)
-        print("🍪 Setting refresh_token_cookie")
         return response
     else:
         return jsonify({"error": "Invalid email or password."}), 401
@@ -150,7 +149,7 @@ def refresh():
     try:
         user_id = get_jwt_identity()
         access_token = create_access_token(identity=user_id)
-        response = jsonify({"message": "Token refreshed."})
+        response = jsonify({"message": "Token refreshed.", "isAdmin": user.isAdmin})
         set_access_cookies(response, access_token)
         return response
     except Exception as e:

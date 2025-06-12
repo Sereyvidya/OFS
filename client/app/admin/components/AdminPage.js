@@ -6,9 +6,10 @@ import Login from "./Login";
 import NavBar from "./NavBar";
 import ProductGrid from "./ProductGrid";
 import AddOrEditForm from "./AddOrEditForm";
+import DeliveryDashboard from "./DeliveryDashboard";
 
 export default function AdminPage() {
-  const { isLoggedIn, showAddForm, showEditForm, showDelivery } =
+  const { isLoggedIn, showAddForm, showEditForm, showDeliveryDashboard } =
     useAdminContext();
 
   return !isLoggedIn ? (
@@ -29,11 +30,11 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* {showDeliveryDashboard && (
+      {showDeliveryDashboard && (
         <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
-          <Delivery />
+          <DeliveryDashboard />
         </div>
-      )} */}
+      )}
     </div>
   );
 }

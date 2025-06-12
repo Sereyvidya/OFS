@@ -9,14 +9,11 @@ import { useAdminContext } from "../context/AdminContext";
  *
  * Props:
  * - product: object with name, image, description, price, quantity
- * - isAdded: boolean, whether the item is already in the cart
- * - handleClick: function to handle adding the product to cart
  */
 const ProductCard = ({ product }) => {
-  const { setEditingProduct, editingProduct, setShowEditForm } =
-    useAdminContext();
+  const { setEditingProduct, setShowEditForm } = useAdminContext();
   return (
-    <div className="flex flex-col items-center rounded-md bg-[#f1f0e9] p-3 text-sm shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+    <div className="flex flex-col items-center rounded-md bg-[#f1f0e9] p-3 text-sm shadow transition-transform duration-300 hover:scale-105 hover:shadow-lg">
       <div className="flex w-full justify-center rounded-md border-2 border-[#90b89b] bg-[#41644a] py-2">
         <h3 className="text-lg font-semibold text-[#f1f0e9] [text-shadow:_0_1px_3px_#73977b]">
           {product.name}
@@ -50,7 +47,11 @@ const ProductCard = ({ product }) => {
           setShowEditForm(true);
         }}
       >
-        Edit
+        {product.quantity === 0
+          ? "Out of Stock"
+          : product.quantity <= 10
+            ? "Low on Stock"
+            : "Edit"}
       </button>
     </div>
   );

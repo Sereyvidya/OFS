@@ -12,6 +12,7 @@ const Profile = () => {
     setIsLoggedIn,
     profile,
     setProfile,
+    setShowOrderHistory,
   } = useUserContext();
 
   const handleLogout = async () => {
@@ -25,15 +26,6 @@ const Profile = () => {
       console.error("Logout failed.");
     }
   };
-
-  // const logout = async () => {
-  //   sessionStorage.removeItem("authToken");
-  //   setProfile(null);
-  //   setIsLoggedIn(false);
-  //   setShowProfile(false);
-  //   window.location.reload();
-  // };
-
   return (
     <div className="m-auto flex h-auto w-100 flex-col rounded-lg bg-[#f1f0e9] shadow">
       <div className="relative flex h-20 items-center justify-between rounded-t-lg border-2 border-[#90b89b4d] bg-[#41644a] px-4 py-4 text-white">
@@ -56,8 +48,7 @@ const Profile = () => {
         ) : (
           <div className="flex w-full flex-col space-y-4 px-4 pt-4">
             {[
-              ["First Name", profile.firstName],
-              ["Last Name", profile.lastName],
+              ["Name", profile.firstName + " " + profile.lastName],
               ["Email", profile.email],
               ["Phone", profile.phone],
             ].map(([label, value]) => (
@@ -72,22 +63,33 @@ const Profile = () => {
           </div>
         )}
 
-        <div className="mt-4 flex flex-row justify-between px-4 pb-4">
+        <div className="flex flex-col px-4">
           <button
-            className="rounded-lg border-2 border-orange-300 bg-[#e9762b] px-6 py-2 text-[#f1f0e9] shadow transition-colors hover:scale-103 hover:bg-orange-400 focus:ring-2 focus:ring-orange-500 focus:outline-none"
-            onClick={handleLogout}
-          >
-            Log Out
-          </button>
-          <button
-            className="rounded-lg border-2 border-red-300 bg-red-600 px-6 py-2 text-[#f1f0e9] shadow transition-colors hover:scale-103 hover:bg-red-400 focus:ring-2 focus:ring-red-500 focus:outline-none"
+            className="[#f1f0e9] space-nowrap mt-4 w-full cursor-pointer rounded-md border-2 border-green-300 bg-green-600 py-2 font-semibold text-[#f1f0e9] shadow transition-colors hover:scale-102 hover:bg-green-400 focus:ring-2 focus:ring-green-500 focus:outline-none"
             onClick={() => {
               setShowProfile(false);
-              setShowDeleteConfirm(true);
+              setShowOrderHistory(true);
             }}
           >
-            Delete Account
+            Order History
           </button>
+          <div className="mt-4 flex flex-row justify-between gap-4 pb-4">
+            <button
+              className="w-1/2 rounded-lg border-2 border-orange-300 bg-[#e9762b] px-6 py-2 text-[#f1f0e9] shadow transition-colors hover:scale-103 hover:bg-orange-400 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              onClick={handleLogout}
+            >
+              Log Out
+            </button>
+            <button
+              className="w-1/2 rounded-lg border-2 border-red-300 bg-red-600 px-6 py-2 text-[#f1f0e9] shadow transition-colors hover:scale-103 hover:bg-red-400 focus:ring-2 focus:ring-red-500 focus:outline-none"
+              onClick={() => {
+                setShowProfile(false);
+                setShowDeleteConfirm(true);
+              }}
+            >
+              Delete Account
+            </button>
+          </div>
         </div>
       </div>
     </div>

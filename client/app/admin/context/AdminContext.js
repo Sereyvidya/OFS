@@ -34,8 +34,10 @@ export function AdminProvider({ children }) {
   const [editingProduct, setEditingProduct] = useState(null);
   const [products, setProducts] = useState([]);
   const [profile, setProfile] = useState(null);
+  const [awaitingOrders, setAwaitingOrders] = useState([]);
   const dropdownRef = useRef(null);
   const API_URL = "http://localhost:5000";
+  const MAPBOX_ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
   const fetchProfile = async () => {
     const { ok, data } = await getUser(API_URL);
@@ -57,8 +59,9 @@ export function AdminProvider({ children }) {
 
   const restoreSession = async () => {
     try {
-      const { ok } = await getUser(API_URL);
-      setIsLoggedIn(ok);
+      const { ok, data } = await getUser(API_URL);
+      const isAdmin = data.isAdmin;
+      setIsLoggedIn(ok && isAdmin);
     } catch (error) {
       console.error("Failed to restore session:", error);
       setIsLoggedIn(false);
@@ -100,6 +103,7 @@ export function AdminProvider({ children }) {
 
   const contextValue = {
     API_URL,
+    MAPBOX_ACCESS_TOKEN,
     dropdownRef,
 
     searchQuery,
@@ -124,6 +128,8 @@ export function AdminProvider({ children }) {
     products,
     profile,
     setProfile,
+    awaitingOrders,
+    setAwaitingOrders,
 
     fetchAllProducts,
   };

@@ -3,7 +3,7 @@ products = [
     # New: Potatoes, Onions, Steak
 
     # Fruits
-    {"name": "Blueberries","description": "per 1 lb pack", "price": 3.99, "quantity": 24, "category": "Fruits", "weight": 0.75},
+    {"name": "Blueberries","description": "per 1 lb pack", "price": 3.99, "quantity": 24, "category": "Fruits", "weight": 1.0},
     {"name": "Apples", "description": "per 2 lb bag", "price": 3.29, "quantity": 35, "category": "Fruits", "weight": 3.0},
     {"name": "Grapes", "description": "per 2 lb pack", "price": 5.99, "quantity": 25, "category": "Fruits", "weight": 2.0},
     {"name": "Strawberries", "description": "per 1 lb pack", "price": 3.99, "quantity": 20, "category": "Fruits", "weight": 1.0},

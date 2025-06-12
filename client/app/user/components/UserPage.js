@@ -7,6 +7,7 @@ import ProductGrid from "./ProductGrid";
 import Login from "./Login";
 import Signup from "./Signup";
 import Profile from "./Profile";
+import OrderHistory from "./OrderHistory";
 import DeleteConfirmation from "./DeleteConfirmation";
 import Cart from "./Cart";
 import DeliveryAddress from "./DeliveryAddress";
@@ -22,6 +23,7 @@ export default function UserPage() {
     showLogin,
     showSignup,
     showProfile,
+    showOrderHistory,
     showDeleteConfirm,
     showCart,
     showDeliveryAddress,
@@ -54,6 +56,12 @@ export default function UserPage() {
       {showProfile && (
         <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
           <Profile />
+        </div>
+      )}
+
+      {showOrderHistory && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50">
+          <OrderHistory />
         </div>
       )}
 

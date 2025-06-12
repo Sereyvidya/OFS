@@ -18,6 +18,7 @@ def get_user():
             "lastName": user.lastName,
             "email": user.email,
             "phone": user.phone,
+            "isAdmin": user.isAdmin,
         }), 200
     else:
         return jsonify({"error": "User not found."}), 404

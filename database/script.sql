@@ -40,7 +40,10 @@ CREATE TABLE IF NOT EXISTS `order` (
   state     VARCHAR(50)  NOT NULL,
   zip       VARCHAR(10)  NOT NULL,
   total     DECIMAL(7,2) NOT NULL,
+  weight    DECIMAL(6,3) NOT NULL,  
   status    VARCHAR(20)  NOT NULL DEFAULT 'awaiting',
+  lat       FLOAT DEFAULT NULL,       
+  lng       FLOAT DEFAULT NULL,
   FOREIGN KEY (userID) REFERENCES user(userID) ON DELETE CASCADE
 );
 

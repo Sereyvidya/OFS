@@ -16,6 +16,7 @@ export function UserProvider({ children }) {
   const [showCart, setShowCart] = useState(false);
   const [showDeliveryAddress, setShowDeliveryAddress] = useState(false);
   const [showOrderSummary, setShowOrderSummary] = useState(false);
+  const [showOrderHistory, setShowOrderHistory] = useState(false);
 
   // States for filter products
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,11 +41,15 @@ export function UserProvider({ children }) {
     city: "",
     state: "",
     zip: "",
+    lat: "",
+    lng: "",
   });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [products, setProducts] = useState([]);
   const [profile, setProfile] = useState(null);
+  const [orders, setOrders] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+
   const dropdownRef = useRef(null);
   const API_URL = "http://localhost:5000";
   const MAPBOX_ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
@@ -155,6 +160,8 @@ export function UserProvider({ children }) {
     setShowDeliveryAddress,
     showOrderSummary,
     setShowOrderSummary,
+    showOrderHistory,
+    setShowOrderHistory,
 
     isLoggedIn,
     setIsLoggedIn,
@@ -163,6 +170,8 @@ export function UserProvider({ children }) {
     setCartItems,
     profile,
     setProfile,
+    orders,
+    setOrders,
     address,
     setAddress,
 

@@ -20,7 +20,9 @@ order_bp = Blueprint('order', __name__)
 def post_order():
     user_id = get_jwt_identity()
     data = request.get_json()
-    street, city, state, zip_code, total = data.get('street'), data.get('city'), data.get('state'), data.get('zip'), data.get('total')
+    street, city, state, zip_code = data.get('street'), data.get('city'), data.get('state'), data.get('zip')
+    total, weight = data.get('total'), data.get('weight')
+    lat, lng = data.get('lat'), data.get('lng')
     order_items = data.get('orderItems', [])
     payment_method_id = data.get('paymentMethodId')
 
@@ -38,7 +40,7 @@ def post_order():
         )
 
         if intent['status'] == 'succeeded':
-            order = Order(userID=user_id, street=street, city=city, state=state, zip=zip_code, total=total)
+            order = Order(userID=user_id, street=street, city=city, state=state, zip=zip_code, total=total, weight=weight, lat=lat, lng=lng)
             db.session.add(order)
             db.session.flush()
 
@@ -69,8 +71,57 @@ def post_order():
         print(f"[Order Error] {str(e)}")
         return jsonify({'error': 'Something went wrong while placing your order. Please try again.'}), 500
 
-# Get all orders
-# @order_bp.route('/get', methods=['GET'])
-# @jwt_required()
-# def get_all_orders():
-#     user_id = get_jwt_identity()
+# Get user's orders
+@order_bp.route('/get/user', methods=['GET'])
+@jwt_required()
+def get_user_orders():
+    user_id = get_jwt_identity()
+    orders = Order.query.filter_by(userID=user_id).all()
+    orderList = []
+
+    for order in orders:
+        orderList.append({
+            "orderDate": order.orderDate,
+            "street": order.street,
+            "zip": order.zip,
+            "total": order.total,
+            "status": order.status
+        })
+    
+    return jsonify(orderList), 200
+
+# Get all awaiting orders
+@order_bp.route('/get/awaiting', methods=['GET'])
+@jwt_required()
+def get_all_awaiting_orders():
+    admin_id = get_jwt_identity()
+
+    orders = Order.query.filter(Order.status.in_(['awaiting'])).all()
+    result = []
+    
+    for order in orders:
+        result.append({
+            'orderID': order.orderID,
+            'street': order.street,
+            'city': order.city,
+            'state': order.state,
+            'zip': order.zip,
+            'total': order.total,
+            'weight': order.weight,
+            'status': order.status,
+            'lat': order.lat,
+            'lng': order.lng
+        })
+
+    return jsonify(result), 200
+
+# Update an order's status
+@order_bp.route('/put/delivered/<int:order_id>', methods=['PUT'])
+@jwt_required()
+def put_delivered_order(order_id):
+    order = Order.query.get(order_id)
+    if not order:
+        return jsonify({'error': 'Order not found.'}), 404
+    order.status = 'delivered'
+    db.session.commit()
+    return jsonify({'message': 'Order marked as delivered.'}), 200

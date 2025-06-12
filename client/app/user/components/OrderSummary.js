@@ -81,6 +81,7 @@ const OrderSummary = () => {
       API_URL,
       address,
       total,
+      cartWeight,
       orderItems,
       paymentMethodId,
     );
