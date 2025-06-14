@@ -60,8 +60,13 @@ export function AdminProvider({ children }) {
   const restoreSession = async () => {
     try {
       const { ok, data } = await getUser(API_URL);
-      const isAdmin = data.isAdmin;
-      setIsLoggedIn(ok && isAdmin);
+      if (ok && data.isAdmin) {
+        setIsLoggedIn(true);
+      } else {
+        console.warn("Refresh token failed or expired.");
+        setIsLoggedIn(false);
+        setProfile(null);
+      }
     } catch (error) {
       console.error("Failed to restore session:", error);
       setIsLoggedIn(false);
@@ -83,21 +88,20 @@ export function AdminProvider({ children }) {
 
   // Runs every 5 minutes to refresh the tokens
   useEffect(() => {
-    const interval = setInterval(
-      async () => {
-        try {
-          const { ok } = await refresh(API_URL);
-          if (!ok) {
-            console.warn("Refresh token failed or expired.");
-            setIsLoggedIn(false);
-            setProfile(null);
-          }
-        } catch (err) {
-          console.error("Error refreshing token:", err);
+    const interval = setInterval(async () => {
+      try {
+        const { ok, data } = await refresh(API_URL);
+        if (ok && data.isAdmin) {
+          setIsLoggedIn(true);
+        } else {
+          console.warn("Refresh token failed or expired.");
+          setIsLoggedIn(false);
+          setProfile(null);
         }
-      },
-      5 * 60 * 1000,
-    ); // every 5 minutes
+      } catch (err) {
+        console.error("Error refreshing token:", err);
+      }
+    }, 30 * 1000); // every 5 minutes
     return () => clearInterval(interval);
   }, []);
 

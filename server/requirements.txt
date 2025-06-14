@@ -1,0 +1,8 @@
+Flask
+flask_sqlalchemy
+pymysql
+flask_cors
+flask_jwt_extended
+python-dotenv
+stripe
+werkzeug

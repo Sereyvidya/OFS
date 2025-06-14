@@ -1,7 +1,22 @@
+addresses = [
+    ("123 Maple Ave", "San Jose", "California", "95123"),
+    ("2500 Bambi Lane", "San Jose", "California", "95116"),
+    ("456 Willow St", "San Jose", "California", "95125"),
+    ("789 Pinecrest Dr", "San Jose", "California", "95132"),
+    ("1600 King Rd", "San Jose", "California", "95122"),
+    ("88 South 4th St", "San Jose", "California", "95112"),
+    ("500 S Market St", "San Jose", "California", "95113"),
+    ("2103 Curtner Ave", "San Jose", "California", "95124"),
+    ("920 S Winchester Blvd", "San Jose", "California", "95128"),
+    ("1 W San Carlos St", "San Jose", "California", "95113"),
+    ("1450 S Bascom Ave", "San Jose", "California", "95128"),
+    ("350 W Julian St", "San Jose", "California", "95110"),
+    ("1620 McKee Rd", "San Jose", "California", "95116"),
+    ("180 Woz Way", "San Jose", "California", "95110"),
+    ("3031 Tisch Way", "San Jose", "California", "95128")
+]
 
 products = [
-    # New: Potatoes, Onions, Steak
-
     # Fruits
     {"name": "Blueberries","description": "per 1 lb pack", "price": 3.99, "quantity": 24, "category": "Fruits", "weight": 1.0},
     {"name": "Apples", "description": "per 2 lb bag", "price": 3.29, "quantity": 35, "category": "Fruits", "weight": 3.0},
@@ -69,7 +84,6 @@ products = [
     # Vegetarian
     {"name": "Tofu", "description": "per 14 oz block", "price": 2.49, "quantity": 30, "category": "Vegetarian", "weight": 0.875},
     {"name": "Vegan Patties", "description": "per 2 count pack", "price": 5.99, "quantity": 20, "category": "Vegetarian", "weight": 0.5},
-    # {"name": "Chickpeas", "description": "per 15 oz can", "price": 1.39, "quantity": 25, "category": "Vegetarian", "weight": 0.9375},
     {"name": "Veggie Mix", "description": "per 1 lb bag", "price": 4.99, "quantity": 15, "category": "Vegetarian", "weight": 1.0},
     {"name": "Lentils", "description": "per 1 lb bag", "price": 2.49, "quantity": 20, "category": "Vegetarian", "weight": 1.0},
 ]

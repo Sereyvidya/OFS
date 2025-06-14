@@ -381,9 +381,11 @@ const DeliveryDashboard = () => {
                 setBatchLoaded(true);
               }
             }}
-            disabled={batch.length === 0 || isDeploying}
+            disabled={
+              (batch.length === 0 && overflow.length === 0) || isDeploying
+            }
             className={`absolute right-4 bottom-4 left-4 rounded py-2 text-[#f1f0e9] shadow ${
-              batch.length === 0 || isDeploying
+              (batch.length === 0 && overflow.length === 0) || isDeploying
                 ? "cursor-not-allowed bg-gray-400"
                 : batchLoaded
                   ? "cursor-pointer rounded-lg border-2 border-green-300 bg-green-600 px-4 py-2 font-semibold whitespace-nowrap text-[#f1f0e9] shadow transition-colors hover:scale-102 hover:bg-green-400 focus:ring-2 focus:ring-green-500 focus:outline-none"

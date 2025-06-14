@@ -62,12 +62,26 @@ export const logout = async (API_URL) => {
 };
 
 export const refresh = async (API_URL) => {
-  const res = await fetch(`${API_URL}/auth/refresh`, {
-    method: "POST",
-    credentials: "include",
-  });
+  try {
+    const res = await fetch(`${API_URL}/auth/refresh`, {
+      method: "POST",
+      credentials: "include",
+    });
 
-  return { ok: res.ok };
+    if (res.ok) {
+      let data = null;
+      try {
+        data = await res.json();
+      } catch (err) {
+        console.warn("Could not parse response JSON:", err);
+      }
+      return { ok: res.ok, data };
+    }
+    return { ok: res.ok };
+  } catch (error) {
+    console.error("Error refreshing:", error);
+    return { ok: false };
+  }
 };
 
 export const fetchWithRefresh = async (url, API_URL, options = {}) => {
@@ -93,7 +107,6 @@ export const fetchWithRefresh = async (url, API_URL, options = {}) => {
 
   // Handle refresh failure
   console.warn("Refresh failed. User is likely logged out.");
-  // You could also clear session data or redirect to login here
 
   // Return a synthetic response that won't break res.json()
   return new Response(JSON.stringify({ error: "Unauthorized" }), {

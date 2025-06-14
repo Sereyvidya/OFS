@@ -58,7 +58,24 @@ const ProductGrid = () => {
             Needs Restocking
           </h2>
           <div className="relative">
-            <div className="hide-scrollbar flex snap-x snap-mandatory overflow-x-auto scroll-smooth">
+            {/* Left Arrow */}
+            <button
+              onClick={() =>
+                scrollRefs.current["restock"]?.scrollBy({
+                  left: -300,
+                  behavior: "smooth",
+                })
+              }
+              className="absolute top-1/2 z-10 hidden h-8 w-8 -translate-y-1/2 transform items-center justify-center rounded-full bg-white/70 text-[#41644a] shadow-md backdrop-blur-sm transition-opacity duration-300 hover:bg-white md:flex"
+              aria-label="Scroll Left"
+            >
+              <ChevronLeft size={20} />
+            </button>
+
+            <div
+              ref={(el) => (scrollRefs.current["restock"] = el)}
+              className="hide-scrollbar flex snap-x snap-mandatory overflow-x-auto scroll-smooth"
+            >
               {filteredLowStockProducts.map((product) => (
                 <div
                   key={product.productID}
@@ -68,6 +85,20 @@ const ProductGrid = () => {
                 </div>
               ))}
             </div>
+
+            {/* Right Arrow */}
+            <button
+              onClick={() =>
+                scrollRefs.current["restock"]?.scrollBy({
+                  left: 300,
+                  behavior: "smooth",
+                })
+              }
+              className="absolute top-1/2 right-0 z-10 hidden h-8 w-8 -translate-y-1/2 transform items-center justify-center rounded-full bg-white/70 text-[#41644a] shadow-md backdrop-blur-sm transition-opacity duration-300 hover:bg-white md:flex"
+              aria-label="Scroll Right"
+            >
+              <ChevronRight size={20} />
+            </button>
           </div>
         </div>
       )}
@@ -101,7 +132,6 @@ const ProductGrid = () => {
                 <ChevronLeft size={20} />
               </button>
 
-              {/* Scrollable Product Row */}
               <div
                 ref={(el) => (scrollRefs.current[category] = el)}
                 className="hide-scrollbar flex snap-x snap-mandatory overflow-x-auto scroll-smooth"

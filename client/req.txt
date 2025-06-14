@@ -1,2 +1,0 @@
-npm install -D prettier prettier-plugin-tailwindcss
-npm install react-icons

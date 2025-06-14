@@ -1,0 +1,14 @@
+# Ignore Python cache and compiled files
+__pycache__/
+
+# Ignore virtual environment
+venv/
+
+# Ignore environment variables (optional if stored locally)
+.env
+
+# Ignore OS or IDE-specific files
+.DS_Store
+
+# Ignore Git files if present
+.gitignore

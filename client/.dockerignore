@@ -1,0 +1,7 @@
+# Ignore dependencies installed on host
+node_modules
+
+.env
+.next
+.DS_Store
+

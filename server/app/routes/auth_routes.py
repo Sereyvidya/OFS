@@ -119,12 +119,10 @@ def login():
 
     # Checks if the user exists and the password matches
     if user and check_password_hash(user.password, data.get('password')):
-        # Create a JWT token for the user
+        # Create JWT tokens for the user
         access_token = create_access_token(identity=str(user.userID))
         refresh_token = create_refresh_token(identity=str(user.userID))
 
-        # return jsonify({"message": "Login successful", "token": access_token}), 200
-        
         response = jsonify({
             "message": "Login successful.",
             "isAdmin": user.isAdmin
@@ -147,10 +145,13 @@ def logout():
 @jwt_required(refresh=True)
 def refresh():
     try:
+        verify_jwt_in_request(refresh=True)
         user_id = get_jwt_identity()
         access_token = create_access_token(identity=user_id)
+        user = User.query.get(user_id)
         response = jsonify({"message": "Token refreshed.", "isAdmin": user.isAdmin})
         set_access_cookies(response, access_token)
-        return response
+        return response, 200
     except Exception as e:
+        print("5")
         return jsonify({"error": "Invalid or expired refresh token."}), 401

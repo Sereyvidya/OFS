@@ -1,0 +1,82 @@
+version: "3.8"
+
+services:
+  database:
+    image: mysql:8.0
+    restart: always
+    ports:
+      - "3307:3307"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: OFS
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./database/script.sql:/docker-entrypoint-initdb.d/script.sql:ro
+    networks:
+      - app-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "--host=localhost",
+          "--user=root",
+          "--password=password",
+        ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+  client:
+    build:
+      context: ./client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    environment:
+      - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+      - NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=${NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
+    networks:
+      - app-network
+
+  server:
+    build:
+      context: ./server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./database:/database
+      - ./database/images:/images
+      - ./server:/app
+      - /app/.venv
+    environment:
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  seed_database:
+    build:
+      context: ./database
+    volumes:
+      - ./database/images:/app/images:ro
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - app-network
+    profiles:
+      - seed
+
+volumes:
+  db-data:
+
+networks:
+  app-network:
+    driver: bridge
