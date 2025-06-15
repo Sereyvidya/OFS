@@ -107,6 +107,7 @@ const AddOrEditForm = () => {
         onClose: () => {
           setShowEditForm(false);
           setShowDeleteConfirm(false);
+          setEditingProduct(null);
           fetchAllProducts();
         },
       });

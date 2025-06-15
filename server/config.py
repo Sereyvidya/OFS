@@ -1,15 +1,18 @@
 # Configuration settings
 from datetime import timedelta
+import os
 
 class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    JWT_SECRET_KEY = 'e4f3a2d5b69c4d1e91f9a79d2f51a3b6e8d4f0c1a2b3c4d5e6f7a8b9c0d1e2f3'
+    JWT_SECRET_KEY = os.getenv("JTW_SECRET_KEY")
 
-    # For localhost, use:
-    # SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:password@localhost:3306/OFS'
+    DB_USER = os.getenv("MYSQL_USER", "root")
+    DB_PASSWORD = os.getenv("MYSQL_PASSWORD", "password")
+    DB_HOST = os.getenv("MYSQL_HOST", "database")  # "database" is the Docker service name (use localhost otherwise)
+    DB_PORT = os.getenv("MYSQL_PORT", "3306")
+    DB_NAME = os.getenv("MYSQL_DATABASE", "OFS")
 
-    # For docker, use:
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:password@database:3306/OFS'
+    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
     # JWT settings
     JWT_TOKEN_LOCATION = ['cookies']

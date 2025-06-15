@@ -4,17 +4,25 @@ import os
 from data import products, addresses
 import random
 from datetime import datetime
+from dotenv import load_dotenv
+
+load_dotenv()
+DB_USER = os.getenv("MYSQL_USER", "root")
+DB_PASSWORD = os.getenv("MYSQL_PASSWORD", "password")
+# "database" is the Docker service name (use localhost otherwise)
+DB_HOST = os.getenv("MYSQL_HOST", "database")  
+DB_PORT = os.getenv("MYSQL_PORT", "3306")
+DB_NAME = os.getenv("MYSQL_DATABASE", "OFS")
 
 # Connect to database
 for _ in range(20):
     try:
         connection = mysql.connector.connect(
-            host="database",
-            # host="localhost", 
-            port=3306,
-            user="root", 
-            password="password",
-            database="OFS"
+            host=DB_HOST,
+            port=DB_PORT,
+            user=DB_USER, 
+            password=DB_PASSWORD,
+            database=DB_NAME
         )
         break
     except mysql.connector.errors.DatabaseError:
