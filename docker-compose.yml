@@ -55,6 +55,7 @@ services:
       - /app/.venv
     environment:
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
     depends_on:
       database:
         condition: service_healthy

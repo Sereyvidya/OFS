@@ -37,7 +37,7 @@ export function AdminProvider({ children }) {
   const [awaitingOrders, setAwaitingOrders] = useState([]);
   const dropdownRef = useRef(null);
   const API_URL = "http://localhost:5000";
-  const MAPBOX_ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+  const MAPBOX_ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 
   const fetchProfile = async () => {
     const { ok, data } = await getUser(API_URL);

@@ -5,11 +5,6 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from .. import db
 from ..models import CartItem, Order, OrderItem, Product, User
 
-load_dotenv()
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
-if not stripe.api_key:
-    raise ValueError("Stripe secret key not found.")
-
 # Create a Blueprint for order-related routes
 order_bp = Blueprint('order', __name__)
 

@@ -52,7 +52,7 @@ export function UserProvider({ children }) {
 
   const dropdownRef = useRef(null);
   const API_URL = "http://localhost:5000";
-  const MAPBOX_ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+  const MAPBOX_ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
   const STRIPE_PROMISE = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   );

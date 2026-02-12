@@ -94,18 +94,9 @@ Since this app runs in Stripe's test mode, use the following dummy card to test 
 
 ### 1. 📁 Clone the Repository
 
-If you only want the `OFS` folder from a larger repo:
-
 ```bash
-git clone --filter=blob:none --no-checkout https://github.com/Sereyvidya/Projects.git
-cd Projects
-git sparse-checkout init --cone
-git sparse-checkout set OFS
-git checkout main
+git clone https://github.com/Sereyvidya/OFS.git
 ```
-
-Or download the full repo:  
-[📦 Download Full Repository ZIP](https://github.com/Sereyvidya/Projects/archive/refs/heads/main.zip)
 
 ---
 
@@ -119,7 +110,22 @@ This will start:
 
 - 🧑‍🎨 Frontend at [http://localhost:3000](http://localhost:3000)
 - 🐍 Flask backend
-- 🐬 MySQL database with seeded schema
+- 🐬 MySQL database with schema
+
+**⚠️ Important: Seed the Database (First Time Only)**
+
+After starting the containers for the first time, **open a new terminal** and run:
+
+```bash
+docker-compose --profile seed run --rm seed_database
+```
+
+This will populate the database with:
+
+- Sample products with images
+- An admin account (email: `alice.smith@ofs.com`, password: `Password123$`)
+
+Once seeding completes, refresh your browser to see the products!
 
 ---
 

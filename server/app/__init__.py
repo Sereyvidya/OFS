@@ -1,6 +1,7 @@
 # Initialize Flask application's factory function (create_app())
 
 import os
+import stripe
 from config import Config
 from dotenv import load_dotenv
 from flask import Flask, jsonify
@@ -15,6 +16,10 @@ def create_app():
     # Create and configure Flask app
     app = Flask(__name__)
     app.config.from_object(Config)
+
+    stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+    if not stripe.api_key:
+        app.logger.warning("STRIPE_SECRET_KEY is not set; Stripe routes") 
     
     # Initialize the database, enable CORS, and set up JWT management
     db.init_app(app)

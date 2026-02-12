@@ -4,7 +4,7 @@ import os
 
 class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    JWT_SECRET_KEY = os.getenv("JTW_SECRET_KEY")
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 
     DB_USER = os.getenv("MYSQL_USER", "root")
     DB_PASSWORD = os.getenv("MYSQL_PASSWORD", "password")
